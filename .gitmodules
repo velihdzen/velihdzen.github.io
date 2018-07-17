@@ -1,0 +1,3 @@
+[submodule "themes/hiker"]
+	path = themes/hiker
+	url = https://github.com/0ranga/hexo-theme-hiker.git
