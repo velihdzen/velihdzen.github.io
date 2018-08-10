@@ -5,7 +5,7 @@ title: 关于凌然葭
  - "Computers are useless. They can only give you answers."
 
 ## Find Me
-[Email](mailto:zjharpoonman@gmail.com) | [Github](https://github.com/0ranga) | [Douban](https://www.douban.com/people/69104080/) | [NeteaseMusic](http://music.163.com/#/user/home?id=1352908)
+[Email](mailto:velih_dzen@gmail.com) | [Github](https://github.com/0ranga) | [Douban](https://www.douban.com/people/69104080/) | [NeteaseMusic](http://music.163.com/#/user/home?id=1352908)
 
 
 --- 
