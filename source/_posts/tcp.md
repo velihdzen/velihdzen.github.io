@@ -6,6 +6,7 @@ tags: [Network]
 categories:
 ---
 生产环境遇到些网络问题，知对 TCP 协议还是有些生疏，在此复习记录。
+<!-- more -->
 ## 协议
 ### 报文段格式
 TCP 协议报文段主要由**首部（Header）** 与**数据（Data）** 两部分组成。在计算校验和是还会加上虚拟的伪首部。此处主要说明首部的组成。
@@ -23,46 +24,7 @@ TCP 在网络模型中属于运输层，用于提供进程与进程间的字节�
 TCP 连接可以分为三个阶段：建立连接，传输数据，终止连接。可以用一个有限状态机表示：
 ![图 2 TCP 连接 (From: Computer Networks)<br>图中（A/B）这样的文字表示“收到A后执行B，A与B可以是标志位或者指令”<br>深实线表示 Client 的行为，深虚线表示 Server 的行为，浅色线表示特殊行为](tcp_connection.png)
 下面结合一个用 Rust 写的 Echo Server 与抓包工具 Wireshark 来演示这三个过程。代码如下：
-``` rust
-use std::net::{TcpListener, TcpStream};
-use std::thread;
-use std::io::Read;
-use std::io::Write;
-
-pub fn main() {
-    let listener = TcpListener::bind("::1:9999").unwrap();
-
-    for stream in listener.incoming() {
-        match stream {
-            Ok(stream) => {
-                thread::spawn(|| {
-                    handle_client(stream);
-                });
-            }
-            Err(_) => {
-                println!("Error");
-            }
-        }
-    }
-}
-
-fn handle_client(mut stream: TcpStream) {
-    loop {
-        let mut read = [0; 1024];
-        match stream.read(&mut read) {
-            Ok(n) => {
-                if n == 0 {
-                    break;
-                }
-                stream.write(&read[0..n]).unwrap();
-            }
-            Err(err) => {
-                panic!(err);
-            }
-        }
-    }
-}
-```
+{% include_code Echo Server lang:Rust echo_server.rs %}
 Echo Server 启动之后使用 telnet 工具连接至服务器，与服务器交互两次，即回显两次字符串，然后从退出 telnet。抓到的包截图如下：
 ![图 3 Wireshark 抓包](wireshark.png)
 
@@ -134,6 +96,8 @@ Echo Server 启动之后使用 telnet 工具连接至服务器，与服务器交
     b. 把 cwnd 重新设置为慢启动门限值；
     c. 重新进入拥塞避免阶段；
 
+图示如下：
+![拥塞控制示例](congestion_control_example.png)
 Tahoe 算法与 Reno （Tahoe 的改进版本）的区别在于收到四个相同 ACK 时，Tahoe 算法的策略和 RTO 计时器超时时一致。
 ### 其他拥塞策略
 拥塞控制策略只需要在发送方实现即可，不需要接受方的参与，因此可以仅在发送方部署一套算法。现在 TCP 网络上的算法也在不断[改进](https://en.wikipedia.org/wiki/TCP_congestion_control)，涌现出诸如 [**TCP CUBIC**](http://www4.ncsu.edu/~rhee/export/bitcp/cubic-paper.pdf)、[**TCP BBR**](https://ai.google/research/pubs/pub45646) 这样的算法。
@@ -169,10 +133,10 @@ Time-Wait 计时器对最后的 FIN 进行确认时启动的超时计时器。�
 [QIUC](https://www.chromium.org/quic) 了解一下下？
 
 ## 参考资料
- - [TCP/IP 协议族 第四版](https://book.douban.com/subject/5386194/)
- - [Andrew S.Tanenbaum - Computer Networks 5th](https://book.douban.com/subject/5344443/)
- - [WikiPedia - Transmission Control Protocol](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)
- - [WikiPedia - TCP congestion control](https://en.wikipedia.org/wiki/TCP_congestion_contro)
- - [TCP Flags: PSH and URG](http://packetlife.net/blog/2011/mar/2/tcp-flags-psh-and-urg/)
- - [KTH - Internetworking Lecture 4](https://www.nada.kth.se/kurser/kth/2D1392/05/lectures/lecture_4.pdf)
- - [一个 TCP FIN_WAIT2 状态细节引发的感慨](https://blog.csdn.net/dog250/article/details/81256550)
+1. [TCP/IP 协议族 第四版](https://book.douban.com/subject/5386194/)
+2. [Andrew S.Tanenbaum - Computer Networks 5th](https://book.douban.com/subject/5344443/)
+3. [WikiPedia - Transmission Control Protocol](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)
+4. [WikiPedia - TCP congestion control](https://en.wikipedia.org/wiki/TCP_congestion_contro)
+5. [TCP Flags: PSH and URG](http://packetlife.net/blog/2011/mar/2/tcp-flags-psh-and-urg/)
+6. [KTH - Internetworking Lecture 4](https://www.nada.kth.se/kurser/kth/2D1392/05/lectures/lecture_4.pdf)
+7. [一个 TCP FIN_WAIT2 状态细节引发的感慨](https://blog.csdn.net/dog250/article/details/81256550)
