@@ -5,7 +5,7 @@ date: 2018/08/04 17:05:00
 tags: [Network, BT]
 categories:
 ---
-在 {% post_link tcp %}中回顾了 TCP，而这篇文章主要讲用于 BT 网络的基于 UDP 的运输层协议 µTP，同时顺便回顾 UDP。下面的内容更多是基于对 [BEP29](http://www.bittorrent.org/beps/bep_0029.html) （BitTorrent 的 29 号提案，或者直翻为增强建议，类似的有 JEP，PEP）的理解。
+在 {% post_link tcp %}中回顾了 TCP，而这篇文章主要讲用于 BT 网络的基于 UDP 的运输层协议 µTP，同时顺便回顾 UDP。下面的内容更多是基于对 [BEP29](http://www.bittorrent.org/beps/bep_0029.html) 的理解。
 ## 名字探究
   µTP 的主要文档 BEP29 的创建于 2009 年，姑且认为这也是设计完成的大致时间，µTP 在 uTorrent 的 1.8 中首次加入（2009 年）这个事实也佐证了这点。它的设计者包括：
  - [Ludvig Strigeus](https://en.wikipedia.org/wiki/Ludvig_Strigeus)（μTorrent 作者，BitTorrent 公司 2006 年收购 μTorrent，目前在 Spotify 工作）
@@ -28,8 +28,8 @@ categories:
  - **总长度（Length）**：定义了 UDP 用户数据报的总长度，包括首部和数据。TCP 首部中是没有所谓“报文段总长度”的字段的，长度可以通过 IP 层的长度减去 IP 首部长度计算所得，所以一定程度上时冗余的，可以参考 Stack OverFlow 上的[相关讨论](https://stackoverflow.com/a/16748680/5091903)；
  - **校验和（Checksum）**：用于对整个用户数据报的校验，通过 IP 位首部与和用户数据报计算得到；
 
-  可见 UDP 首部的这些字段在理论上可以是 TCP 首部字段的子集。因此我们可以粗略地讲 **TCP 是基于 UDP 的传输层协议。**
-  UDP 服务是一个“尽力而为”的服务，它**没有流量控制**，**只能通过校验和进行差错控制，丢包不会知晓，也不会重传**，也**没有拥塞控制**。
+可见 UDP 首部的这些字段在理论上可以是 TCP 首部字段的子集。因此我们可以粗略地讲 **TCP 是基于 UDP 的传输层协议。**
+UDP 服务是一个“尽力而为”的服务，它**没有流量控制**，**只能通过校验和进行差错控制，丢包不会知晓，也不会重传**，也**没有拥塞控制**。
 ### µTP 首部
  - **version**：版本号，现在为 1，[还有一个原始版本号 0 存在](https://github.com/boundary/wireshark/blob/master/epan/dissectors/packet-bt-utp.c)
  - **connection_id**：用于标记连接。[这个字段是必须的么?](http://www.calvinneo.com/2017/12/05/libutp%E6%BA%90%E7%A0%81%E7%AE%80%E6%9E%90/#utp-context%E7%9A%84%E6%88%90%E5%91%98)；

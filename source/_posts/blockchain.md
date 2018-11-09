@@ -1,14 +1,24 @@
 ---
-title: 探索 BlockChain
+title: 区块链学习计划
 keywords: []
 date: 2018/08/04 17:00:00
 tags: [BlockChain]
 categories:
 ---
-Bitcoin 带来的 BlockChain 技术一往无前。计划从现在开始能够比较系统地学习与记录相关技术知识。这篇文章是个进度表也是一个目录。
+比特币带来的区块链技术一往无前。计划从现在开始能够比较系统地学习与记录相关技术知识。这篇文章是个计划表也是一个目录。
 <!-- more -->
 ## Bitcoin
 Bitcoin 的文档非常丰富，之前我是结合 [Bitcoin Developer Reference](https://bitcoin.org/en/developer-reference) 与 [Bitcoin Developer Guide](https://bitcoin.org/en/developer-guide) 进行学习的，写得非常详细，而且比较容易理解。
+
+## Ethereum
+ - 交易结构对比
+ - MPT 树与 Merkle Proofs 对比
+ - 奖励，叔块，难度，与PoW->PoS的转变过程
+ - 存储、数据库体系
+ - EVM
+ - 智能合约
+
+## DAG
 
 ## IPFS：星际文件系统 
 > IPFS is the Distributed Web. 
@@ -19,8 +29,6 @@ IPFS 的目标是取代 HTTP，看上去像很多白皮书项目一样牛逼轰�
 
 ### 博文计划
  - BT
-    - BT 概述
+    - {% post_link bt-overview %}
     - {% post_link µtp %}
     - DHT 网络
- - IPFS
-    - 白皮书翻译

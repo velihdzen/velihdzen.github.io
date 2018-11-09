@@ -35,3 +35,8 @@ twitter:
 google_plus:
 fb_admins:
 fb_app_id:
+
+
+mathjax:
+  enable: true
+  cdn: //cdn.staticfile.org/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML

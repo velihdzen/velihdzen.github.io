@@ -1,7 +1,8 @@
 ---
 title: 闲云孤鹤
-tags:
-	- Essay
+date: 2018-07-10 21:24:55
+updated: 2018-07-10 21:24:55
+tags: [Essay]
 ---
 ``` java
 public class Blog {

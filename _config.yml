@@ -36,7 +36,7 @@ external_link: true # Open external links in new tab
 filename_case: 0
 render_drafts: false
 post_asset_folder: true
-relative_link: false
+relative_link: true
 future: true
 highlight:
   enable: true
@@ -81,3 +81,27 @@ deploy:
   type: git 
   repo: git@github.com:0ranga/0ranga.github.io.git
   branch: master
+
+feed:
+    type: atom
+    path: atom.xml
+    limit: 20
+    hub:
+    content: true
+    content_limit:
+    content_limit_delim: ' '
+
+math:
+  engine: 'mathjax' # or 'katex'
+  mathjax:
+    src: custom_mathjax_source
+    config:
+      # MathJax config
+  katex:
+    css: custom_css_source
+    js: custom_js_source # not used
+    config:
+      # KaTeX config
+
+server:
+  compress: true
