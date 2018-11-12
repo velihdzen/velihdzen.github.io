@@ -3,7 +3,7 @@ title: DHT 网络之 Kademlia 算法
 tags:
   - Algorithm
   - 翻译
-date: 2018-11-08T11:29Z 
+date: 2018-11-08T11:29+08:00
 ---
 
 本文是论文 [Kademlia: A Peer-to-Peer Information System Based on the XOR Metric](http://www.scs.stanford.edu/~dm/home/papers/kpos.pdf) 的翻译。

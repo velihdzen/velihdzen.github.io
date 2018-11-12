@@ -1,5 +1,5 @@
 ---
-title: BT 系列之概述
+title: BT 增强建议之概述
 tags:
   - BT
 keywords: []
@@ -21,7 +21,7 @@ categories:
 
 当你获取了一个**磁力链接**或者**种子文件**，使用 BT 客户端打开文件确认下载后，客户端就成为了一个 peer，客户端通过连接 **Tracker** 服务器或者 **DHT** 网络寻找到其他拥有所需要文件分片的 peer，从这些 peer 中下载资源分片，同时客户端也上传数据给其他来索要自己所拥有分片的 peer，以此反复，直到下载完成。
 
-搞清楚这个下载过程中到底发生了什么事情就是记录这个系列文章的目的所在。整个学习过程以 [BEP](http://www.bittorrent.org/beps/bep_0000.html) 为主要参考，同时适当参考 [BT 的一个 Java 版本实现源码](https://github.com/atomashpolskiy/bt)。
+搞清楚这个下载过程中到底发生了什么事情就是记录这个系列文章的目的所在。整个学习过程以 BT 增强建议 [BEP](http://www.bittorrent.org/beps/bep_0000.html) 为主要参考，同时适当参考 [BT 的一个 Java 版本实现源码](https://github.com/atomashpolskiy/bt)。
 
 整个系列分为：
 
@@ -29,9 +29,10 @@ categories:
 - {% post_link bt-metadata %}：Torrent 种子文件结构与 Magnet 磁力链接的原理（已完成）
 - {% post_link bt-tracker %}：作为 Peer 间桥梁的 Tracker 服务器的工作原理（已完成）
 - {% post_link bt-peer %}： Peer 间的通信的过程以及以牙还牙策略（已完成）
-- 进阶功能：BEP 中提出的一些进阶功能（整理中）
-- DHT：使得 BT 网络脱离 Tracker，实现完全去中心化（整理中）
+- DHT：使得 BT 网络脱离 Tracker，实现完全去中心化（已完成）
   - {% post_link dht-kademlia %}
+  - {% post_link bt-dht %}
+- 进阶功能：BEP 中提出的一些进阶功能（整理中）
 
 用于保证 BT 高速下载时其他应用低时延网络通信的传输层协议 **µTP** 已在独立的博文 {% post_link µtp %} 中介绍。
 

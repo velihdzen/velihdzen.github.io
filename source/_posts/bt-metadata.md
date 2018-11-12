@@ -1,5 +1,5 @@
 ---
-title: BT 系列之 Metadata：Torrent 与 Magnet
+title: BT 增强建议之 Metadata：Torrent 与 Magnet
 tags:
   - BT
 date: 2018-08-26 22:00:00
