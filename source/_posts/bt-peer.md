@@ -6,7 +6,7 @@ date: 2018-08-30 19:14:00
 categories:
 ---
 
-本文是 BT 系列文章中的一篇，主要介绍 Peer 以及 Peer 间的通信，有需要的话可以先阅读博文{% post_link bt-overview %}。
+本文是 BT 系列文章中的一篇，主要介绍 Peer 以及 Peer 间的通信，有需要的话可以先阅读博文 {% post_link bt-overview %}。
 
 ## Peer 来源
 在讲 Peer 间的通信前，先总结一下 Peer 的来源。
@@ -135,7 +135,7 @@ Extend Handshake 消息的有效载荷是一个 bencode 字典。字典中的所
 - **total_size**：仅在 **data** 类型消息中出现，和握手消息中的 **metadata_size** 语义一致。
 
 ### Partial Seeds
-这个扩展是为了让 BT 支持对 Partial Seeds（部分种子）的识别与进一步优化。部分种子就是资源不完整但是也不再进行下载的 peer。这种情况发生在多文件种子中，用户只设定下载一部分文件。
+这个扩展是为了让 BT 支持对 Partial Seeds（部分种子，[BEP21 - Extension for partial seeds](http://bittorrent.org/beps/bep_0021.html)）的识别与进一步优化。部分种子就是资源不完整但是也不再进行下载的 peer。这种情况发生在多文件种子中，用户只设定下载一部分文件。
 
 这个扩展不定义额外的扩展消息，但是在扩展握手消息的字典中加入一个键 **upload_only**，值为整型，如果 peer 对下载不感兴趣则需要讲此值置为 1。
 

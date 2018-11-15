@@ -25,14 +25,14 @@ categories:
 
 整个系列分为：
 
-- {% post_link bt-overview %}：主要介绍 BEP 与 Bencode 编码（已完成）
-- {% post_link bt-metadata %}：Torrent 种子文件结构与 Magnet 磁力链接的原理（已完成）
-- {% post_link bt-tracker %}：作为 Peer 间桥梁的 Tracker 服务器的工作原理（已完成）
-- {% post_link bt-peer %}： Peer 间的通信的过程以及以牙还牙策略（已完成）
-- DHT：使得 BT 网络脱离 Tracker，实现完全去中心化（已完成）
+- {% post_link bt-overview %}：主要介绍 BEP 与 Bencode 编码
+- {% post_link bt-metadata %}：Torrent 种子文件结构与 Magnet 磁力链接的原理
+- {% post_link bt-tracker %}：作为 Peer 间桥梁的 Tracker 服务器的工作原理
+- {% post_link bt-peer %}： Peer 间的通信的过程以及以牙还牙策略
+- DHT：使得 BT 网络脱离 Tracker，实现完全去中心化
   - {% post_link dht-kademlia %}
   - {% post_link bt-dht %}
-- 进阶功能：BEP 中提出的一些进阶功能（整理中）
+- {% post_link bt-advanced %}：BEP 中提出的一些进阶改进方案
 
 用于保证 BT 高速下载时其他应用低时延网络通信的传输层协议 **µTP** 已在独立的博文 {% post_link µtp %} 中介绍。
 
