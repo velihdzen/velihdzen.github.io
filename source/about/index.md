@@ -3,10 +3,6 @@ title: 关于 0ranga
 ---
 0ranga，生于九零年代的浙江诸暨，目前是一头程序员。建此博客以分享技术与表达自我。
 
-***名字考究***：
-
-- 博客名 “闲云孤鹤” 来自中国新世纪音乐 “拓荒者” 刘星专辑《一意孤行》中的作品《闲云孤鹤》
-
 ***一些兴趣与特点***：
 
 - 喜欢家乡的历史，如果你恰巧来自诸暨，可以去时安的[博客](http://blog.sina.com.cn/u/2759005812)中了解更多关于诸暨的历史
@@ -22,8 +18,12 @@ title: 关于 0ranga
 如果有任何问题，可以电邮 [velih.dzen@gmail.com](mailto:velih.dzen@gmail.com)。除了邮件，还可以在这些地方找到我：
 
 - GitHub：[0ranga](https://github.com/0ranga)
+- Twitter: [0ranga](https://twitter.com/lostzzwooo)
 - Douban：[Aloha](https://www.douban.com/people/69104080/)
 
+***名字考究***：
+
+- 博客名 “闲云孤鹤” 来自中国新世纪音乐 “拓荒者” 刘星专辑《一意孤行》中的作品《闲云孤鹤》
 
 --- 
 <!-- netease music -->
