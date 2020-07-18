@@ -7,7 +7,7 @@ title: 闲云孤鹤
 subtitle:
 description: 逝者如斯夫！不舍晝夜。
 keywords:
-author: 0ranga
+author: VelihDzen
 language: zh-CN
 timezone:
 
@@ -79,7 +79,7 @@ theme: hiker
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git 
-  repo: git@github.com:0ranga/0ranga.github.io.git
+  repo: git@github.com:velihdzen/velihdzen.github.io.git
   branch: master
 
 feed:
