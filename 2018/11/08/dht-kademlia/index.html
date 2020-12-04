@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <title>DHT 网络之 Kademlia 算法 | 闲云孤鹤</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Algorithm翻译">
+  <meta name="keywords" content="Algorithm翻译" />
   
   
   
   
   <meta name="description" content="本文是论文 Kademlia: A Peer-to-Peer Information System Based on the XOR Metric 的翻译。">
-<meta name="keywords" content="Algorithm,翻译">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DHT 网络之 Kademlia 算法">
 <meta property="og:url" content="https://0ranga.com/2018/11/08/dht-kademlia/index.html">
 <meta property="og:site_name" content="闲云孤鹤">
 <meta property="og:description" content="本文是论文 Kademlia: A Peer-to-Peer Information System Based on the XOR Metric 的翻译。">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://0ranga.com/2018/11/08/dht-kademlia/kademlia-1.png">
 <meta property="og:image" content="https://0ranga.com/2018/11/08/dht-kademlia/kademlia-2.png">
 <meta property="og:image" content="https://0ranga.com/2018/11/08/dht-kademlia/kademlia-3.png">
 <meta property="og:image" content="https://0ranga.com/2018/11/08/dht-kademlia/kademlia-4.png">
 <meta property="og:image" content="https://0ranga.com/2018/11/08/dht-kademlia/kademlia-5.png">
-<meta property="og:updated_time" content="2020-07-18T07:11:02.021Z">
+<meta property="article:published_time" content="2018-11-08T03:29:00.000Z">
+<meta property="article:modified_time" content="2020-07-18T07:11:02.000Z">
+<meta property="article:author" content="VelihDzen">
+<meta property="article:tag" content="Algorithm">
+<meta property="article:tag" content="翻译">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DHT 网络之 Kademlia 算法">
-<meta name="twitter:description" content="本文是论文 Kademlia: A Peer-to-Peer Information System Based on the XOR Metric 的翻译。">
 <meta name="twitter:image" content="https://0ranga.com/2018/11/08/dht-kademlia/kademlia-1.png">
   
     <link rel="alternate" href="/atom.xml" title="闲云孤鹤" type="application/atom+xml">
@@ -50,30 +51,40 @@
 }
 
   </style>
-  <link rel="stylesheet" href="../../../../css/style.css">
+  
+<link rel="stylesheet" href="../../../../css/style.css">
 
-  <script src="../../../../js/jquery-3.1.1.min.js"></script>
-  <script src="../../../../js/bootstrap.js"></script>
+
+  
+<script src="../../../../js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="../../../../js/bootstrap.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/bootstrap.css" >
 
   
-    <link rel="stylesheet" href="../../../../css/dialog.css">
-  
+    
+<link rel="stylesheet" href="../../../../css/dialog.css">
 
-  
-
-  
-    <link rel="stylesheet" href="/css/header-post.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
   
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
   
   
 
-</head>
-</html>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="custom_css_source.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
@@ -147,7 +158,9 @@
     window.INSIGHT_CONFIG = INSIGHT_CONFIG;
 })(window);
 </script>
+
 <script src="../../../../js/insight.js"></script>
+
 
 </div></li>
             </div>
@@ -197,7 +210,7 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>本文是论文 <a href="http://www.scs.stanford.edu/~dm/home/papers/kpos.pdf" target="_blank" rel="noopener">Kademlia: A Peer-to-Peer Information System Based on the XOR Metric</a> 的翻译。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>本文是论文 <a target="_blank" rel="noopener" href="http://www.scs.stanford.edu/~dm/home/papers/kpos.pdf">Kademlia: A Peer-to-Peer Information System Based on the XOR Metric</a> 的翻译。</p>
 <a id="more"></a>
 
 <h1 id="Kademlia：一种基于-XOR-距离的-P2P-信息系统"><a href="#Kademlia：一种基于-XOR-距离的-P2P-信息系统" class="headerlink" title="Kademlia：一种基于 XOR 距离的 P2P 信息系统"></a>Kademlia：一种基于 XOR 距离的 P2P 信息系统</h1><p>作者：Petar Maymounkov 以及 David Mazières</p>
@@ -287,8 +300,8 @@
 <h2 id="Implementation-Notes（待译）"><a href="#Implementation-Notes（待译）" class="headerlink" title="Implementation Notes（待译）"></a>Implementation Notes（待译）</h2><p>待翻译</p>
 <h2 id="Summary（总结）"><a href="#Summary（总结）" class="headerlink" title="Summary（总结）"></a>Summary（总结）</h2><p>由于采用基于 XOR 度量的拓扑，Kademlia 是第一个结合了可证明的一致性，性能，低时延路由以及单向对称拓扑的点对点系统。Kademlia 还引入了并发参数 $α$，它允许人们在带宽中交换常数因子，以实现异步最低延迟路由选择和无延迟错误恢复。最后，Kademlia 是第一个利用节点故障与正常运行时间成反比关系这一事实的点对点系统。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
-<li><a href="https://blog.csdn.net/hoping/article/details/5307320" target="_blank" rel="noopener">Kademlia ：一种基于 XOR 度量的 P2P 信息系统</a></li>
-<li><a href="http://www.huamo.online/2018/06/12/P2P%E7%BD%91%E7%BB%9C-Kademlia%E5%8D%8F%E8%AE%AE/" target="_blank" rel="noopener">P2P网络–Kademlia协议</a></li>
+<li> <a target="_blank" rel="noopener" href="https://blog.csdn.net/hoping/article/details/5307320">Kademlia ：一种基于 XOR 度量的 P2P 信息系统</a></li>
+<li> <a target="_blank" rel="noopener" href="http://www.huamo.online/2018/06/12/P2P%E7%BD%91%E7%BB%9C-Kademlia%E5%8D%8F%E8%AE%AE/">P2P网络–Kademlia协议</a></li>
 </ol>
 
       
@@ -300,7 +313,7 @@
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -327,7 +340,7 @@
       
       
         
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/Algorithm/">Algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/翻译/">翻译</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/Algorithm/" rel="tag">Algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/%E7%BF%BB%E8%AF%91/" rel="tag">翻译</a></li></ul>
 
       
 
@@ -363,7 +376,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
     
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kademlia：一种基于-XOR-距离的-P2P-信息系统"><span class="nav-number">1.</span> <span class="nav-text">Kademlia：一种基于 XOR 距离的 P2P 信息系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract（摘要）"><span class="nav-number">1.1.</span> <span class="nav-text">Abstract（摘要）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction（介绍）"><span class="nav-number">1.2.</span> <span class="nav-text">Introduction（介绍）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#System-Description（系统描述）"><span class="nav-number">1.3.</span> <span class="nav-text">System Description（系统描述）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XOR-Metric（XOR-度量）"><span class="nav-number">1.3.1.</span> <span class="nav-text">XOR Metric（XOR 度量）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-State（节点状态）"><span class="nav-number">1.3.2.</span> <span class="nav-text">Node State（节点状态）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kademlia-protocol（Kademlia-协议）"><span class="nav-number">1.3.3.</span> <span class="nav-text">Kademlia protocol（Kademlia 协议）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#临近-ID-节点查找"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">临近 ID 节点查找</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存储键值对与重新发布时间"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">存储键值对与重新发布时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询键值对与过期时间"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">查询键值对与过期时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#K-桶更新与加入网络"><span class="nav-number">1.3.3.4.</span> <span class="nav-text">$K$ 桶更新与加入网络</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Routing-Table（路由表）"><span class="nav-number">1.3.4.</span> <span class="nav-text">Routing Table（路由表）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Efficient-Key-Re-publishing（Key-的高效重发布）"><span class="nav-number">1.3.5.</span> <span class="nav-text">Efficient Key Re-publishing（Key 的高效重发布）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sketch-of-Proof（待译）"><span class="nav-number">1.4.</span> <span class="nav-text">Sketch of Proof（待译）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation-Notes（待译）"><span class="nav-number">1.5.</span> <span class="nav-text">Implementation Notes（待译）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary（总结）"><span class="nav-number">1.6.</span> <span class="nav-text">Summary（总结）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kademlia%EF%BC%9A%E4%B8%80%E7%A7%8D%E5%9F%BA%E4%BA%8E-XOR-%E8%B7%9D%E7%A6%BB%E7%9A%84-P2P-%E4%BF%A1%E6%81%AF%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">Kademlia：一种基于 XOR 距离的 P2P 信息系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract%EF%BC%88%E6%91%98%E8%A6%81%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">Abstract（摘要）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction%EF%BC%88%E4%BB%8B%E7%BB%8D%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">Introduction（介绍）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#System-Description%EF%BC%88%E7%B3%BB%E7%BB%9F%E6%8F%8F%E8%BF%B0%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">System Description（系统描述）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XOR-Metric%EF%BC%88XOR-%E5%BA%A6%E9%87%8F%EF%BC%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">XOR Metric（XOR 度量）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-State%EF%BC%88%E8%8A%82%E7%82%B9%E7%8A%B6%E6%80%81%EF%BC%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">Node State（节点状态）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kademlia-protocol%EF%BC%88Kademlia-%E5%8D%8F%E8%AE%AE%EF%BC%89"><span class="nav-number">1.3.3.</span> <span class="nav-text">Kademlia protocol（Kademlia 协议）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%B4%E8%BF%91-ID-%E8%8A%82%E7%82%B9%E6%9F%A5%E6%89%BE"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">临近 ID 节点查找</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E9%94%AE%E5%80%BC%E5%AF%B9%E4%B8%8E%E9%87%8D%E6%96%B0%E5%8F%91%E5%B8%83%E6%97%B6%E9%97%B4"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">存储键值对与重新发布时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E9%94%AE%E5%80%BC%E5%AF%B9%E4%B8%8E%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">查询键值对与过期时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#K-%E6%A1%B6%E6%9B%B4%E6%96%B0%E4%B8%8E%E5%8A%A0%E5%85%A5%E7%BD%91%E7%BB%9C"><span class="nav-number">1.3.3.4.</span> <span class="nav-text">$K$ 桶更新与加入网络</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Routing-Table%EF%BC%88%E8%B7%AF%E7%94%B1%E8%A1%A8%EF%BC%89"><span class="nav-number">1.3.4.</span> <span class="nav-text">Routing Table（路由表）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Efficient-Key-Re-publishing%EF%BC%88Key-%E7%9A%84%E9%AB%98%E6%95%88%E9%87%8D%E5%8F%91%E5%B8%83%EF%BC%89"><span class="nav-number">1.3.5.</span> <span class="nav-text">Efficient Key Re-publishing（Key 的高效重发布）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sketch-of-Proof%EF%BC%88%E5%BE%85%E8%AF%91%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">Sketch of Proof（待译）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation-Notes%EF%BC%88%E5%BE%85%E8%AF%91%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">Implementation Notes（待译）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary%EF%BC%88%E6%80%BB%E7%BB%93%EF%BC%89"><span class="nav-number">1.6.</span> <span class="nav-text">Summary（总结）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol>
     
     </div>
   </aside>
@@ -451,18 +464,28 @@
 </script>
 
 
-  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
-  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+
+  
+<script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="../../../../js/scripts.js"></script>
 
 
-  <script src="../../../../js/home.js"></script>
+
+  
+<script src="../../../../js/home.js"></script>
 
 
 
-  <script src="../../../../js/dialog.js"></script>
+
+  
+<script src="../../../../js/dialog.js"></script>
+
 
 
 
@@ -556,24 +579,7 @@ ga('send', 'pageview');
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
   
-    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="custom_mathjax_source">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 </body>
 </html>

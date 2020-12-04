@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <title>BT 增强建议之 DHT | 闲云孤鹤</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="BT">
+  <meta name="keywords" content="BT" />
   
   
   
   
   <meta name="description" content="BitTorrent 使用 DHT 网路来存储 peer 信息，以实现去 Tracker 化的种子。此时，每个 peer 都成了一个 Tracker。网络基于 Kademlia 算法实现，使用 UDP 进行传输。 本文主要对 BT 中的 DHT 网络实现与在博文 DHT 网络之 Kademlia 算法 中描述的 Kademlia 算法的区别进行总结。准确的说不能说是区别，而应该定义成实现细节，毕竟">
-<meta name="keywords" content="BT">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BT 增强建议之 DHT">
 <meta property="og:url" content="https://0ranga.com/2018/11/12/bt-dht/index.html">
 <meta property="og:site_name" content="闲云孤鹤">
 <meta property="og:description" content="BitTorrent 使用 DHT 网路来存储 peer 信息，以实现去 Tracker 化的种子。此时，每个 peer 都成了一个 Tracker。网络基于 Kademlia 算法实现，使用 UDP 进行传输。 本文主要对 BT 中的 DHT 网络实现与在博文 DHT 网络之 Kademlia 算法 中描述的 Kademlia 算法的区别进行总结。准确的说不能说是区别，而应该定义成实现细节，毕竟">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-07-18T07:11:02.020Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-11-12T13:11:00.000Z">
+<meta property="article:modified_time" content="2020-07-18T07:11:02.000Z">
+<meta property="article:author" content="VelihDzen">
+<meta property="article:tag" content="BT">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="BT 增强建议之 DHT">
-<meta name="twitter:description" content="BitTorrent 使用 DHT 网路来存储 peer 信息，以实现去 Tracker 化的种子。此时，每个 peer 都成了一个 Tracker。网络基于 Kademlia 算法实现，使用 UDP 进行传输。 本文主要对 BT 中的 DHT 网络实现与在博文 DHT 网络之 Kademlia 算法 中描述的 Kademlia 算法的区别进行总结。准确的说不能说是区别，而应该定义成实现细节，毕竟">
   
     <link rel="alternate" href="/atom.xml" title="闲云孤鹤" type="application/atom+xml">
   
@@ -44,30 +44,40 @@
 }
 
   </style>
-  <link rel="stylesheet" href="../../../../css/style.css">
+  
+<link rel="stylesheet" href="../../../../css/style.css">
 
-  <script src="../../../../js/jquery-3.1.1.min.js"></script>
-  <script src="../../../../js/bootstrap.js"></script>
+
+  
+<script src="../../../../js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="../../../../js/bootstrap.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/bootstrap.css" >
 
   
-    <link rel="stylesheet" href="../../../../css/dialog.css">
-  
+    
+<link rel="stylesheet" href="../../../../css/dialog.css">
 
-  
-
-  
-    <link rel="stylesheet" href="/css/header-post.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
   
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
   
   
 
-</head>
-</html>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="custom_css_source.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
@@ -141,7 +151,9 @@
     window.INSIGHT_CONFIG = INSIGHT_CONFIG;
 })(window);
 </script>
+
 <script src="../../../../js/insight.js"></script>
+
 
 </div></li>
             </div>
@@ -199,14 +211,14 @@
 <p>每个桶都会有一个<em>最近更新时间</em>标记来指示桶中节点的新鲜程度。如果一个桶中节点被 ping 成功了，或者有新的节点加入，或者一个节点被另一个替代了，这个时间会更新。如果一个桶最近更新时间已经过去 15 分钟，则需要进行一次桶刷新，方式和 Kademlia 中描述的一致。</p>
 <h3 id="Peer-DHT-支持与否告知"><a href="#Peer-DHT-支持与否告知" class="headerlink" title="Peer DHT 支持与否告知"></a>Peer DHT 支持与否告知</h3><p>peer 通过在 handshake 握手消息中将 reserved_byte 的最后一比特设置为 1 来表示支持 DHT 网络。同样支持 DHT 网络的节点收到该握手消息后会发起一个 PORT 消息，type 为 9，负载为两个字节的 DHT 节点 UDP 端口。收到 PORT 消息的节点需要对改节点端口执行 ping 操作，如果对方响应了，则节点需要尝试将其加入到 $K$ 桶中。</p>
 <h3 id="初始节点获取"><a href="#初始节点获取" class="headerlink" title="初始节点获取"></a>初始节点获取</h3><p>去 Tracker 化的 Torrent 文件中是没有存储 Tracker 地址的 ”announce“ 键的。取而代之的是 ”nodes“ 键，nodes 中需要存储距离 key 最近的 $k$ 个节点地址或者存储一个 <em>Good 节点</em>，比如说产生这个 Torrent 的用户节点。不能将某些公共的节点加入到 Torrent 文件中，否则就变得不那么去 Tracker 化了。nodes 大概可以表示为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nodes = [[&quot;&lt;host&gt;&quot;, &lt;port&gt;], [&quot;&lt;host&gt;&quot;, &lt;port&gt;], ...]</span><br><span class="line">nodes = [[&quot;127.0.0.1&quot;, 6881], [&quot;your.router.node&quot;, 4804]]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nodes &#x3D; [[&quot;&lt;host&gt;&quot;, &lt;port&gt;], [&quot;&lt;host&gt;&quot;, &lt;port&gt;], ...]</span><br><span class="line">nodes &#x3D; [[&quot;127.0.0.1&quot;, 6881], [&quot;your.router.node&quot;, 4804]]</span><br></pre></td></tr></table></figure>
 
 <h3 id="RPC-消息"><a href="#RPC-消息" class="headerlink" title="RPC 消息"></a>RPC 消息</h3><p>BT 使用 KRPC 来实现 Kademlia 节点间的 RPC 通信，KRPC 消息有三种消息类型：查询，响应，错误。对于 DHT 协议，有四种查询协议：ping，find_node，get_peers，announce_peer。</p>
 <h4 id="KRPC-协议"><a href="#KRPC-协议" class="headerlink" title="KRPC 协议"></a>KRPC 协议</h4><p>KRPC 协议是基于 UDP 和 bencode 编码的 RPC 协议。每条 KRPC 消息带有三个公共键值对以及其他因消息类型而异的键。三个公共的键是：</p>
 <ul>
 <li>”t“：值为字符串，代表 transaction ID。由发起 query 请求的节点生成，被请求节点需要在回复中返回。一般两个字节；</li>
 <li>”y“：值为单字符，代表消息类型，是 q(query)、r(response)、e(error) 中的一个；</li>
-<li>“v”：值为字符串，代表客户端版本 <a href="http://www.bittorrent.org/beps/bep_0020.html" target="_blank" rel="noopener">BEP 20</a> 中定义，不一定存在这个键；</li>
+<li>“v”：值为字符串，代表客户端版本 <a target="_blank" rel="noopener" href="http://www.bittorrent.org/beps/bep_0020.html">BEP 20</a> 中定义，不一定存在这个键；</li>
 </ul>
 <p>每种消息会有自己额外的键：</p>
 <h5 id="Query-消息"><a href="#Query-消息" class="headerlink" title="Query 消息"></a>Query 消息</h5><ul>
@@ -247,14 +259,13 @@
 </tr>
 </tbody></table>
 <p>示例错误消息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">generic error = &#123;&quot;t&quot;:&quot;aa&quot;, &quot;y&quot;:&quot;e&quot;, &quot;e&quot;:[201, &quot;A Generic Error Ocurred&quot;]&#125;</span><br><span class="line">bencoded = d1:eli201e23:A Generic Error Ocurrede1:t2:aa1:y1:ee</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">generic error &#x3D; &#123;&quot;t&quot;:&quot;aa&quot;, &quot;y&quot;:&quot;e&quot;, &quot;e&quot;:[201, &quot;A Generic Error Ocurred&quot;]&#125;</span><br><span class="line">bencoded &#x3D; d1:eli201e23:A Generic Error Ocurrede1:t2:aa1:y1:ee</span><br></pre></td></tr></table></figure>
 
 <h4 id="DHT-Query-消息"><a href="#DHT-Query-消息" class="headerlink" title="DHT Query 消息"></a>DHT Query 消息</h4><h5 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h5><p>用于检测一个节点是否工作，相当于 Kademlia 的 PING 调用。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arguments:  &#123;&quot;id&quot; : &quot;&lt;querying nodes id&gt;&quot;&#125;</span><br><span class="line"></span><br><span class="line">response: &#123;&quot;id&quot; : &quot;&lt;queried nodes id&gt;&quot;&#125;</span><br></pre></td></tr></table></figure>
 
 <h5 id="find-node"><a href="#find-node" class="headerlink" title="find_node"></a>find_node</h5><p>查找距离指定节点 ID 最近的节点 ID 信息，相当于 Kademlia 的 FIND_NODE 调用。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arguments:  &#123;&quot;id&quot; : &quot;&lt;querying nodes id&gt;&quot;, &quot;target&quot; : &quot;&lt;id of target node&gt;&quot;&#125;</span><br><span class="line"></span><br><span class="line">response: &#123;&quot;id&quot; : &quot;&lt;queried nodes id&gt;&quot;, &quot;nodes&quot; : &quot;&lt;compact node info&gt;&quot;&#125;</span><br></pre></td></tr></table></figure>
-
 <p>“Compact node info” 列表中每个节点信息占用 26 字节，其中节点 ID 20 字节，IP 与 Port 占用 6 字节。</p>
 <h5 id="get-peers"><a href="#get-peers" class="headerlink" title="get_peers"></a>get_peers</h5><p>查找与指定 info_hash 相关的 peer 信息，相当于 Kademlia 的 FIND_VALUE 调用。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">arguments:  &#123;&quot;id&quot; : &quot;&lt;querying nodes id&gt;&quot;, &quot;info_hash&quot; : &quot;&lt;20-byte infohash of target torrent&gt;&quot;&#125;</span><br><span class="line"></span><br><span class="line">response: &#123;&quot;id&quot; : &quot;&lt;queried nodes id&gt;&quot;, &quot;token&quot; :&quot;&lt;opaque write token&gt;&quot;, &quot;values&quot; : [&quot;&lt;peer 1 info string&gt;&quot;, &quot;&lt;peer 2 info string&gt;&quot;]&#125;</span><br><span class="line"></span><br><span class="line">or: &#123;&quot;id&quot; : &quot;&lt;queried nodes id&gt;&quot;, &quot;token&quot; :&quot;&lt;opaque write token&gt;&quot;, &quot;nodes&quot; : &quot;&lt;compact node info&gt;&quot;&#125;</span><br></pre></td></tr></table></figure>
@@ -264,18 +275,18 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">arguments:  &#123;&quot;id&quot; : &quot;&lt;querying nodes id&gt;&quot;,</span><br><span class="line">  &quot;implied_port&quot;: &lt;0 or 1&gt;,</span><br><span class="line">  &quot;info_hash&quot; : &quot;&lt;20-byte infohash of target torrent&gt;&quot;,</span><br><span class="line">  &quot;port&quot; : &lt;port number&gt;,</span><br><span class="line">  &quot;token&quot; : &quot;&lt;opaque token&gt;&quot;&#125;</span><br><span class="line"></span><br><span class="line">response: &#123;&quot;id&quot; : &quot;&lt;queried nodes id&gt;&quot;&#125;</span><br></pre></td></tr></table></figure>
 
 <p>接受者需要校验 token 是否与之前它通过 get_peers 调用的响应回复给该请求者的一致。如果 implied_port 值为 1，表示 port 的值不可用，接受者需要将请求包的 UDP 源端口作为 port。</p>
-<h2 id="BT-DHT-相关增强方案"><a href="#BT-DHT-相关增强方案" class="headerlink" title="BT DHT 相关增强方案"></a>BT DHT 相关增强方案</h2><h3 id="DHT-Scrape-帮助选择-Seeding-内容"><a href="#DHT-Scrape-帮助选择-Seeding-内容" class="headerlink" title="DHT Scrape 帮助选择 Seeding 内容"></a>DHT Scrape 帮助选择 Seeding 内容</h3><p>类似 <a href="http://bittorrent.org/beps/bep_0048.html" target="_blank" rel="noopener">Tracker Scrape</a>，DHT 网络可以通过 <a href="http://bittorrent.org/beps/bep_0033.html" target="_blank" rel="noopener">BEP33 - DHT Scrapes</a> 中定义的 DHT scrape 来了解某个 Swarm 中 peer 的大致情况，然后根据这个状态选择 seeding 队列中下一个 Swarm 进行做种。这种算法主要通过布隆过滤器（Bloom Filter）实现，布隆过滤器通常用于检索一个元素是否在一个集合中。但在 DHT scrape 中，作用所有不同。加入布隆过滤器中的是各个 peer 的 IP 的 sha1 值，可以根据过滤器中剩余的 0 比特数量来估算整个 Swarm 的规模。</p>
-<h3 id="只读-DHT-节点"><a href="#只读-DHT-节点" class="headerlink" title="只读 DHT 节点"></a>只读 DHT 节点</h3><p>在一些情况下，DHT 节点主动或被动地限制成为只读节点（<a href="http://bittorrent.org/beps/bep_0043.html" target="_blank" rel="noopener">BEP43 - Read-only DHT Nodes</a> 中定义），比如位于 NAT 后且 hole punching 失败的节点，节点具有流量限制或者有流量计划，流量会影响节点的电量等等情况。</p>
+<h2 id="BT-DHT-相关增强方案"><a href="#BT-DHT-相关增强方案" class="headerlink" title="BT DHT 相关增强方案"></a>BT DHT 相关增强方案</h2><h3 id="DHT-Scrape-帮助选择-Seeding-内容"><a href="#DHT-Scrape-帮助选择-Seeding-内容" class="headerlink" title="DHT Scrape 帮助选择 Seeding 内容"></a>DHT Scrape 帮助选择 Seeding 内容</h3><p>类似 <a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0048.html">Tracker Scrape</a>，DHT 网络可以通过 <a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0033.html">BEP33 - DHT Scrapes</a> 中定义的 DHT scrape 来了解某个 Swarm 中 peer 的大致情况，然后根据这个状态选择 seeding 队列中下一个 Swarm 进行做种。这种算法主要通过布隆过滤器（Bloom Filter）实现，布隆过滤器通常用于检索一个元素是否在一个集合中。但在 DHT scrape 中，作用所有不同。加入布隆过滤器中的是各个 peer 的 IP 的 sha1 值，可以根据过滤器中剩余的 0 比特数量来估算整个 Swarm 的规模。</p>
+<h3 id="只读-DHT-节点"><a href="#只读-DHT-节点" class="headerlink" title="只读 DHT 节点"></a>只读 DHT 节点</h3><p>在一些情况下，DHT 节点主动或被动地限制成为只读节点（<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0043.html">BEP43 - Read-only DHT Nodes</a> 中定义），比如位于 NAT 后且 hole punching 失败的节点，节点具有流量限制或者有流量计划，流量会影响节点的电量等等情况。</p>
 <p>节点通过在每条向外发送的 DHT Query 消息中给出一个 <code>ro=1</code> 的键值对来表明自己为只读节点。成为只读节点后，不再响应其他节点的 Query 请求。其他节点知晓只读节点后也不会发送 Query 请求以减少网络流量。</p>
-<h3 id="在-DHT-中存储任意数据"><a href="#在-DHT-中存储任意数据" class="headerlink" title="在 DHT 中存储任意数据"></a>在 DHT 中存储任意数据</h3><p><a href="http://bittorrent.org/beps/bep_0044.html" target="_blank" rel="noopener">BEP44 - Storing arbitrary data in the DHT</a> 中提供了一种在 DHT 中存储任意数据的方式。存储的数据可以是不可变数据也可以是可变数据，不可变数据的 key 是数据内容的 sha1 值，可变数据的 key 是用于签名数据的密钥对公钥。<a href="http://bittorrent.org/beps/bep_0046.html" target="_blank" rel="noopener">BEP46 - Updating Torrents Via DHT Mutable Items</a> 则基于在 DHT 网络中存储可变数据而给出了一种用于更新 Torrent 的方法。<a href="http://bittorrent.org/beps/bep_0050.html" target="_blank" rel="noopener">BEP50 - Publish/Subscribe Protocol</a> 实现了一种基于主题的发布订阅模式来向订阅特定主题的客户端发送更新后可变数据的协议。</p>
-<h3 id="多个监听地址情况处理"><a href="#多个监听地址情况处理" class="headerlink" title="多个监听地址情况处理"></a>多个监听地址情况处理</h3><p>某些客户端可能会监听多个公网单播 IP 地址，如果在这种情况下，该客户端仅使用一个节点 ID，则其他节点可能会因为多地址现象而对该节点 ID 进行清理。<a href="http://bittorrent.org/beps/bep_0045.html" target="_blank" rel="noopener">BEP45 - Multiple-address operation for the BitTorrent DHT</a> 中给出了一些要求和建议：</p>
+<h3 id="在-DHT-中存储任意数据"><a href="#在-DHT-中存储任意数据" class="headerlink" title="在 DHT 中存储任意数据"></a>在 DHT 中存储任意数据</h3><p><a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0044.html">BEP44 - Storing arbitrary data in the DHT</a> 中提供了一种在 DHT 中存储任意数据的方式。存储的数据可以是不可变数据也可以是可变数据，不可变数据的 key 是数据内容的 sha1 值，可变数据的 key 是用于签名数据的密钥对公钥。<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0046.html">BEP46 - Updating Torrents Via DHT Mutable Items</a> 则基于在 DHT 网络中存储可变数据而给出了一种用于更新 Torrent 的方法。<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0050.html">BEP50 - Publish/Subscribe Protocol</a> 实现了一种基于主题的发布订阅模式来向订阅特定主题的客户端发送更新后可变数据的协议。</p>
+<h3 id="多个监听地址情况处理"><a href="#多个监听地址情况处理" class="headerlink" title="多个监听地址情况处理"></a>多个监听地址情况处理</h3><p>某些客户端可能会监听多个公网单播 IP 地址，如果在这种情况下，该客户端仅使用一个节点 ID，则其他节点可能会因为多地址现象而对该节点 ID 进行清理。<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0045.html">BEP45 - Multiple-address operation for the BitTorrent DHT</a> 中给出了一些要求和建议：</p>
 <ul>
 <li>要求每个套接字地址必须具有不同的节点 ID，且它们的 XOR 距离要分得比较开，响应必须从收到相应请求的同一套接字地址发送；</li>
 <li>建议节点应避免在单个IP地址上使用多个端口；</li>
 </ul>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>和 DHT 相关的草案还有如对 IPv6 的支持（<a href="http://bittorrent.org/beps/bep_0032.html" target="_blank" rel="noopener">BEP32 - BitTorrent DHT Extensions for IPv6</a>），DHT 网络安全（<a href="http://bittorrent.org/beps/bep_0042.html" target="_blank" rel="noopener">BEP42 - DHT Security extension</a>），检索其他节点存储的 infohash 列表（<a href="http://bittorrent.org/beps/bep_0051.html" target="_blank" rel="noopener">BEP51 - DHT Infohash Indexing</a>）等。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>和 DHT 相关的草案还有如对 IPv6 的支持（<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0032.html">BEP32 - BitTorrent DHT Extensions for IPv6</a>），DHT 网络安全（<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0042.html">BEP42 - DHT Security extension</a>），检索其他节点存储的 infohash 列表（<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0051.html">BEP51 - DHT Infohash Indexing</a>）等。</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
-<li><a href="https://www.quora.com/%CE%BCTorrent-Whats-the-difference-between-the-status-Queued-Seed-and-Seeding" target="_blank" rel="noopener">μTorrent: What’s the difference between the status “Queued Seed” and “Seeding”?</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.quora.com/%CE%BCTorrent-Whats-the-difference-between-the-status-Queued-Seed-and-Seeding">μTorrent: What’s the difference between the status “Queued Seed” and “Seeding”?</a></li>
 </ol>
 
       
@@ -287,7 +298,7 @@
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -314,7 +325,7 @@
       
       
         
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/BT/">BT</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/BT/" rel="tag">BT</a></li></ul>
 
       
 
@@ -350,7 +361,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
     
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现细节点"><span class="nav-number">1.</span> <span class="nav-text">实现细节点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#key-value-对存储的内容"><span class="nav-number">1.1.</span> <span class="nav-text">key-value 对存储的内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#K-桶实现细节"><span class="nav-number">1.2.</span> <span class="nav-text">$K$ 桶实现细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Peer-DHT-支持与否告知"><span class="nav-number">1.3.</span> <span class="nav-text">Peer DHT 支持与否告知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始节点获取"><span class="nav-number">1.4.</span> <span class="nav-text">初始节点获取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RPC-消息"><span class="nav-number">1.5.</span> <span class="nav-text">RPC 消息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#KRPC-协议"><span class="nav-number">1.5.1.</span> <span class="nav-text">KRPC 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Query-消息"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">Query 消息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Response-消息"><span class="nav-number">1.5.1.2.</span> <span class="nav-text">Response 消息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Error-消息"><span class="nav-number">1.5.1.3.</span> <span class="nav-text">Error 消息</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DHT-Query-消息"><span class="nav-number">1.5.2.</span> <span class="nav-text">DHT Query 消息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ping"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">ping</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#find-node"><span class="nav-number">1.5.2.2.</span> <span class="nav-text">find_node</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#get-peers"><span class="nav-number">1.5.2.3.</span> <span class="nav-text">get_peers</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#announce-peer"><span class="nav-number">1.5.2.4.</span> <span class="nav-text">announce_peer</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BT-DHT-相关增强方案"><span class="nav-number">2.</span> <span class="nav-text">BT DHT 相关增强方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DHT-Scrape-帮助选择-Seeding-内容"><span class="nav-number">2.1.</span> <span class="nav-text">DHT Scrape 帮助选择 Seeding 内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#只读-DHT-节点"><span class="nav-number">2.2.</span> <span class="nav-text">只读 DHT 节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在-DHT-中存储任意数据"><span class="nav-number">2.3.</span> <span class="nav-text">在 DHT 中存储任意数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多个监听地址情况处理"><span class="nav-number">2.4.</span> <span class="nav-text">多个监听地址情况处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">2.5.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">实现细节点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#key-value-%E5%AF%B9%E5%AD%98%E5%82%A8%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-number">1.1.</span> <span class="nav-text">key-value 对存储的内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#K-%E6%A1%B6%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="nav-number">1.2.</span> <span class="nav-text">$K$ 桶实现细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Peer-DHT-%E6%94%AF%E6%8C%81%E4%B8%8E%E5%90%A6%E5%91%8A%E7%9F%A5"><span class="nav-number">1.3.</span> <span class="nav-text">Peer DHT 支持与否告知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E8%8A%82%E7%82%B9%E8%8E%B7%E5%8F%96"><span class="nav-number">1.4.</span> <span class="nav-text">初始节点获取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RPC-%E6%B6%88%E6%81%AF"><span class="nav-number">1.5.</span> <span class="nav-text">RPC 消息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#KRPC-%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.5.1.</span> <span class="nav-text">KRPC 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Query-%E6%B6%88%E6%81%AF"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">Query 消息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Response-%E6%B6%88%E6%81%AF"><span class="nav-number">1.5.1.2.</span> <span class="nav-text">Response 消息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Error-%E6%B6%88%E6%81%AF"><span class="nav-number">1.5.1.3.</span> <span class="nav-text">Error 消息</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DHT-Query-%E6%B6%88%E6%81%AF"><span class="nav-number">1.5.2.</span> <span class="nav-text">DHT Query 消息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ping"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">ping</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#find-node"><span class="nav-number">1.5.2.2.</span> <span class="nav-text">find_node</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#get-peers"><span class="nav-number">1.5.2.3.</span> <span class="nav-text">get_peers</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#announce-peer"><span class="nav-number">1.5.2.4.</span> <span class="nav-text">announce_peer</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BT-DHT-%E7%9B%B8%E5%85%B3%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">BT DHT 相关增强方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DHT-Scrape-%E5%B8%AE%E5%8A%A9%E9%80%89%E6%8B%A9-Seeding-%E5%86%85%E5%AE%B9"><span class="nav-number">2.1.</span> <span class="nav-text">DHT Scrape 帮助选择 Seeding 内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AA%E8%AF%BB-DHT-%E8%8A%82%E7%82%B9"><span class="nav-number">2.2.</span> <span class="nav-text">只读 DHT 节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-DHT-%E4%B8%AD%E5%AD%98%E5%82%A8%E4%BB%BB%E6%84%8F%E6%95%B0%E6%8D%AE"><span class="nav-number">2.3.</span> <span class="nav-text">在 DHT 中存储任意数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E7%9B%91%E5%90%AC%E5%9C%B0%E5%9D%80%E6%83%85%E5%86%B5%E5%A4%84%E7%90%86"><span class="nav-number">2.4.</span> <span class="nav-text">多个监听地址情况处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.5.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol>
     
     </div>
   </aside>
@@ -438,18 +449,28 @@
 </script>
 
 
-  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
-  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+
+  
+<script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="../../../../js/scripts.js"></script>
 
 
-  <script src="../../../../js/home.js"></script>
+
+  
+<script src="../../../../js/home.js"></script>
 
 
 
-  <script src="../../../../js/dialog.js"></script>
+
+  
+<script src="../../../../js/dialog.js"></script>
+
 
 
 
@@ -543,24 +564,7 @@ ga('send', 'pageview');
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
   
-    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="custom_mathjax_source">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 </body>
 </html>
