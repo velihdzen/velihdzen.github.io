@@ -3,7 +3,7 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>BT 增强建议之 Tracker | Velih Dzen&#39;s Blog | BitJogger</title>
+  <title>BT 增强建议之 Tracker | Velih Dzen&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   <meta name="keywords" content="BT" />
@@ -14,8 +14,8 @@
   <meta name="description" content="本文是 BT 系列文章中的一篇，主要介绍种子文件结构与磁力链接的原理，有需要的话可以先阅读博文BT 增强建议之概述。 p2p 是 peer-to-peer 的缩写，为了让网络中的一个 peer 如何才能找到另外志同道合的 peer，Tracker 扮演着至关重要的月老作用。Tracker 是一个 HTTP 或者 UDP 服务器，作用是帮助 peer 找到其他拥有相同资源的 peer。 后来有了 D">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BT 增强建议之 Tracker">
-<meta property="og:url" content="https://0ranga.com/2018/08/27/bt-tracker/index.html">
-<meta property="og:site_name" content="Velih Dzen&#39;s Blog | BitJogger">
+<meta property="og:url" content="https://velih.de/2018/08/27/bt-tracker/index.html">
+<meta property="og:site_name" content="Velih Dzen&#39;s Blog">
 <meta property="og:description" content="本文是 BT 系列文章中的一篇，主要介绍种子文件结构与磁力链接的原理，有需要的话可以先阅读博文BT 增强建议之概述。 p2p 是 peer-to-peer 的缩写，为了让网络中的一个 peer 如何才能找到另外志同道合的 peer，Tracker 扮演着至关重要的月老作用。Tracker 是一个 HTTP 或者 UDP 服务器，作用是帮助 peer 找到其他拥有相同资源的 peer。 后来有了 D">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-08-26T16:00:00.000Z">
@@ -24,7 +24,7 @@
 <meta property="article:tag" content="BT">
 <meta name="twitter:card" content="summary">
   
-    <link rel="alternate" href="/atom.xml" title="Velih Dzen&#39;s Blog | BitJogger" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Velih Dzen&#39;s Blog" type="application/atom+xml">
   
 
   
@@ -45,14 +45,14 @@
 
   </style>
   
-<link rel="stylesheet" href="../../../../css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 
 
   
-<script src="../../../../js/jquery-3.1.1.min.js"></script>
+<script src="/js/jquery-3.1.1.min.js"></script>
 
   
-<script src="../../../../js/bootstrap.js"></script>
+<script src="/js/bootstrap.js"></script>
 
 
   <!-- Bootstrap core CSS -->
@@ -60,7 +60,7 @@
 
   
     
-<link rel="stylesheet" href="../../../../css/dialog.css">
+<link rel="stylesheet" href="/css/dialog.css">
 
   
 
@@ -75,8 +75,8 @@
   
 
 <!-- hexo injector head_end start -->
-<link rel="stylesheet" href="custom_css_source.css">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<link rel="stylesheet" href="/custom_css_source.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 
 
@@ -111,11 +111,11 @@
             <div class="navbar-collapse collapse">
               <ul class="hnav navbar-nav">
                 
-                  <li> <a class="main-nav-link" href="../../../../index.html">首页</a> </li>
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
                 
-                  <li> <a class="main-nav-link" href="../../../../archives">归档</a> </li>
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
                 
-                  <li> <a class="main-nav-link" href="../../../../about">关于</a> </li>
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
                 
                   <li><div id="search-form-wrap">
 
@@ -146,13 +146,13 @@
             UNTITLED: '(无标题)',
         },
         ROOT_URL: '/',
-        CONTENT_URL: '../../../../content.json',
+        CONTENT_URL: '/content.json',
     };
     window.INSIGHT_CONFIG = INSIGHT_CONFIG;
 })(window);
 </script>
 
-<script src="../../../../js/insight.js"></script>
+<script src="/js/insight.js"></script>
 
 
 </div></li>
@@ -186,7 +186,7 @@
     
     <div class="article-meta">
       
-	<a href="" class="article-date">
+	<a href="/2018/08/27/bt-tracker/" class="article-date">
 	  <time datetime="2018-08-26T16:00:00.000Z" itemprop="datePublished">2018-08-27</time>
 	</a>
 
@@ -229,13 +229,13 @@
 <p>为了防止 UDP Flood 攻击，peer 与 UDP Tracker 的通信会首先通过 <strong>connect</strong> 动作进行类似 TCP 的三次握手，约定一个 connection_id，之后所有的动作都会使用这个 connection_id。<strong>announce</strong> 动作可以向 UDP Tracker 完成类似对 HTTP Tracker 的 GET 请求。使用 <strong>scrape</strong> 动作完成类似对 HTTP Tracker 的 Scrape 请求。如果出现错误，Tracker 会触发 <strong>error</strong> 动作。</p>
 <p>GET 请求如果需要扩展参数只需要在请求的 URL 中增加相关的参数即可，在 UDP Tracker 中，实现这种增加参数的可扩展性则需要另外想办法。<a target="_blank" rel="noopener" href="http://www.bittorrent.org/beps/bep_0041.html">BEP41 - UDP Tracker Protocol Extensions</a> 对于其实现方案举了一个这样的例子：一个 Tracker 服务器想要提高它的运行效率而限制其所能服务的 info_hash，他们考虑在在 peer 对 Tracker 的 URL 中加入一个 auth 字段，即该 info_hash 的签名，这样的情况下，Tracker 可以通过 Torrent 或者 Magnet 发布这个带有 info_hash 签名的 Tracker URL，peer 对该 Tracker 的请求时带上该签名，Tracker 就可以验证这个签名是否与 info_hash 相匹配以及这个 info_hash 是否在其服务的范围，从而实现限制。</p>
 <p>比如 Tracker 在一个 Magnet 中附加的 tr 参数如下，auth 字段就是指的 info_hash 的示例签名：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">udp:&#x2F;&#x2F;tracker.example.com:80&#x2F;?auth&#x3D;0xA0B1C</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">udp://tracker.example.com:80/?auth=0xA0B1C</span><br></pre></td></tr></table></figure>
 <p>实现 BEP41 方案后的客户端在对 UDP Tracker 发起 <strong>announce</strong> 请求动作时，会在包体尾部添加如下字节：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x2, 0xC, &#39;&#x2F;&#39;, &#39;？&#39;, &#39;a&#39;, &#39;u&#39;, &#39;t&#39;, &#39;h&#39;, &#39;&#x3D;&#39;, &#39;A&#39;, &#39;0&#39;, &#39;B&#39;, &#39;1&#39;, &#39;C&#39;, 0x1, 0x1, 0x0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x2, 0xC, &#x27;/&#x27;, &#x27;？&#x27;, &#x27;a&#x27;, &#x27;u&#x27;, &#x27;t&#x27;, &#x27;h&#x27;, &#x27;=&#x27;, &#x27;A&#x27;, &#x27;0&#x27;, &#x27;B&#x27;, &#x27;1&#x27;, &#x27;C&#x27;, 0x1, 0x1, 0x0</span><br></pre></td></tr></table></figure>
 <p><code>0x2</code> 表示附加的选项类型是 <strong>URLData</strong>，这个选项会紧跟着两个参数，<code>0xC</code> 表示后面的内容长度为 12，后续的 12 字节就是 URLData 的内容；<code>0x1</code> 表示附加的选项类型是 <strong>NOP</strong> ,即填充字节，连续两个 <code>0x1</code> 表示填充两个字节，<code>0x0</code> 表示附加的选项类型是 <strong>EndOfOptions</strong>，即结束标志。最后三个选项不是必须的，这里加入他们只是说明有这些选项。</p>
 <p>当然这里例子在 HTTP Tracker 中也容易实现，但是 UDP Tracker 有着更好的网络优化。</p>
 <h2 id="Tracker-相关增强方案"><a href="#Tracker-相关增强方案" class="headerlink" title="Tracker 相关增强方案"></a>Tracker 相关增强方案</h2><p>BEP 中还有不少改进提案是针对 Tracker 的：</p>
-<h3 id="Torrent-文件多-Tracker-支持"><a href="#Torrent-文件多-Tracker-支持" class="headerlink" title="Torrent 文件多 Tracker 支持"></a>Torrent 文件多 Tracker 支持</h3><p>Torrent 文件中 <strong>announce</strong> 字段只支持定义一个 Tracker，<a target="_blank" rel="noopener" href="http://www.bittorrent.org/beps/bep_0012.html">BEP12 - Multitracker Metadata Extension</a> 中提出了让 Torrent 携带多个 Tracker 的方案。<br>在 Torrent 文件根节点增加一个键 <strong>announce-list</strong>，这里简易的表示为 <strong>/announce-list</strong>，之后在 Torrent 中增加键时也会简易地表示成这样。如果 Torrent 文件中有 <strong>announce-list</strong>，则会忽略 <strong>announce</strong>。<strong>announce-list</strong> 是一个列表，**<em>列表的每个子项是都是一个子项是 Tracker URL 的列表**</em>。之所以是一个子项为列表的列表的原因在 BEP12 中有详细的介绍与举例。此处不详细展开。</p>
+<h3 id="Torrent-文件多-Tracker-支持"><a href="#Torrent-文件多-Tracker-支持" class="headerlink" title="Torrent 文件多 Tracker 支持"></a>Torrent 文件多 Tracker 支持</h3><p>Torrent 文件中 <strong>announce</strong> 字段只支持定义一个 Tracker，<a target="_blank" rel="noopener" href="http://www.bittorrent.org/beps/bep_0012.html">BEP12 - Multitracker Metadata Extension</a> 中提出了让 Torrent 携带多个 Tracker 的方案。<br>在 Torrent 文件根节点增加一个键 <strong>announce-list</strong>，这里简易的表示为 <strong>&#x2F;announce-list</strong>，之后在 Torrent 中增加键时也会简易地表示成这样。如果 Torrent 文件中有 <strong>announce-list</strong>，则会忽略 <strong>announce</strong>。<strong>announce-list</strong> 是一个列表，<em><strong>列表的每个子项是都是一个子项是 Tracker URL 的列表</strong></em>。之所以是一个子项为列表的列表的原因在 BEP12 中有详细的介绍与举例。此处不详细展开。</p>
 <h3 id="DNS-辅助纠正-Tracker-地址"><a href="#DNS-辅助纠正-Tracker-地址" class="headerlink" title="DNS 辅助纠正 Tracker 地址"></a>DNS 辅助纠正 Tracker 地址</h3><p>考虑到部分种子中的 Tracker 服务器可能变更服务端口或者讲 HTTP 服务改为 UDP 服务。<a target="_blank" rel="noopener" href="http://www.bittorrent.org/beps/bep_0034.html">BEP34 - DNS Tracker Preferences</a> 一种基于 DNS 的解决方案。<br>如果客户端发现自己所请求的 Tracker 没有相应，则可以查询相应域名的 DNS TXT 记录。如果有 TXT 记录是以 ”BITTORRENT“ 开头，则可以对这个 Tracker 地址进行纠正。这类 TXT 记录有以下几种类型：</p>
 <ul>
 <li>“BITTORRENT”：表明该主机不再运行任何 Tracker 服务。</li>
@@ -243,7 +243,7 @@
 <li>“BITTORRENT UDP:1337 TCP:80”：表示这个主机运行两个 Tracker 服务，分别时在 UDP 端口 1337 和 TCP 端口 80 上，且优先建议使用 UDP 端口。</li>
 </ul>
 <p>以下是一个相关的 TXT 记录查询过程，这个主机在多个 UDP 端口上运行了 Tracker 服务：</p>
-<figure class="highlight shell"><figcaption><span>dig txt</span><a href="/downloads/code/bt_dig_dns_txt.txt">view raw</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> dig 9.rarbg.to txt</span></span><br><span class="line">;; QUESTION SECTION:</span><br><span class="line">;9.rarbg.to.                    IN      TXT</span><br><span class="line"></span><br><span class="line">;; ANSWER SECTION:</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2710&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2720&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2730&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2740&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2750&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2770&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2780&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2790&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2800&quot;</span><br><span class="line"></span><br><span class="line">;; Query time: 207 msec</span><br><span class="line">;; SERVER: 1.1.1.1#53(1.1.1.1)</span><br><span class="line">;; WHEN: Sat Aug 25 05:46:02 CST 2018</span><br><span class="line">;; MSG SIZE  rcvd: 327</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><figcaption><span>dig txt</span><a href="/downloads/code/bt_dig_dns_txt.txt">view raw</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">dig 9.rarbg.to txt</span></span><br><span class="line">;; QUESTION SECTION:</span><br><span class="line">;9.rarbg.to.                    IN      TXT</span><br><span class="line"></span><br><span class="line">;; ANSWER SECTION:</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2710&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2720&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2730&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2740&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2750&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2770&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2780&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2790&quot;</span><br><span class="line">9.rarbg.to.             5134    IN      TXT     &quot;BITTORRENT UDP:2800&quot;</span><br><span class="line"></span><br><span class="line">;; Query time: 207 msec</span><br><span class="line">;; SERVER: 1.1.1.1#53(1.1.1.1)</span><br><span class="line">;; WHEN: Sat Aug 25 05:46:02 CST 2018</span><br><span class="line">;; MSG SIZE  rcvd: 327</span><br></pre></td></tr></table></figure>
 
 <h3 id="Tracker-返回公网-IP"><a href="#Tracker-返回公网-IP" class="headerlink" title="Tracker 返回公网 IP"></a>Tracker 返回公网 IP</h3><p><a target="_blank" rel="noopener" href="http://www.bittorrent.org/beps/bep_0024.html">BEP24 - Tracker Returns External IP</a> 通过在 GET 请求的返回中（UDP 也适用，下同）增加一个 <strong>external ip</strong> 字段来告知发起请求的 peer 自身的公网 IP。[Todo:客户端需要知道自己的公网 IP 做什么用暂时还不太清楚……ff]<br>通过 peer 间的 yourip 扩展消息也可以获得自身的公网 IP。</p>
 <h3 id="Tracker-返回压缩-peer-列表"><a href="#Tracker-返回压缩-peer-列表" class="headerlink" title="Tracker 返回压缩 peer 列表"></a>Tracker 返回压缩 peer 列表</h3><p><a target="_blank" rel="noopener" href="http://www.bittorrent.org/beps/bep_0023.html">BEP23 - Tracker Returns Compact Peer Lists</a> 提出了一种压缩 GET 请求返回中 peers 字段值的方式以在一定程度上减小 Tracker 服务器的流量压力。<br>这种方案的返回值中 peers 字段不再是一个列表，而是一个字符串，它由代表每个 peer 的六个字节（4 个字节用于 IP 地址，2 个字节用于端口）拼接而成。去除了 peer_id 这个字段，事实证明没有这个字段也没什么关系。<br>Peer 通过在 GET 请求中增加 <strong>compact</strong> 参数来告知 Tracker 服务器自己更喜欢什么格式，0 为原始格式，1 为压缩格式。但是 Tracker 不一定会接受这个参数的建议，所以客户端仍然需要同时支持两种格式。</p>
@@ -285,7 +285,7 @@
       
       
         
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/BT/" rel="tag">BT</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BT/" rel="tag">BT</a></li></ul>
 
       
 
@@ -295,7 +295,7 @@
     
 <nav id="article-nav">
   
-    <a href="../../30/bt-peer/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/08/30/bt-peer/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
@@ -305,7 +305,7 @@
     </a>
   
   
-    <a href="../../26/bt-metadata/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/08/26/bt-metadata/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
       <div class="article-nav-title">BT 增强建议之 Metadata：Torrent 与 Magnet</div>
     </a>
@@ -335,8 +335,8 @@
 
   <div class="container">
       	<div class="row">
-	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
-	      <p id="copyRightEn">Copyright &copy; 2018 - 2020 Velih Dzen&#39;s Blog | BitJogger All Rights Reserved.</p>
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2018 - 2022 Velih Dzen&#39;s Blog All Rights Reserved.</p>
 	      
 	      
     		<p class="busuanzi_uv">
@@ -368,11 +368,11 @@
     </div>
     <!-- <nav id="mobile-nav">
   
-    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+    <a href="/" class="mobile-nav-link">Home</a>
   
-    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+    <a href="/archives" class="mobile-nav-link">Archives</a>
   
-    <a href="../../../../about" class="mobile-nav-link">About</a>
+    <a href="/about" class="mobile-nav-link">About</a>
   
 </nav> -->
     
@@ -410,26 +410,26 @@
 
 
   
-<link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
 
   
-<script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
 
-<script src="../../../../js/scripts.js"></script>
-
-
-
-  
-<script src="../../../../js/home.js"></script>
-
+<script src="/js/scripts.js"></script>
 
 
 
   
-<script src="../../../../js/dialog.js"></script>
+<script src="/js/home.js"></script>
+
+
+
+
+  
+<script src="/js/dialog.js"></script>
 
 
 
@@ -503,10 +503,10 @@ ga('send', 'pageview');
         </div>
          <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
           <div class="panel-body">
-            Velih Dzen&#39;s Blog | BitJogger
+            Velih Dzen&#39;s Blog
           </div>
           <div class="panel-body">
-            Copyright © 2020 Velih Dzen All Rights Reserved.
+            Copyright © 2022 Velih Dzen All Rights Reserved.
           </div>
         </div>
       </div>
@@ -521,8 +521,8 @@ ga('send', 'pageview');
   </div>
 </div>
   
-  <a id="rocket" href="#top" class=""></a>
-  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  <!-- <a id="rocket" href="#top" class=""></a> -->
+  <!-- <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script> -->
   
     <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   

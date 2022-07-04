@@ -3,7 +3,7 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>BT 增强建议之进阶改进方案 | Velih Dzen&#39;s Blog | BitJogger</title>
+  <title>BT 增强建议之进阶改进方案 | Velih Dzen&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   <meta name="keywords" content="BT" />
@@ -14,8 +14,8 @@
   <meta name="description" content="本文是 BT 系列文章中的一篇，主要介绍 BEP 中剩下的改进方案，有需要的话可以先阅读博文 BT 增强建议之概述。 进阶改进方案本节点详细介绍几个比较重要的进阶改进方案。剩余的只作简单归纳。 超级做种模式提高做种效率BEP16 - Superseeding 中起草的超级做种功能是一个来帮助初始做种者使用较少的流量来完成做种的算法。当一个做种客户端进入超级做种模式后，它将不会表现为一个标准的做种者">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BT 增强建议之进阶改进方案">
-<meta property="og:url" content="https://0ranga.com/2018/11/15/bt-advanced/index.html">
-<meta property="og:site_name" content="Velih Dzen&#39;s Blog | BitJogger">
+<meta property="og:url" content="https://velih.de/2018/11/15/bt-advanced/index.html">
+<meta property="og:site_name" content="Velih Dzen&#39;s Blog">
 <meta property="og:description" content="本文是 BT 系列文章中的一篇，主要介绍 BEP 中剩下的改进方案，有需要的话可以先阅读博文 BT 增强建议之概述。 进阶改进方案本节点详细介绍几个比较重要的进阶改进方案。剩余的只作简单归纳。 超级做种模式提高做种效率BEP16 - Superseeding 中起草的超级做种功能是一个来帮助初始做种者使用较少的流量来完成做种的算法。当一个做种客户端进入超级做种模式后，它将不会表现为一个标准的做种者">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-11-15T11:45:00.000Z">
@@ -24,7 +24,7 @@
 <meta property="article:tag" content="BT">
 <meta name="twitter:card" content="summary">
   
-    <link rel="alternate" href="/atom.xml" title="Velih Dzen&#39;s Blog | BitJogger" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Velih Dzen&#39;s Blog" type="application/atom+xml">
   
 
   
@@ -45,14 +45,14 @@
 
   </style>
   
-<link rel="stylesheet" href="../../../../css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 
 
   
-<script src="../../../../js/jquery-3.1.1.min.js"></script>
+<script src="/js/jquery-3.1.1.min.js"></script>
 
   
-<script src="../../../../js/bootstrap.js"></script>
+<script src="/js/bootstrap.js"></script>
 
 
   <!-- Bootstrap core CSS -->
@@ -60,7 +60,7 @@
 
   
     
-<link rel="stylesheet" href="../../../../css/dialog.css">
+<link rel="stylesheet" href="/css/dialog.css">
 
   
 
@@ -75,8 +75,8 @@
   
 
 <!-- hexo injector head_end start -->
-<link rel="stylesheet" href="custom_css_source.css">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<link rel="stylesheet" href="/custom_css_source.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 
 
@@ -111,11 +111,11 @@
             <div class="navbar-collapse collapse">
               <ul class="hnav navbar-nav">
                 
-                  <li> <a class="main-nav-link" href="../../../../index.html">首页</a> </li>
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
                 
-                  <li> <a class="main-nav-link" href="../../../../archives">归档</a> </li>
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
                 
-                  <li> <a class="main-nav-link" href="../../../../about">关于</a> </li>
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
                 
                   <li><div id="search-form-wrap">
 
@@ -146,13 +146,13 @@
             UNTITLED: '(无标题)',
         },
         ROOT_URL: '/',
-        CONTENT_URL: '../../../../content.json',
+        CONTENT_URL: '/content.json',
     };
     window.INSIGHT_CONFIG = INSIGHT_CONFIG;
 })(window);
 </script>
 
-<script src="../../../../js/insight.js"></script>
+<script src="/js/insight.js"></script>
 
 
 </div></li>
@@ -186,7 +186,7 @@
     
     <div class="article-meta">
       
-	<a href="" class="article-date">
+	<a href="/2018/11/15/bt-advanced/" class="article-date">
 	  <time datetime="2018-11-15T11:45:00.000Z" itemprop="datePublished">2018-11-15</time>
 	</a>
 
@@ -206,12 +206,12 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>本文是 BT 系列文章中的一篇，主要介绍 BEP 中剩下的改进方案，有需要的话可以先阅读博文 <a href="/2018/08/26/bt-overview/" title="BT 增强建议之概述">BT 增强建议之概述</a>。</p>
 <h2 id="进阶改进方案"><a href="#进阶改进方案" class="headerlink" title="进阶改进方案"></a>进阶改进方案</h2><p>本节点详细介绍几个比较重要的进阶改进方案。剩余的只作简单归纳。</p>
 <h3 id="超级做种模式提高做种效率"><a href="#超级做种模式提高做种效率" class="headerlink" title="超级做种模式提高做种效率"></a>超级做种模式提高做种效率</h3><p><a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0016.html">BEP16 - Superseeding</a> 中起草的超级做种功能是一个来帮助初始做种者使用较少的流量来完成做种的算法。当一个做种客户端进入超级做种模式后，它将不会表现为一个标准的做种者，而是伪装成一个没有数据的正常 peer。当有其他 peer 连接时，它仅将一个从未发送过的片段发送给刚连接的 peer，在一个别的 peer 通知到该做种者这个片段前，做种者不会向刚才的 peer 发送新的片段，以此节约做种者的流量。<br>一般情况下，不建议使用超级种子模式。虽然它确实有助于更广泛地分发稀有数据，因为它限制了客户端可以下载的片段的选择，但也限制了这些客户端下载已经检索到的部分片段数据的能力。因此，超级种子模式仅推荐用于初始种子服务器。</p>
-<h3 id="使用-Web-方式做种"><a href="#使用-Web-方式做种" class="headerlink" title="使用 Web 方式做种"></a>使用 Web 方式做种</h3><p>WebSeed 在 BEP 中有两个增强建议：<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0019.html">BEP19 - HTTP/FTP Seeding (GetRight style)</a> 和 <a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0017.html">BEP17 - Seeding (Hoffman-style)</a></p>
+<h3 id="使用-Web-方式做种"><a href="#使用-Web-方式做种" class="headerlink" title="使用 Web 方式做种"></a>使用 Web 方式做种</h3><p>WebSeed 在 BEP 中有两个增强建议：<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0019.html">BEP19 - HTTP&#x2F;FTP Seeding (GetRight style)</a> 和 <a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0017.html">BEP17 - Seeding (Hoffman-style)</a></p>
 <p>BEP17 提供了一种通过 HTTP 协议做种以及从 HTTP 获取数据的方式。初始做种者主要在元数据文件中加入键 <code>httpseeds</code>，值为支持 HTTP Seeding 服务器地址列表，举例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d[&#39;httpseeds&#39;] &#x3D; [ &#39;http:&#x2F;&#x2F;www.site1.com&#x2F;source1.php&#39;,</span><br><span class="line">                   &#39;http:&#x2F;&#x2F;www.site2.com&#x2F;source2.php&#39;  ]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d[&#x27;httpseeds&#x27;] = [ &#x27;http://www.site1.com/source1.php&#x27;,</span><br><span class="line">                   &#x27;http://www.site2.com/source2.php&#x27;  ]</span><br></pre></td></tr></table></figure>
 
 <p>客户端通过以下方式访问 HTTP Seeding 服务器获取全部或者特定数据片段。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;url&gt;?info_hash&#x3D;[hash]&amp;piece&#x3D;[piece]&#123;&amp;ranges&#x3D;[start]-[end]&#123;,[start]-[end]&#125;...&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;url&gt;?info_hash=[hash]&amp;piece=[piece]&#123;&amp;ranges=[start]-[end]&#123;,[start]-[end]&#125;...&#125;</span><br></pre></td></tr></table></figure>
 
 <p>BEP19 通告服务器地址的方式和 BEP17 差不多，但是键改为了 <code>url-list</code>。BEP19 的优点是能够处理任何可通过普通 HTTP 或 FTP 访问的文件，利用标准 HTTP 请求下载片段。BEP17 要求对服务器做适当修改，以支持 BEP17，这在互操作性方面是一个缺点，但它确实具有允许种子服务器更好地控制流量和避免带宽滥用的优势。</p>
 <h3 id="私有种子加强数据分享隐私性"><a href="#私有种子加强数据分享隐私性" class="headerlink" title="私有种子加强数据分享隐私性"></a>私有种子加强数据分享隐私性</h3><p>私有种子是在 <a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0027.html">BEP27 - Private Torrents</a> 中描述的，通过在元数据信息总增加键值对 <code>private=1</code> 来标记种子为私有种子。客户端只能向私有种子对应的私有 Tracker 通告自身，而且只能与私有 Tracker 返回的 peer 建立连接。</p>
@@ -220,7 +220,7 @@
 <h3 id="Merkle-Tree-数据结构优化元数据文件大小"><a href="#Merkle-Tree-数据结构优化元数据文件大小" class="headerlink" title="Merkle Tree 数据结构优化元数据文件大小"></a>Merkle Tree 数据结构优化元数据文件大小</h3><p>如果种子文件过大，对于提供种子文件下载的中心化服务器就会有较大压力。为了让元数据文件体积减小，一个有效的方法就是将每个片段的大小增加（上限是 2 Mb），同样大小的文件因此会产生更少的摘要数量。考虑到只有当一个片段被完全接受完成且验证摘要后，才能将之与其他 peer 进行交换，这意味着节点需要一段时间才能和其他 peer 进行交换。</p>
 <p><a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0030.html">BEP30 - Merkle hash torrent extension</a> 利用了 Merkle Tree 这种数据结构来优化元数据文件大小。该方案使用单一的 Merkle 哈希来替代摘要列表。Merkle 散列可用于通过分层方案验证整个内容文件以及各个块的完整性。它通过构建与数据相关的哈希树并仅需使用根哈希作为验证数据完整性的依据。</p>
 <p>如图所示，P0-P12 代表片段 0-12，X 是为了树的完整而填充的零值片段，0-30 均表示哈希，其中 0 是根哈希。如果一个节点接受到了完整的片段 P8，那么该节点只需要额外通过一些途径知道 P8 的姊妹片段 P9 的哈希值，以及 P8 的所有叔块哈希（依次为 12，6，1）就可以验证 P8 的完整性。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">                                       0* &#x3D; root hash</span><br><span class="line">                                    &#x2F;     \</span><br><span class="line">                                &#x2F;            \</span><br><span class="line">                            &#x2F;                   \</span><br><span class="line">                        &#x2F;                          \</span><br><span class="line">                    &#x2F;                                 \</span><br><span class="line">                  1*                                     2</span><br><span class="line">                 &#x2F; \                                    &#x2F; \</span><br><span class="line">               &#x2F;     \                                &#x2F;     \</span><br><span class="line">             &#x2F;         \                            &#x2F;         \</span><br><span class="line">           &#x2F;             \                        &#x2F;             \</span><br><span class="line">         &#x2F;                 \                    &#x2F;                 \</span><br><span class="line">        3                   4                  5                   6* &#x3D; uncle</span><br><span class="line">       &#x2F; \                 &#x2F; \                &#x2F; \                 &#x2F; \</span><br><span class="line">      &#x2F;   \               &#x2F;   \              &#x2F;   \               &#x2F;   \</span><br><span class="line">     &#x2F;     \             &#x2F;     \            &#x2F;     \             &#x2F;     \</span><br><span class="line">   7         8         9        10        11        12*       13        14 </span><br><span class="line">  &#x2F; \       &#x2F; \       &#x2F; \       &#x2F; \       &#x2F; \       &#x2F; \       &#x2F; \       &#x2F; \</span><br><span class="line">15   16   17   18   19   20   21   22   23   24   25   26   27   28   29   30</span><br><span class="line"></span><br><span class="line">P0   P1   P2   P3   P4   P5   P6   P7   P8*  P9*  P10  P11  P12   X    X    X</span><br><span class="line">&#x3D; piece index                            &#x3D;    &#x3D;                   &#x3D; filler hash </span><br><span class="line">                                         p    s                   </span><br><span class="line">                                         i    i                   </span><br><span class="line">                                         e    b                   </span><br><span class="line">                                         c    l</span><br><span class="line">                                         e    i</span><br><span class="line">                                              n</span><br><span class="line">                                              g</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">                                       0* = root hash</span><br><span class="line">                                    /     \</span><br><span class="line">                                /            \</span><br><span class="line">                            /                   \</span><br><span class="line">                        /                          \</span><br><span class="line">                    /                                 \</span><br><span class="line">                  1*                                     2</span><br><span class="line">                 / \                                    / \</span><br><span class="line">               /     \                                /     \</span><br><span class="line">             /         \                            /         \</span><br><span class="line">           /             \                        /             \</span><br><span class="line">         /                 \                    /                 \</span><br><span class="line">        3                   4                  5                   6* = uncle</span><br><span class="line">       / \                 / \                / \                 / \</span><br><span class="line">      /   \               /   \              /   \               /   \</span><br><span class="line">     /     \             /     \            /     \             /     \</span><br><span class="line">   7         8         9        10        11        12*       13        14 </span><br><span class="line">  / \       / \       / \       / \       / \       / \       / \       / \</span><br><span class="line">15   16   17   18   19   20   21   22   23   24   25   26   27   28   29   30</span><br><span class="line"></span><br><span class="line">P0   P1   P2   P3   P4   P5   P6   P7   P8*  P9*  P10  P11  P12   X    X    X</span><br><span class="line">= piece index                            =    =                   = filler hash </span><br><span class="line">                                         p    s                   </span><br><span class="line">                                         i    i                   </span><br><span class="line">                                         e    b                   </span><br><span class="line">                                         c    l</span><br><span class="line">                                         e    i</span><br><span class="line">                                              n</span><br><span class="line">                                              g</span><br></pre></td></tr></table></figure>
 
 <p>原始资源发布者需要将元数据中的原本用来存储片段散列值的 <strong>pieces</strong> 键替换为存储根哈希的键 <strong>root hash</strong>。</p>
 <p>支持 Merkle Tree 哈希方式的客户端需要同时支持扩展消息（见 <a href="/2018/08/30/bt-peer/" title="BT 增强建议之 Peer">BT 增强建议之 Peer</a>）来替代普通的 <strong>piece</strong> 消息来完成数据传输。用于传输数据的扩展消息类型是 <strong>Tr_hashpiece</strong> ，和其他扩展消息一样，这个消息也需要在 peer 间的扩展握手消息中声明。</p>
@@ -243,7 +243,7 @@
 <li><a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0049.html">BEP49 - Distributed Torrent Feeds</a> 与 BEP36 提供的 RSS 订阅功能类似，但是通过 DHT 网络实现。</li>
 </ul>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://github.com/webtorrent/webtorrent/issues/67">Implement Web (HTTP) Seeding (BEP17+BEP19) · Issue #67 · webtorrent/webtorrent</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/webtorrent/webtorrent/issues/67">Implement Web (HTTP) Seeding (BEP17+BEP19) · Issue #67 · webtorrent&#x2F;webtorrent</a></li>
 </ol>
 
       
@@ -282,7 +282,7 @@
       
       
         
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/BT/" rel="tag">BT</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BT/" rel="tag">BT</a></li></ul>
 
       
 
@@ -292,8 +292,17 @@
     
 <nav id="article-nav">
   
+    <a href="/2022/06/30/haichaicape/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          深圳大鹏半岛海柴角地名历史小记
+        
+      </div>
+    </a>
   
-    <a href="../../12/bt-dht/" id="article-nav-older" class="article-nav-link-wrap">
+  
+    <a href="/2018/11/12/bt-dht/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
       <div class="article-nav-title">BT 增强建议之 DHT</div>
     </a>
@@ -323,8 +332,8 @@
 
   <div class="container">
       	<div class="row">
-	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
-	      <p id="copyRightEn">Copyright &copy; 2018 - 2020 Velih Dzen&#39;s Blog | BitJogger All Rights Reserved.</p>
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2018 - 2022 Velih Dzen&#39;s Blog All Rights Reserved.</p>
 	      
 	      
     		<p class="busuanzi_uv">
@@ -356,11 +365,11 @@
     </div>
     <!-- <nav id="mobile-nav">
   
-    <a href="../../../../index.html" class="mobile-nav-link">Home</a>
+    <a href="/" class="mobile-nav-link">Home</a>
   
-    <a href="../../../../archives" class="mobile-nav-link">Archives</a>
+    <a href="/archives" class="mobile-nav-link">Archives</a>
   
-    <a href="../../../../about" class="mobile-nav-link">About</a>
+    <a href="/about" class="mobile-nav-link">About</a>
   
 </nav> -->
     
@@ -398,26 +407,26 @@
 
 
   
-<link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
 
   
-<script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
 
-<script src="../../../../js/scripts.js"></script>
-
-
-
-  
-<script src="../../../../js/home.js"></script>
-
+<script src="/js/scripts.js"></script>
 
 
 
   
-<script src="../../../../js/dialog.js"></script>
+<script src="/js/home.js"></script>
+
+
+
+
+  
+<script src="/js/dialog.js"></script>
 
 
 
@@ -491,10 +500,10 @@ ga('send', 'pageview');
         </div>
          <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
           <div class="panel-body">
-            Velih Dzen&#39;s Blog | BitJogger
+            Velih Dzen&#39;s Blog
           </div>
           <div class="panel-body">
-            Copyright © 2020 Velih Dzen All Rights Reserved.
+            Copyright © 2022 Velih Dzen All Rights Reserved.
           </div>
         </div>
       </div>
@@ -509,8 +518,8 @@ ga('send', 'pageview');
   </div>
 </div>
   
-  <a id="rocket" href="#top" class=""></a>
-  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  <!-- <a id="rocket" href="#top" class=""></a> -->
+  <!-- <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script> -->
   
     <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   

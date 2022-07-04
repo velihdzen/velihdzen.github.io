@@ -3,23 +3,21 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Velih Dzen&#39;s Blog | BitJogger</title>
+  <title>Velih Dzen&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   
   
   
-  <meta name="description" content="BitJogger, Jog Jog Jog in the Bit World">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Velih Dzen&#39;s Blog | BitJogger">
-<meta property="og:url" content="https://0ranga.com/page/2/index.html">
-<meta property="og:site_name" content="Velih Dzen&#39;s Blog | BitJogger">
-<meta property="og:description" content="BitJogger, Jog Jog Jog in the Bit World">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Velih Dzen&#39;s Blog">
+<meta property="og:url" content="https://velih.de/page/2/index.html">
+<meta property="og:site_name" content="Velih Dzen&#39;s Blog">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Velih Dzen">
 <meta name="twitter:card" content="summary">
   
-    <link rel="alternate" href="/atom.xml" title="Velih Dzen&#39;s Blog | BitJogger" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Velih Dzen&#39;s Blog" type="application/atom+xml">
   
 
   
@@ -40,14 +38,14 @@
 
   </style>
   
-<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 
 
   
-<script src="../../js/jquery-3.1.1.min.js"></script>
+<script src="/js/jquery-3.1.1.min.js"></script>
 
   
-<script src="../../js/bootstrap.js"></script>
+<script src="/js/bootstrap.js"></script>
 
 
   <!-- Bootstrap core CSS -->
@@ -68,8 +66,8 @@
   
 
 <!-- hexo injector head_end start -->
-<link rel="stylesheet" href="custom_css_source.css">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<link rel="stylesheet" href="/custom_css_source.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 
 
@@ -104,11 +102,11 @@
             <div class="navbar-collapse collapse">
               <ul class="hnav navbar-nav">
                 
-                  <li> <a class="main-nav-link" href="../../index.html">首页</a> </li>
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
                 
-                  <li> <a class="main-nav-link" href="../../archives">归档</a> </li>
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
                 
-                  <li> <a class="main-nav-link" href="../../about">关于</a> </li>
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
                 
                   <li><div id="search-form-wrap">
 
@@ -139,13 +137,13 @@
             UNTITLED: '(无标题)',
         },
         ROOT_URL: '/',
-        CONTENT_URL: '../../content.json',
+        CONTENT_URL: '/content.json',
     };
     window.INSIGHT_CONFIG = INSIGHT_CONFIG;
 })(window);
 </script>
 
-<script src="../../js/insight.js"></script>
+<script src="/js/insight.js"></script>
 
 
 </div></li>
@@ -165,7 +163,7 @@
         
           <section id="main" style="float:none;">
   
-    <article id="post-hello-world"  class="article article-type-post" itemscope itemprop="blogPost" >
+    <article id="post-tcp"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="article-inner">
     
     
@@ -173,7 +171,7 @@
         
   
     <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="../../2018/07/10/hello-world/">闲云孤鹤</a>
+      <a class="article-title" href="/2018/07/20/tcp/">TCP 温故知新</a>
     </h1>
   
 
@@ -181,8 +179,8 @@
     
     <div class="article-meta">
       
-	<a href="../../2018/07/10/hello-world/" class="article-date">
-	  <time datetime="2018-07-10T13:24:55.000Z" itemprop="datePublished">2018-07-10</time>
+	<a href="/2018/07/20/tcp/" class="article-date">
+	  <time datetime="2018-07-19T16:00:00.000Z" itemprop="datePublished">2018-07-20</time>
 	</a>
 
       
@@ -193,10 +191,12 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p class="article-excerpt-content">
-          12345public class Blog &#123;    public static void main(String[] args) &#123;        System.out.println(&quot;斯是陋室，惟吾德馨&quot;);    &#125;&#125;
+          生产环境遇到些网络问题，知对 TCP 协议还是有些生疏，在此复习记录。
+
+协议报文段格式TCP 协议报文段主要由首部（Header） 与数据（Data） 两部分组成。在计算校验和是还会加上虚拟的伪首部。此处主要说明首部的组成。TCP 在网络模型中属于运输层，用于提供进程与进程间的字节流通信服务，因此需要源 &#x2F; 目端口（Source &#x2F; Destination port） 以确定通信双方进程。使用序号（Sequence number，seq） 表明本报文段第一个数据字节的...
         </p>
         <p class="article-more-link">
-          <a href="../../2018/07/10/hello-world/#more">阅读全文</a>
+          <a href="/2018/07/20/tcp/#more">阅读全文</a>
         </p>
       
     </div>
@@ -219,7 +219,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="../../">&amp;laquo; 上一页</a><a class="page-number" href="../../">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/">« 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
   </nav>
 
 </section>
@@ -233,8 +233,8 @@
 
   <div class="container">
       	<div class="row">
-	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
-	      <p id="copyRightEn">Copyright &copy; 2018 - 2020 Velih Dzen&#39;s Blog | BitJogger All Rights Reserved.</p>
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2018 - 2022 Velih Dzen&#39;s Blog All Rights Reserved.</p>
 	      
 	      
     		<p class="busuanzi_uv">
@@ -266,11 +266,11 @@
     </div>
     <!-- <nav id="mobile-nav">
   
-    <a href="../../index.html" class="mobile-nav-link">Home</a>
+    <a href="/" class="mobile-nav-link">Home</a>
   
-    <a href="../../archives" class="mobile-nav-link">Archives</a>
+    <a href="/archives" class="mobile-nav-link">Archives</a>
   
-    <a href="../../about" class="mobile-nav-link">About</a>
+    <a href="/about" class="mobile-nav-link">About</a>
   
 </nav> -->
     
@@ -308,20 +308,20 @@
 
 
   
-<link rel="stylesheet" href="../../fancybox/jquery.fancybox.css">
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
 
   
-<script src="../../fancybox/jquery.fancybox.pack.js"></script>
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
 
-<script src="../../js/scripts.js"></script>
+<script src="/js/scripts.js"></script>
 
 
 
   
-<script src="../../js/home.js"></script>
+<script src="/js/home.js"></script>
 
 
 
@@ -397,10 +397,10 @@ ga('send', 'pageview');
         </div>
          <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
           <div class="panel-body">
-            Velih Dzen&#39;s Blog | BitJogger
+            Velih Dzen&#39;s Blog
           </div>
           <div class="panel-body">
-            Copyright © 2020 Velih Dzen All Rights Reserved.
+            Copyright © 2022 Velih Dzen All Rights Reserved.
           </div>
         </div>
       </div>
@@ -415,8 +415,8 @@ ga('send', 'pageview');
   </div>
 </div>
   
-  <a id="rocket" href="#top" class=""></a>
-  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <!-- <a id="rocket" href="#top" class=""></a> -->
+  <!-- <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 </body>
 </html>

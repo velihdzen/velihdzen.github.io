@@ -1504,11 +1504,6 @@ a.article-title:hover {
 .archive-year:hover {
   color: #022070;
 }
-.archive-year:before {
-  font-family: "FontAwesome";
-  content: "\f273";
-  margin-right: 0.2em;
-}
 .archives-tags-wrap {
   margin: 50px 0;
 }
