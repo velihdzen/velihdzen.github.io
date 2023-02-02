@@ -923,7 +923,7 @@ a.article-title:hover {
 }
 .article-entry {
   color: #444;
-  margin: 0 20px;
+  margin: 0 15px;
 }
 .article-entry:before,
 .article-entry:after {
@@ -997,7 +997,7 @@ a.article-title:hover {
 }
 .article-entry td {
   border-bottom: 1px solid #eef1f8;
-  padding: 10px 0;
+  padding: 4px 0;
 }
 .article-entry blockquote {
   padding: 0.1px 20px;
@@ -1006,7 +1006,7 @@ a.article-title:hover {
   color: rgba(44,44,44,0.6);
   margin: 1.4em 0px;
   border-left: 2px solid #022070;
-  background: rgba(208,211,248,0.15);
+  background: rgba(113,151,255,0.15);
 }
 .article-entry blockquote p {
   font-size: 14px;
@@ -1113,9 +1113,9 @@ a.article-title:hover {
 .article-footer {
   font-size: 0.85em;
   line-height: 1.6em;
-  border-top: 1px solid rgba(208,211,248,0.25);
+  border-top: 1px solid rgba(113,151,255,0.25);
   padding-top: 1.6em;
-  margin: 0 20px 20px;
+  margin: 0 15px 15px;
 }
 .article-footer:before,
 .article-footer:after {
@@ -1467,7 +1467,7 @@ a.article-title:hover {
   line-height: 30px;
 }
 #comments {
-  padding: 20px;
+  padding: 15px;
   margin: 50px 0;
 }
 #comments a {
@@ -1515,7 +1515,7 @@ a.article-title:hover {
   color: #33363b;
   text-align: center;
   border-left: 0px solid #022070;
-  background: rgba(208,211,248,0.15);
+  background: rgba(113,151,255,0.15);
 }
 .archives-tags-wrap blockquote a {
   color: #33363b;
@@ -1547,7 +1547,7 @@ a.article-title:hover {
   color: #022070;
   text-align: left;
   border-left: 0px solid #022070;
-  background: rgba(208,211,248,0.15);
+  background: rgba(113,151,255,0.15);
 }
 .archives-category-wrap blockquote a {
   color: #33363b;
@@ -1719,8 +1719,8 @@ a.article-title:hover {
 .article-entry pre,
 .article-entry .highlight {
   background: #002451;
-  margin: 20px 0px;
-  padding: 15px 20px;
+  margin: 15px 0px;
+  padding: 10px 15px;
   border-style: solid;
   border-color: #eef1f8;
   border-width: 1px 0;
@@ -1756,7 +1756,7 @@ figure.highlight::-webkit-scrollbar-track {
 }
 .article-entry code {
   white-space: normal;
-  background: rgba(208,211,248,0.2);
+  background: rgba(113,151,255,0.2);
   color: #444;
   padding: 0 0.3em;
 }
@@ -1817,12 +1817,12 @@ figure.highlight::-webkit-scrollbar-track {
   background: #003f8e;
 }
 .article-entry .gist {
-  margin: 0 -20px;
+  margin: 0 -15px;
   border-style: solid;
   border-color: #eef1f8;
   border-width: 1px 0;
   background: #002451;
-  padding: 15px 20px 15px 0;
+  padding: 15px 15px 15px 0;
 }
 .article-entry .gist .gist-file {
   border: none;
@@ -1853,7 +1853,7 @@ figure.highlight::-webkit-scrollbar-track {
   text-shadow: 0 0;
   padding: 0;
   margin-top: 1em;
-  margin-left: 20px;
+  margin-left: 15px;
 }
 .article-entry .gist .gist-file .gist-meta a {
   color: #0e83cd;

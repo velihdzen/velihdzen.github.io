@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  <meta charset="utf-8">
   
-  <title>在 IPFS 上部署静态博客 | Velih Dzen&#39;s Blog</title>
+  <title>在 IPFS 上部署静态博客 | Velih&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   <meta name="keywords" content="IPFS" />
@@ -11,26 +11,26 @@
   
   
   
-  <meta name="description" content="本文主要记录在 IPFS 上部署博客的过程，用以熟悉 IPFS 的基本操作。https:&#x2F;&#x2F;ipfs.0ranga.com 就是博主博客在 IPFS 上部署的版本。">
+  <meta name="description" content="本文已过时，见 IPFS 静态网站部署指南">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在 IPFS 上部署静态博客">
 <meta property="og:url" content="https://velih.de/2018/09/22/ipfs-blog/index.html">
-<meta property="og:site_name" content="Velih Dzen&#39;s Blog">
-<meta property="og:description" content="本文主要记录在 IPFS 上部署博客的过程，用以熟悉 IPFS 的基本操作。https:&#x2F;&#x2F;ipfs.0ranga.com 就是博主博客在 IPFS 上部署的版本。">
+<meta property="og:site_name" content="Velih&#39;s Blog">
+<meta property="og:description" content="本文已过时，见 IPFS 静态网站部署指南">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-09-22T13:12:00.000Z">
-<meta property="article:modified_time" content="2020-07-18T07:11:02.000Z">
+<meta property="article:modified_time" content="2023-01-10T11:19:12.249Z">
 <meta property="article:author" content="Velih Dzen">
 <meta property="article:tag" content="IPFS">
 <meta name="twitter:card" content="summary">
   
-    <link rel="alternate" href="/atom.xml" title="Velih Dzen&#39;s Blog" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Velih&#39;s Blog" type="application/atom+xml">
   
 
   
 
-  <link rel="icon" href="/css/images/mylogo.jpg">
-  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  <link rel="icon" href="/css/images/mylogo.png">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.png">
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
@@ -76,7 +76,7 @@
 
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="/custom_css_source.css">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 
@@ -84,7 +84,7 @@
 
 
   
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+  <div id="container">
     <div id="wrap">
       
         <header>
@@ -104,7 +104,7 @@
               <a class="brand" style="
                  margin-top: 0px;"  
                 href="#" data-toggle="modal" data-target="#myModal" >
-                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.png">
               </a>
             
             
@@ -203,116 +203,7 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>本文主要记录在 IPFS 上部署博客的过程，用以熟悉 IPFS 的基本操作。<a target="_blank" rel="noopener" href="https://ipfs.0ranga.com/">https://ipfs.0ranga.com</a> 就是博主博客在 IPFS 上部署的版本。</p>
-<span id="more"></span>
-
-<h2 id="IPFS"><a href="#IPFS" class="headerlink" title="IPFS"></a>IPFS</h2><h3 id="安装-IPFS"><a href="#安装-IPFS" class="headerlink" title="安装 IPFS"></a>安装 IPFS</h3><p>首先得在计算机上安装 IPFS，博主 PC 的操作系统的 Arch，可以直接使用包管理器进行安装。如果之后需要为博客添加域名则需要在云服务器上部署 IPFS，博主选择的是 DightOcean 的 CentOS 7。所以提供了以上两种操作系统的安装方式，其他系统如何安装请自行探索。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Arch</span></span><br><span class="line"><span class="comment">## 包管理器直接安装</span></span><br><span class="line">pacman -S go-ipfs </span><br><span class="line"></span><br><span class="line"><span class="comment"># CentOS</span></span><br><span class="line"><span class="comment">## 从 https://dist.ipfs.io/#go-ipfs 获取最新安装包，例如</span></span><br><span class="line">wget https://dist.ipfs.io/go-ipfs/v0.4.17/go-ipfs_v0.4.17_linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment">## 解压</span></span><br><span class="line">tar xvfz go-ipfs_v0.4.17_linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment">## 安装</span></span><br><span class="line"><span class="built_in">cd</span> go-ipfs &amp;&amp; ./install.sh</span><br></pre></td></tr></table></figure>
-
-<p>安装完成后需要先初始化 IPFS</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipfs init</span><br></pre></td></tr></table></figure>
-<p>另外，一般在云服务器上需要将 IPFS 设置为自启动服务，设置方式如下，首先需要添加 service 描述文件</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/systemd/system/ipfs.service</span><br></pre></td></tr></table></figure>
-<p>文件内容如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=IPFS Daemon</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/usr/local/bin/ipfs daemon --enable-namesys-pubsub</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
-<p>然后使服务开机自启动同时立即启动：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> ipfs</span><br><span class="line">systemctl start ipfs</span><br></pre></td></tr></table></figure>
-<h3 id="部署一个文件"><a href="#部署一个文件" class="headerlink" title="部署一个文件"></a>部署一个文件</h3><p>接下来在本地创建一个文件 <code>index.html</code>，在里面写入简单的话</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;hello, my simple blog!&#x27;</span> &gt; index.html</span><br></pre></td></tr></table></figure>
-<p>随后添加至 IPFS 中</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipfs add index.html</span><br></pre></td></tr></table></figure>
-<p>得到返回如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ipfs add index.html </span><br><span class="line"><span class="comment"># added QmaqwGFUj34wDLPzHVxmJhEN6n27xidsfrmf2WUnhSTKTr index.html</span></span><br><span class="line"><span class="comment"># 23 B / 23 B [=========================================] 100.00%</span></span><br></pre></td></tr></table></figure>
-<p>可以通过如下命令查看文件内容</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipfs <span class="built_in">cat</span> QmaqwGFUj34wDLPzHVxmJhEN6n27xidsfrmf2WUnhSTKTr</span><br></pre></td></tr></table></figure>
-<p>当我们使用如下命令启动节点后，文件内容将会逐渐被 IPFS 网络存储</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ipfs daemon</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">systemctl start ipfs</span><br></pre></td></tr></table></figure>
-<p>随后可以通过访问 <a target="_blank" rel="noopener" href="https://gateway.ipfs.io/ipfs/QmaqwGFUj34wDLPzHVxmJhEN6n27xidsfrmf2WUnhSTKTr">https://gateway.ipfs.io/ipfs/QmaqwGFUj34wDLPzHVxmJhEN6n27xidsfrmf2WUnhSTKTr</a> 得到该文件。如果你不介意将这句简单的话作为你的博客的全部内容的话，那至此博客的全部创建完成了，而且理论上永远不会消失。</p>
-<h2 id="部署静态博客框架：以-Hexo-为例"><a href="#部署静态博客框架：以-Hexo-为例" class="headerlink" title="部署静态博客框架：以 Hexo 为例"></a>部署静态博客框架：以 Hexo 为例</h2><p>虽然小标题写的是“以 Hexo 为例”，但本文不会细讲如何使用 Hexo，<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo 官方文档</a>提供了细致的帮助。如果你之前用过 Hexo 而且因为懒得写作而把它丢弃在硬盘里，这里有几个命令可以帮助你快速回想起使用方法。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建新文章</span></span><br><span class="line">hexo new post &lt;new_post_name&gt;</span><br><span class="line"><span class="comment"># 清理</span></span><br><span class="line">hexo clean</span><br><span class="line"><span class="comment"># 生成博客</span></span><br><span class="line">hexo g</span><br><span class="line"><span class="comment"># 启动本地服务器</span></span><br><span class="line">hexo s --open</span><br><span class="line"><span class="comment"># 部署</span></span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-<p>在使用 <code>hexo g</code> 生成静态博客后，我们可以在 <strong>public</strong> 目录中找到部署博客需要的所有文件，入口是熟悉的 <strong>index.html</strong>。（其他博客框架也有个类似 public 的文件夹用于存放整个博客）</p>
-<p>使用如下命令将整个 public 文件夹放入 IPFS</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipfs add -r public</span><br></pre></td></tr></table></figure>
-<p>添加后的输出中最后一行是目录 public 的哈希值，比如博主得到的是</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># added QmSc5D1ahPbVkAhHFxJvqnWDEWrgMQw9B9BGmQv5i1VAwt public</span></span><br></pre></td></tr></table></figure>
-<p>然后访问 <a target="_blank" rel="noopener" href="https://gateway.ipfs.io/ipfs/QmSc5D1ahPbVkAhHFxJvqnWDEWrgMQw9B9BGmQv5i1VAwt/">https://gateway.ipfs.io/ipfs/QmSc5D1ahPbVkAhHFxJvqnWDEWrgMQw9B9BGmQv5i1VAwt/</a> 就可以看到保存在 IPFS 上的博客了。不过，在修改文章更新 public 目录之后，目录的哈希值会变化，因此以上的连接只是博客在当前的一个（永久）状态，如果想要通过一个链接访问不断更新的博客，就需要借助 IPNS，IPNS 的作用就是将某个文件与 PeerID 进行绑定，一般情况下，PeerID 可以保持不变，这样，通过访问 PeerID，就可以访问与 PeerID 绑定的内容了，这和 DNS 中域名与 IP 的关系类似。</p>
-<p>通过以下命令将当前的 public 目录哈希与 PeerID，PeerID 不需要显示指定，得到绑定结果后的 PeerID 实际上与通过 <code>ipfs id</code> 命令得到的 ID 一致。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 绑定</span></span><br><span class="line">ipfs name publish &lt;file_hash&gt;</span><br><span class="line">ipfs name publish QmSc5D1ahPbVkAhHFxJvqnWDEWrgMQw9B9BGmQv5i1VAwt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绑定后的输出</span></span><br><span class="line"><span class="comment"># Published to QmRP5ZT2B5W8zWTXhPwpgZQpuj8Gv5bNaXWbttRB6niAYo:</span></span><br><span class="line"><span class="comment"># /ipfs/QmSc5D1ahPbVkAhHFxJvqnWDEWrgMQw9B9BGmQv5i1VAwt</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 访问（列出目录） IPNS QmRP5ZT2B5W8zWTXhPwpgZQpuj8Gv5bNaXWbttRB6niAYo</span></span><br><span class="line">ipfs <span class="built_in">ls</span> /ipns/&lt;peer_id&gt;</span><br><span class="line">ipfs <span class="built_in">ls</span> /ipns/QmRP5ZT2B5W8zWTXhPwpgZQpuj8Gv5bNaXWbttRB6niAYo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 反向解析</span></span><br><span class="line">ipfs name resolve &lt;peer_id&gt;</span><br><span class="line">ipfs name resolve QmRP5ZT2B5W8zWTXhPwpgZQpuj8Gv5bNaXWbttRB6niAYo</span><br></pre></td></tr></table></figure>
-<p>绑定 IPNS 之后，可以通过 <a target="_blank" rel="noopener" href="https://gateway.ipfs.io/ipns/QmRP5ZT2B5W8zWTXhPwpgZQpuj8Gv5bNaXWbttRB6niAYo/">https://gateway.ipfs.io/ipns/QmRP5ZT2B5W8zWTXhPwpgZQpuj8Gv5bNaXWbttRB6niAYo/</a> 访问到博客。</p>
-<p><strong>但是直接部署 public 目录存在一个问题</strong>：hexo 这类的博客中所有本地资源的路径均为根目录开头的相对站点根目录的绝对路径，例如对于 <code>/css/home.css</code>，当访问 <code>https://gateway.ipfs.io/ipfs/&lt;file_hash&gt;</code> 这样在文件中有类似绝对路径链接时，相当于访问 <code>https://gateway.ipfs.io/css/home.css</code>，显然这个 <code>home.css</code> 文件是不存在的。如果想要使得网站可以正确访问，有两种解决办法：</p>
-<ol>
-<li>使用相对路径 <code>./css/home.css</code>，这样就相当于访问 <code>https://gateway.ipfs.io/ipfs/&lt;file_hash&gt;/css/home.css</code>，如此可以正确访问。如果博客框架自身支持将所有本站资源的绝对路径替换成这样，或者整个博客是自己实现如此，那不需要额外的操作就可以得到一个完美的博客。</li>
-<li>让 <code>http://gateway.site/css/home.css</code> 真实存在，即将 <code>http://gateway.ipfs.io/ipfs/&lt;file_hash&gt;</code> 替换成一个独立域名 <code>http://gateway.site</code>，这就需要用到 IPFS 提供的 <a target="_blank" rel="noopener" href="https://github.com/ipfs/go-dnslink">dnslink</a> 增强。</li>
-</ol>
-<h2 id="为博客添加域名"><a href="#为博客添加域名" class="headerlink" title="为博客添加域名"></a>为博客添加域名</h2><p>还是以我自己的域名 0ranga.com 为例，这个域名托管在 Namecheap 上，使用 Namecheap 的 DNS 管理，可以为域名增加一个子域名 TXT 记录如下：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TXT 0ranga.com dnslink=/ipns/QmRP5ZT2B5W8zWTXhPwpgZQpuj8Gv5bNaXWbttRB6niAYo</span><br></pre></td></tr></table></figure>
-<p>这样，我们可以通过地址 <a target="_blank" rel="noopener" href="https://gateway.ipfs.io/ipns/0ranga.com">https://gateway.ipfs.io/ipns/0ranga.com</a> 访问到部署在 IPFS 上博客。我们还可以进一步缩短访问链接长度，在 DNS 管理中进一步添加如下记录（为了不与原博客 0ranga.com 冲突，这里使用子域名 ipfs.0ranga.com）：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 1. 为子域名 ipfs.0ranga.com 添加 A 记录，绑定到一个 Gateway 的 IP，</span><br><span class="line">#    示例中是 209.94.78.78 ，这个 IP 是 gateway.ipfs.io 的众多 IP 中的一个</span><br><span class="line">A ipfs.0ranga.com 209.94.78.78</span><br><span class="line"></span><br><span class="line"># 2. 为子域名 ipfs.0ranga.com 添加 TXT 记录，指定 IPNS</span><br><span class="line">TXT ipfs.0ranga.com dnslink=/ipns/QmRP5ZT2B5W8zWTXhPwpgZQpuj8Gv5bNaXWbttRB6niAYo</span><br></pre></td></tr></table></figure>
-<p>等待 DNS 记录生效后，可以通过 <a target="_blank" rel="noopener" href="http://ipfs.0ranga.com/">http://ipfs.0ranga.com</a> 访问博客。至此，博客的短链接改造已经基本完成。接下来会记录些自己另外的一些尝试，包括对博客的访问进行加速等。</p>
-<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><h3 id="部署云服务器以增强博客的可用性同时加快访问速度"><a href="#部署云服务器以增强博客的可用性同时加快访问速度" class="headerlink" title="部署云服务器以增强博客的可用性同时加快访问速度"></a>部署云服务器以增强博客的可用性同时加快访问速度</h3><p>如果部署了博客的本地 PC 关机，同时博客的访问量不是那么可观，则可能存在一部分博客文件无法访问的情况，因为在没有激励的情况下 IPFS 上的其他节点一般不会主动存储其他用户往 IPFS 中添加的文件。所以配置一个云服务器来存储博客本身就可以确保文件的可用性（请问：那为什么还要用 IPFS 来部署博客？），同时随着 FileCoin 激励与 IPFS 的结合，事情会变得不那么糟糕。</p>
-<p>云服务部署的步骤如下：</p>
-<ol>
-<li><p>按照<strong>安装 IPFS</strong> 这小节中的安装方法在云服务器上部署一个 IPFS 服务；</p>
-</li>
-<li><p>为了 Gateway 可以被公网访问，需要将 IPFS 配置文件 <code>～/.ipfs/config</code> 中 <code>Addresses:Gateway</code> 的配置改为 <code>/ip4/0.0.0.0/tcp/80</code> ，用以监听所有网卡上的 TCP 80 端口，随后重启 IPFS 服务使配置生效；</p>
-</li>
-<li><p>通过本地浏览器直接访问云服务器的 IP （博主目前测试使用的服务器实例的 IP 为 <code>104.248.70.88</code>）结果为 <strong>404 page not found</strong> ，则表明服务部署成功。进一步，访问 <a target="_blank" rel="noopener" href="http://104.248.70.88/ipfs/QmaqwGFUj34wDLPzHVxmJhEN6n27xidsfrmf2WUnhSTKTr">http://104.248.70.88/ipfs/QmaqwGFUj34wDLPzHVxmJhEN6n27xidsfrmf2WUnhSTKTr</a> 可以得到 <strong>部署一个文件</strong> 这节中的 <strong>index.html</strong> 文件，至此完成了 IPFS Gateway 的部署与共享；</p>
-</li>
-<li><p>为 Gateway 绑定域名。类似之前的做法，添加一条 DNS A 记录。待记录生效后，访问连接变为 <a target="_blank" rel="noopener" href="http://gateway.0ranga.com/ipfs/QmaqwGFUj34wDLPzHVxmJhEN6n27xidsfrmf2WUnhSTKTr">http://gateway.0ranga.com/ipfs/QmaqwGFUj34wDLPzHVxmJhEN6n27xidsfrmf2WUnhSTKTr</a></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A gateway.0ranga.com 104.248.70.88</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>改用自己的 Gateway。将之前配置的子域名 ipfs.0ranga.com 的 A 记录对应的 IP 改成云服务器的 IP（TXT 记录保持不变），当浏览器访问 ipfs.0ranga.com 这个域名时，首先会访问 104.248.70.88 这台 Gateway 服务器，Gateway 再向整个 IPFS 网络收集当前页面的碎片；</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A ipfs.0ranga.com 104.248.70.88</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>通过 Pin 操作将本地博客 public 目录”钉“至云服务器 IPFS 节点，然后将 public 目录哈希绑定至云服务器中 IPFS 的 PeerID，另外记得修改子域名 ipfs.0ranga.com 的 TXT 记录中的 IPNS 地址。此后即使关闭本地 PC 的 IPFS 服务，部署在 IPFS 上博客也可以被正常访问，访问地址依然是 <a target="_blank" rel="noopener" href="http://ipfs.0ranga.com;/">http://ipfs.0ranga.com；</a></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipfs pin add QmSc5D1ahPbVkAhHFxJvqnWDEWrgMQw9B9BGmQv5i1VAwt</span><br></pre></td></tr></table></figure></li>
-<li><p>如果觉着同步文件至云服务器，而又不介意一直运行本地 PC 的 IPFS 服务，但是博客的访问速度又不快，可以考虑使用以下方式将云服务器上 IPFS 节点直接加入到本地 Peer 列表中，这样可以帮助云服务器上的 IPFS 节点快速找到本地 PC IPFS 节点中的博客文件。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipfs swarm connect /ip4/104.248.70.88/tcp/4001/ipfs/QmamxGp6sw2dKUHm2RnaJ7zRDeR3w8m98kKAYgfpszeqHR</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="HTTPS-加持"><a href="#HTTPS-加持" class="headerlink" title="HTTPS 加持"></a>HTTPS 加持</h3><p>在云服务器 CentOS 系统上安装 Nginx 服务，然后使用 Certbot 生成 Let’s Encrypt 证书，过程比较简单，Certbot 的安装在<a target="_blank" rel="noopener" href="https://certbot.eff.org/lets-encrypt/centosrhel7-nginx">官方教程</a>有详细的说明，此处省略。最终，子域名 ipfs.0ranga.com 的 Nginx 的配置大致如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    server_name  ipfs.0ranga.com;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">            proxy_pass http://localhost:8080/;</span><br><span class="line">            proxy_set_header Host $host;</span><br><span class="line">            proxy_buffering off;</span><br><span class="line">            proxy_pass_request_headers on;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    listen 443 ssl; # managed by Certbot</span><br><span class="line">    ssl_certificate /etc/letsencrypt/live/ipfs.0ranga.com/fullchain.pem; # managed by Certbot</span><br><span class="line">    ssl_certificate_key /etc/letsencrypt/live/ipfs.0ranga.com/privkey.pem; # managed by Certbot</span><br><span class="line">    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">    if ($host = ipfs.0ranga.com) &#123;</span><br><span class="line">        return 301 https://$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    listen       80 default_server;</span><br><span class="line">    server_name  ipfs.0ranga.com;</span><br><span class="line">return 404; # managed by Certbot</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意，由于端口由 Nginx 进行控制， Gateway 不能再占用 80 端口，因此这里将其（<code>～/.ipfs/config</code> 中 <code>Addresses:Gateway</code> 配置）重新设定为 8080。gateway.0ranga.com 的 Nginx 配置也是类似。Hurray！现在我们可以通过 <a target="_blank" rel="noopener" href="https://ipfs.0ranga.com/">https://ipfs.0ranga.com</a> 访问博主部署在 IPFS 上的博客，通过 <a target="_blank" rel="noopener" href="https://gateway.0ranga.com/">https://gateway.0ranga.com</a> 访问博主的 Gateway 了。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>可以用以下几个网址进行总结：</p>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>链接</th>
-<th>改进之处</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td><a target="_blank" rel="noopener" href="https://gateway.ipfs.io/ipfs/">https://gateway.ipfs.io/ipfs/</a><root_path_hash>&#x2F;</td>
-<td>原始博客目录</td>
-</tr>
-<tr>
-<td>2</td>
-<td><a target="_blank" rel="noopener" href="https://gateway.ipfs.io/ipns/">https://gateway.ipfs.io/ipns/</a><peer_id>&#x2F;</td>
-<td>IPNS 映射目录，站点更新时链接保持不变</td>
-</tr>
-<tr>
-<td>3</td>
-<td><a target="_blank" rel="noopener" href="https://gateway.ipfs.io/ipns/0ranga.com">https://gateway.ipfs.io/ipns/0ranga.com</a></td>
-<td>dnslink 绑定，增加链接可读性</td>
-</tr>
-<tr>
-<td>4</td>
-<td><a target="_blank" rel="noopener" href="http://ipfs.0ranga.com/">http://ipfs.0ranga.com</a></td>
-<td>实现完全自定义域名</td>
-</tr>
-<tr>
-<td>5</td>
-<td><a target="_blank" rel="noopener" href="https://ipfs.0ranga.com/">https://ipfs.0ranga.com</a></td>
-<td>为域名添加 HTTPS 证书</td>
-</tr>
-</tbody></table>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://michalzalecki.com/set-up-ipfs-node-on-the-server/">https://michalzalecki.com/set-up-ipfs-node-on-the-server/</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/ipfs/notes/issues/39">https://github.com/ipfs/notes/issues/39</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.cloudxns.net/Support/detail/id/304.html">https://www.cloudxns.net/Support/detail/id/304.html</a></li>
-<li><a target="_blank" rel="noopener" href="https://ipfs.io/ipns/Qme48wyZ7LaF9gC5693DZyJBtehgaFhaKycESroemD5fNX/post/putting_this_blog_on_ipfs/">https://ipfs.io/ipns/Qme48wyZ7LaF9gC5693DZyJBtehgaFhaKycESroemD5fNX/post/putting_this_blog_on_ipfs/</a></li>
-</ol>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>本文已过时，见 <a href="/2023/02/02/ipfs-static-site/" title="IPFS 静态网站部署指南">IPFS 静态网站部署指南</a></p>
 
       
     </div>
@@ -386,7 +277,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
     
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#IPFS"><span class="nav-number">1.</span> <span class="nav-text">IPFS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-IPFS"><span class="nav-number">1.1.</span> <span class="nav-text">安装 IPFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.</span> <span class="nav-text">部署一个文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2%E6%A1%86%E6%9E%B6%EF%BC%9A%E4%BB%A5-Hexo-%E4%B8%BA%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">部署静态博客框架：以 Hexo 为例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D"><span class="nav-number">3.</span> <span class="nav-text">为博客添加域名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E9%98%B6"><span class="nav-number">4.</span> <span class="nav-text">进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BB%A5%E5%A2%9E%E5%BC%BA%E5%8D%9A%E5%AE%A2%E7%9A%84%E5%8F%AF%E7%94%A8%E6%80%A7%E5%90%8C%E6%97%B6%E5%8A%A0%E5%BF%AB%E8%AE%BF%E9%97%AE%E9%80%9F%E5%BA%A6"><span class="nav-number">4.1.</span> <span class="nav-text">部署云服务器以增强博客的可用性同时加快访问速度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS-%E5%8A%A0%E6%8C%81"><span class="nav-number">4.2.</span> <span class="nav-text">HTTPS 加持</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol>
+        <ol class="nav">无</ol>
     
     </div>
   </aside>
@@ -401,7 +292,7 @@
   <div class="container">
       	<div class="row">
 	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hiker</a> </p>
-	      <p id="copyRightEn">Copyright &copy; 2018 - 2022 Velih Dzen&#39;s Blog All Rights Reserved.</p>
+	      <p id="copyRightEn">Copyright &copy; 2018 - 2023 Velih&#39;s Blog All Rights Reserved.</p>
 	      
 	      
     		<p class="busuanzi_uv">
@@ -568,10 +459,10 @@ ga('send', 'pageview');
         </div>
          <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
           <div class="panel-body">
-            Velih Dzen&#39;s Blog
+            Velih&#39;s Blog
           </div>
           <div class="panel-body">
-            Copyright © 2022 Velih Dzen All Rights Reserved.
+            Copyright © 2023 Velih Dzen All Rights Reserved.
           </div>
         </div>
       </div>
@@ -589,7 +480,7 @@ ga('send', 'pageview');
   <!-- <a id="rocket" href="#top" class=""></a> -->
   <!-- <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script> -->
   
-    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
   
 </body>
 </html>

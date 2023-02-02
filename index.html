@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  <meta charset="utf-8">
   
-  <title>Velih Dzen&#39;s Blog</title>
+  <title>Velih&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   
   
   
   <meta property="og:type" content="website">
-<meta property="og:title" content="Velih Dzen&#39;s Blog">
+<meta property="og:title" content="Velih&#39;s Blog">
 <meta property="og:url" content="https://velih.de/index.html">
-<meta property="og:site_name" content="Velih Dzen&#39;s Blog">
+<meta property="og:site_name" content="Velih&#39;s Blog">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Velih Dzen">
 <meta name="twitter:card" content="summary">
   
-    <link rel="alternate" href="/atom.xml" title="Velih Dzen&#39;s Blog" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Velih&#39;s Blog" type="application/atom+xml">
   
 
   
 
-  <link rel="icon" href="/css/images/mylogo.jpg">
-  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  <link rel="icon" href="/css/images/mylogo.png">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.png">
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
@@ -67,7 +67,7 @@
 
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="/custom_css_source.css">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 
@@ -75,7 +75,7 @@
 
 
   
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+  <div id="container">
     <div id="wrap">
       
         <header>
@@ -95,7 +95,7 @@
               <a class="brand" style="
                  margin-top: 0px;"  
                  >
-                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.png">
               </a>
             
             
@@ -162,6 +162,117 @@
       <div id="content" class="outer">
         
           <section id="main" style="float:none;">
+  
+    <article id="post-ipfs-static-site"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2023/02/02/ipfs-static-site/">IPFS 静态网站部署指南</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2023/02/02/ipfs-static-site/" class="article-date">
+	  <time datetime="2023-02-02T12:05:43.000Z" itemprop="datePublished">2023-02-02</time>
+	</a>
+
+      
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p class="article-excerpt-content">
+          与四年前写博客 在 IPFS 上部署静态博客 时相比，现在 IPFS 更加成熟了，也多了很多相关的服务，也考虑到原来的博文现在看来有点繁琐且过时，所以这次进行了重构并添加了周边服务的介绍。
+1. 安装 IPFS123456# 安装 IPFS，此处使用 brew 为例brew install ipfs# 初始化，生成本地公私钥，默认配置等ipfs init# 保持 IPFS 运行ipfs daemon
+
+2. IPFS 本地访问静态页面一般我们的静态页面都包含一个 index.html，放在...
+        </p>
+        <p class="article-more-link">
+          <a href="/2023/02/02/ipfs-static-site/#more">阅读全文</a>
+        </p>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-ipfs-gateway"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2023/02/02/ipfs-gateway/">IPFS Gateway 部署指南</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2023/02/02/ipfs-gateway/" class="article-date">
+	  <time datetime="2023-02-02T10:27:03.000Z" itemprop="datePublished">2023-02-02</time>
+	</a>
+
+      
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p class="article-excerpt-content">
+          IPFS 官方还没有很完整的 Gateway 部署指南，而且 Gateway 也缺少 Authorization 支持，本文就是简单记录下 Gateway 的部署过程，分别使用 Nginx 与 Caddy 作为服务器软件，最终将会得到：
+
+基于 Docker 部署的 IPFS 实例；
+支持 HTTPS 的 Gateway；
+支持 HTTP Basic Authentication 的 API Server；
+
+在开始前，你需要提前准备以下几项内容：
+
+知道一些基本操作，或者会找相关的资料学...
+        </p>
+        <p class="article-more-link">
+          <a href="/2023/02/02/ipfs-gateway/#more">阅读全文</a>
+        </p>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
   
     <article id="post-haichaicape"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="article-inner">
@@ -400,11 +511,8 @@ Abstract（摘要）我们描述了一种在容易出错的环境下仍具有可
     <div class="article-entry" itemprop="articleBody">
       
         <p class="article-excerpt-content">
-          本文主要记录在 IPFS 上部署博客的过程，用以熟悉 IPFS 的基本操作。https://ipfs.0ranga.com 就是博主博客在 IPFS 上部署的版本。
+          本文已过时，见 IPFS 静态网站部署指南
 
-
-IPFS安装 IPFS首先得在计算机上安装 IPFS，博主 PC 的操作系统的 Arch，可以直接使用包管理器进行安装。如果之后需要为博客添加域名则需要在云服务器上部署 IPFS，博主选择的是 DightOcean 的 CentOS 7。所以提供了以上两种操作系统的安装方式，其他系统如何安装请自行探索。
-123456789...
         </p>
         <p class="article-more-link">
           <a href="/2018/09/22/ipfs-blog/#more">阅读全文</a>
@@ -585,116 +693,6 @@ Torrent文件结构种子文件使用 bencode 进行编码，整个...
 
 
   
-    <article id="post-bt-overview"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2018/08/26/bt-overview/">BT 增强建议之概述</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2018/08/26/bt-overview/" class="article-date">
-	  <time datetime="2018-08-26T09:00:00.000Z" itemprop="datePublished">2018-08-26</time>
-	</a>
-
-      
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p class="article-excerpt-content">
-          在版权意识愈渐加强的今天，BT 流量占全球流量的比重不断下降，这种 p2p 技术的应用在逐渐衰落。但是请记住
-
-“技术无罪”——纵然据说爱因斯坦也曾对“把原子弹送到了疯子手里”感到后悔。
-“个体重复系统发育”：技术的变化会导致某些思想过时并迅速消失，这种情形经常发生。但是，技术的另一种变化还可能使某些思想再次复活。
-Andrew Tanenbaum现代操作系统
-
-总目录下面进入正题。一个使用 BT 进行下载的过程可以简短地描述如下：
-当你获取了一个磁力链接或者种子文件，使用 BT 客户端打...
-        </p>
-        <p class="article-more-link">
-          <a href="/2018/08/26/bt-overview/#more">阅读全文</a>
-        </p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-µtp"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2018/08/04/%C2%B5tp/">µTP 协议 —— 对 BEP29 的简要理解</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2018/08/04/%C2%B5tp/" class="article-date">
-	  <time datetime="2018-08-04T09:05:00.000Z" itemprop="datePublished">2018-08-04</time>
-	</a>
-
-      
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p class="article-excerpt-content">
-          在 TCP 温故知新中回顾了 TCP，而这篇文章主要讲用于 BT 网络的基于 UDP 的运输层协议 µTP，同时顺便回顾 UDP。下面的内容更多是基于对 BEP29 的理解。
-名字探究  µTP 的主要文档 BEP29 的创建于 2009 年，姑且认为这也是设计完成的大致时间，µTP 在 uTorrent 的 1.8 中首次加入（2009 年）这个事实也佐证了这点。它的设计者包括：
-
-Ludvig Strigeus（μTorrent 作者，BitTorrent 公司 2006 年收购 μT...
-        </p>
-        <p class="article-more-link">
-          <a href="/2018/08/04/%C2%B5tp/#more">阅读全文</a>
-        </p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
 
 
   <nav id="page-nav">
@@ -714,7 +712,7 @@ Ludvig Strigeus（μTorrent 作者，BitTorrent 公司 2006 年收购 μT...
   <div class="container">
       	<div class="row">
 	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hiker</a> </p>
-	      <p id="copyRightEn">Copyright &copy; 2018 - 2022 Velih Dzen&#39;s Blog All Rights Reserved.</p>
+	      <p id="copyRightEn">Copyright &copy; 2018 - 2023 Velih&#39;s Blog All Rights Reserved.</p>
 	      
 	      
     		<p class="busuanzi_uv">
@@ -877,10 +875,10 @@ ga('send', 'pageview');
         </div>
          <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
           <div class="panel-body">
-            Velih Dzen&#39;s Blog
+            Velih&#39;s Blog
           </div>
           <div class="panel-body">
-            Copyright © 2022 Velih Dzen All Rights Reserved.
+            Copyright © 2023 Velih Dzen All Rights Reserved.
           </div>
         </div>
       </div>
@@ -896,7 +894,7 @@ ga('send', 'pageview');
 </div>
   
   <!-- <a id="rocket" href="#top" class=""></a> -->
-  <!-- <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <!-- <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script> -->
   
 </body>
 </html>
