@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>µTP 协议 —— 对 BEP29 的简要理解 | Velih&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="" />
+  
+  
+  
+  
+  <meta name="description" content="在 TCP 温故知新中回顾了 TCP，而这篇文章主要讲用于 BT 网络的基于 UDP 的运输层协议 µTP，同时顺便回顾 UDP。下面的内容更多是基于对 BEP29 的理解。 名字探究  µTP 的主要文档 BEP29 的创建于 2009 年，姑且认为这也是设计完成的大致时间，µTP 在 uTorrent 的 1.8 中首次加入（2009 年）这个事实也佐证了这点。它的设计者包括：  Ludvig">
+<meta property="og:type" content="article">
+<meta property="og:title" content="µTP 协议 —— 对 BEP29 的简要理解">
+<meta property="og:url" content="https://velih.de/2018/08/04/%C2%B5tp/index.html">
+<meta property="og:site_name" content="Velih&#39;s Blog">
+<meta property="og:description" content="在 TCP 温故知新中回顾了 TCP，而这篇文章主要讲用于 BT 网络的基于 UDP 的运输层协议 µTP，同时顺便回顾 UDP。下面的内容更多是基于对 BEP29 的理解。 名字探究  µTP 的主要文档 BEP29 的创建于 2009 年，姑且认为这也是设计完成的大致时间，µTP 在 uTorrent 的 1.8 中首次加入（2009 年）这个事实也佐证了这点。它的设计者包括：  Ludvig">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://velih.de/2018/08/04/%C2%B5tp/udp_utp_header.png">
+<meta property="og:image" content="https://velih.de/2018/08/04/%C2%B5tp/wireshark.png">
+<meta property="article:published_time" content="2018-08-04T09:05:00.000Z">
+<meta property="article:modified_time" content="2020-07-18T07:11:02.000Z">
+<meta property="article:author" content="Velih Dzen">
+<meta property="article:tag" content="BT">
+<meta property="article:tag" content="Network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://velih.de/2018/08/04/%C2%B5tp/udp_utp_header.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Velih&#39;s Blog" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.png">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.png">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("/css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("/css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("/css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/bootstrap.js"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    
+<link rel="stylesheet" href="/css/dialog.css">
+
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="/custom_css_source.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.png">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-µtp" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      µTP 协议 —— 对 BEP29 的简要理解
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/08/04/%C2%B5tp/" class="article-date">
+	  <time datetime="2018-08-04T09:05:00.000Z" itemprop="datePublished">2018-08-04</time>
+	</a>
+
+      
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		阅读量  <span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>在 <a href="/2018/07/20/tcp/" title="TCP 温故知新">TCP 温故知新</a>中回顾了 TCP，而这篇文章主要讲用于 BT 网络的基于 UDP 的运输层协议 µTP，同时顺便回顾 UDP。下面的内容更多是基于对 <a target="_blank" rel="noopener" href="http://www.bittorrent.org/beps/bep_0029.html">BEP29</a> 的理解。</p>
+<h2 id="名字探究"><a href="#名字探究" class="headerlink" title="名字探究"></a>名字探究</h2><p>  µTP 的主要文档 BEP29 的创建于 2009 年，姑且认为这也是设计完成的大致时间，µTP 在 uTorrent 的 1.8 中首次加入（2009 年）这个事实也佐证了这点。它的设计者包括：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Ludvig_Strigeus">Ludvig Strigeus</a>（μTorrent 作者，BitTorrent 公司 2006 年收购 μTorrent，目前在 Spotify 工作）</li>
+<li>Greg Hazel</li>
+<li><a target="_blank" rel="noopener" href="https://www.linkedin.com/in/shalunov">Stanislav Shalunov</a>（µTP 中的拥塞算法 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc6817">LEDBAT</a> 主要作者，后来还创造了可以脱离现有蜂窝网络使用的 IM 应用 <a target="_blank" rel="noopener" href="https://www.opengarden.com/firechat.html">FireChat</a> —— 它被多次用到”占中”这样的公民运动中）</li>
+<li>Arvid Norberg（libtorrent 开发者，目前在 <a target="_blank" rel="noopener" href="https://blockstream.com/">Blockstream</a> 工作）</li>
+<li>Bram Cohen（BitTorrent 作者）</li>
+</ul>
+<h2 id="设计原因"><a href="#设计原因" class="headerlink" title="设计原因"></a>设计原因</h2><p>  在过去多年前，如果使用 BT 进行下载热门资源的话可以感受到到速度飞快，但是同时带来的问题就是如果想要同时看在线视频就会带来卡顿。问题在于 DSL 和 modem 的往往有一个和它们的发送速率不成比例的发送缓冲区，不成比例到可以容纳几秒钟的数据量。而 BT 往往会与许多 peer 建立 TCP 连接，在 TCP 将带宽均匀地分配到每个连接的前提下，BT 就占用了较多的带宽，但是其他诸如浏览网页、即时通讯这些场景的优先级实际上应该要比 BT 传输更高些，但是因为 BT 和 物理层的这种特性导致了其他服务有延迟，影响了使用 BT 时其他服务的体验。<br>  µTP 通过将 modem 的缓冲队列的大小作为一个控制因子来调整发送速率，当队列过大时，将会放慢发送速度。这种策略使得 BT 在没有竞争的情况下可以充分利用上传带宽，在有大量其他流量的情况下则放慢发送速率。<br>  上述时 Bittorrent 文档中的说法，但是实际上 µTP 是基于包的延时的，而不是基于队列大小的。而且 µTP 具体对拥塞算法 LEDBAT 的实现有与在 IETF 互联网草案 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc6817">RFC 6817</a> 中的描述有所区别（这里的实现指 C++ 版本的 <a target="_blank" rel="noopener" href="https://github.com/bittorrent/libutp">libutp</a>，各个版本的实现不完全一致）。</p>
+<h2 id="UDP-和-µTP-首部"><a href="#UDP-和-µTP-首部" class="headerlink" title="UDP 和 µTP 首部"></a>UDP 和 µTP 首部</h2><p>  为了方便与 TCP 做简单的对比，把 UDP 的首部（前四个字节）与 µTP 的首部（剩余部分）放在了一个图中示意。从 UDP 首部字段数量皆可以发现 UDP 协议相对 TCP 协议是如此简单，以至于我们w可以将 TCP 协议看成是类似 µTP 协议一样的基于 UDP 协议的运输层协议。<br><img src="/2018/08/04/%C2%B5tp/udp_utp_header.png" alt="UDP Header And µTP Header"></p>
+<h3 id="UDP-首部"><a href="#UDP-首部" class="headerlink" title="UDP 首部"></a>UDP 首部</h3><ul>
+<li><strong>源 &#x2F; 目端口（Source &#x2F; Destination port）</strong>：用于确认通信进程双方。源端口是可选的，如果设置了源端口，则接收方将其视为回复端口。如果不需要回复就不需要设置；</li>
+<li><strong>总长度（Length）</strong>：定义了 UDP 用户数据报的总长度，包括首部和数据。TCP 首部中是没有所谓“报文段总长度”的字段的，长度可以通过 IP 层的长度减去 IP 首部长度计算所得，所以一定程度上时冗余的，可以参考 Stack OverFlow 上的<a target="_blank" rel="noopener" href="https://stackoverflow.com/a/16748680/5091903">相关讨论</a>；</li>
+<li><strong>校验和（Checksum）</strong>：用于对整个用户数据报的校验，通过 IP 位首部与和用户数据报计算得到；</li>
+</ul>
+<p>可见 UDP 首部的这些字段在理论上可以是 TCP 首部字段的子集。因此我们可以粗略地讲 <strong>TCP 是基于 UDP 的传输层协议。</strong><br>UDP 服务是一个“尽力而为”的服务，它<strong>没有流量控制</strong>，<strong>只能通过校验和进行差错控制，丢包不会知晓，也不会重传</strong>，也<strong>没有拥塞控制</strong>。</p>
+<h3 id="µTP-首部"><a href="#µTP-首部" class="headerlink" title="µTP 首部"></a>µTP 首部</h3><ul>
+<li><strong>version</strong>：版本号，现在为 1，<a target="_blank" rel="noopener" href="https://github.com/boundary/wireshark/blob/master/epan/dissectors/packet-bt-utp.c">还有一个原始版本号 0 存在</a></li>
+<li><strong>connection_id</strong>：用于标记连接。<a target="_blank" rel="noopener" href="http://www.calvinneo.com/2017/12/05/libutp%E6%BA%90%E7%A0%81%E7%AE%80%E6%9E%90/#utp-context%E7%9A%84%E6%88%90%E5%91%98">这个字段是必须的么?</a>；</li>
+<li><strong>timestamp_microseconds</strong>：发送数据包的时间，和计算延迟时间，rtt 相关；</li>
+<li><strong>timestamp_difference_microseconds</strong>：当前时间和上一次收到的包中的 timestamp_microseconds 之差；</li>
+<li><strong>wnd_size</strong>：表示另一端建议的窗口大小，相当于 TCP 中的接收窗口；</li>
+<li><strong>extension</strong>：代表第一个扩展的类型，0 表示没有扩展，1 表示 Selective ACKs（选择确认扩展）。</li>
+<li><strong>type</strong>：数据包的类型。可以有：<ul>
+<li>ST_DATA  &#x3D; 0：承载有效数据的数据包；</li>
+<li>ST_FIN   &#x3D; 1：终止连接。是通信单方发送的最后一个包，类似于 TCP 的 FIN 标记。但是发送 ST_FIN 的一方还是会等待可能丢失或者失序到达的包，即使收到了对方的 ST_FIN 包；</li>
+<li>ST_STATE &#x3D; 2：用于报告状态，传输一个没有数据的 ACK。和 TCP 中未携带数据的 ACK 包一样，它不消耗序号；</li>
+<li>ST_RESET &#x3D; 3：强制重置连接。类似 TCP 的 RST 标记。</li>
+<li>ST_SYN   &#x3D; 4：发起连接。类似 TCP 的 SYN 标记。发起方会随机一个 connection_id ID 用于给接收方后续的回复使用。然后发起方之后的包中传输的 connection_id 为 ID + 1；</li>
+</ul>
+</li>
+<li><strong>seq_nr</strong>：表示这个数据包的序号。注意和 TCP 中代表字号号的序号有所不同。初始序号同样也是随机生成。</li>
+<li><strong>ack_nr</strong>：表示最后收到的数据包的seq_nr；</li>
+</ul>
+<h2 id="连接过程"><a href="#连接过程" class="headerlink" title="连接过程"></a>连接过程</h2><p>  图示为一次在 qBittorrent 中对一个种子开始 BT 下载二十秒左右后停止下载时，与其中一个 peer 的交互过程。<br><img src="/2018/08/04/%C2%B5tp/wireshark.png" alt="连接过程（以 connection_id 为 8671 和 8672 的这一个过程为例）"></p>
+<h2 id="丢包"><a href="#丢包" class="headerlink" title="丢包"></a>丢包</h2><p>和丢包处理有一个和窗口相关的变量需要先进行说明：</p>
+<ul>
+<li><em><strong>max_window</strong></em>：定义了未被确认的字节的上限，相当与 TCP 中的拥塞窗口；</li>
+<li><em><strong>wnd_size</strong></em>：同首部中的 wnd_size，和 TCP 中相同，实际的发送窗口大小为 <code>min(max_windows, wnd_size)</code>；</li>
+<li><em><strong>cur_window</strong></em>：表示当前未被确认的字节的数量；</li>
+</ul>
+<p>当需要发送数据包时，仅当 <code>cur_window + packet_size &lt;= min(max_windows, wnd_size)</code> 成立，这个数据包才能被发送。</p>
+<ul>
+<li>当序号为 <code>seq_nr - cur_window</code> 的数据包（发送队列中年龄最大的未被确认的数据包，下一个理论上需要被确认的就是它）没有被确认，但是已经有至少三个序号大于它的数据包通过 Selective ACK 被确认，那么这个数据包被认为是丢失了。</li>
+<li>如果 <code>ack_nr + 1</code> 这个包已经发送了，而收到三个重复的 <code>ack_nr</code> 的 ACK，那么 <code>ack_nr + 1</code>这个包被认为是丢失了。</li>
+</ul>
+<p>如果检测到丢包，那么拥塞窗口 <strong>max_window</strong> 大小减半。</p>
+<h2 id="超时"><a href="#超时" class="headerlink" title="超时"></a>超时</h2><p>µTP 的超时计时和 TCP 中 RTO 计时器不太一样，RTO 计时器主要用于对 ACK 的计时，但是　µTP 的计时器则是指接收任何数据包超时时间，如果超时时间内没有任何数据包到达则超时，如果超时，则 <strong>packet_size</strong> 和 <strong>max_window</strong> 将都会被设置为最小数据包大小（150 字节）。 <strong>（疑问？：packet_size 的调整策略是什么）</strong></p>
+<h3 id="超时时间的计算"><a href="#超时时间的计算" class="headerlink" title="超时时间的计算"></a>超时时间的计算</h3><p>每当收到一个数据包的 ACK，就会更新往返时间（不考虑重传的包），往返时间用于计算超时时间。先说明下相关的变量：</p>
+<ul>
+<li><em><strong>rtt</strong></em>：往返时间；</li>
+<li><em><strong>rtt_var</strong></em>：往返时间差异；</li>
+<li><em><strong>packet_rtt</strong></em>：当前收到 ACK 对应的包的往返时间，即当前时间减去这个包发送时的时间，即首部中的 timestamp 字段记录的值。</li>
+<li><em><strong>timeout</strong></em>：超时时间；</li>
+</ul>
+<p>通过以下公式更新 rtt：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">delta = rtt - packet_rtt</span><br><span class="line">rtt_var += (abs(delta) - rtt_var) / 4;</span><br><span class="line">rtt += (packet_rtt - rtt) / 8;</span><br></pre></td></tr></table></figure>
+<p>正常情况下通过 rtt 计算得到 timeout（第一次由于没有 rtt，timeout 使用初始值 1000 ms，）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">timeout = max(rtt + rtt_var * 4, 500);</span><br></pre></td></tr></table></figure>
+<p>如果遇到超时，则 timeout 翻倍。</p>
+<h2 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h2><p>在<strong>丢包</strong>和<strong>超时</strong>部分已经涉及到拥塞窗口的调整了。µTP 的拥塞控制可以理解为一种基于延迟的负反馈拥塞控制，通过延迟的变化控制窗口大小的变化，达到拥塞控制目的。计算窗口大小过程中的相关常量和变量的定义如下：</p>
+<ul>
+<li><em><strong>CONTROL_TARGET</strong></em>：µTP 所能接收的上行缓冲延迟，现在是 100 ms；</li>
+<li><em><strong>base_delay</strong></em>：两分钟内的收到的数据包的最低延迟；</li>
+<li><em><strong>our_delay</strong></em>：当前的数据包延迟；</li>
+<li><em><strong>off_target</strong></em>：实际延迟和目标延迟的差距。即<code>CONTROL_TARGET - our_delay</code>；</li>
+<li><em><strong>outstanding_packet</strong></em>：已经被发送但是未被确认的数据包；</li>
+</ul>
+<p>具体计算过程如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">delay_factor = off_target / CCONTROL_TARGET;</span><br><span class="line">window_factor = outstanding_packet / max_window;</span><br><span class="line">scaled_gain = MAX_CWND_INCREASE_PACKETS_PER_RTT * delay_factor * window_factor;</span><br><span class="line"></span><br><span class="line">max_window += scaled_gain;</span><br></pre></td></tr></table></figure>
+<p>当 <code>off_target &gt; 0</code> 时，当前包的延迟时间比设定的还小一些，那么窗口会缩小，发送速率就会放慢；反之，窗口增加，速率加快。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a target="_blank" rel="noopener" href="http://www.bittorrent.org/beps/bep_0029.html">BitTorrent Enhancement Proposal 29 - µTorrent transport protocol</a></li>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc6817">RFC 6817 - Low Extra Delay Background Transport (LEDBAT)</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.calvinneo.com/2017/12/05/libutp%E6%BA%90%E7%A0%81%E7%AE%80%E6%9E%90/">Calvin’s Marbles - libutp源码简析</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = '0ranga-com';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+      
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BT/" rel="tag">BT</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Network/" rel="tag">Network</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/26/bt-overview/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          BT 增强建议之概述
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/20/tcp/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">TCP 温故知新</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8D%E5%AD%97%E6%8E%A2%E7%A9%B6"><span class="nav-number">1.</span> <span class="nav-text">名字探究</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%9B%A0"><span class="nav-number">2.</span> <span class="nav-text">设计原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP-%E5%92%8C-%C2%B5TP-%E9%A6%96%E9%83%A8"><span class="nav-number">3.</span> <span class="nav-text">UDP 和 µTP 首部</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP-%E9%A6%96%E9%83%A8"><span class="nav-number">3.1.</span> <span class="nav-text">UDP 首部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%C2%B5TP-%E9%A6%96%E9%83%A8"><span class="nav-number">3.2.</span> <span class="nav-text">µTP 首部</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E8%BF%87%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">连接过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A2%E5%8C%85"><span class="nav-number">5.</span> <span class="nav-text">丢包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B6%85%E6%97%B6"><span class="nav-number">6.</span> <span class="nav-text">超时</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-number">6.1.</span> <span class="nav-text">超时时间的计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-number">7.</span> <span class="nav-text">拥塞控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2018 - 2023 Velih&#39;s Blog All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				访客数  : <span id="busuanzi_value_site_uv"></span> |  
+				访问量  : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+  
+<script src="/js/home.js"></script>
+
+
+
+
+  
+<script src="/js/dialog.js"></script>
+
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123136650-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Velih&#39;s Blog
+          </div>
+          <div class="panel-body">
+            Copyright © 2023 Velih Dzen All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <!-- <a id="rocket" href="#top" class=""></a> -->
+  <!-- <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script> -->
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>

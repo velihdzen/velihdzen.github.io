@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>BT 增强建议之 Peer | Velih&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="BT" />
+  
+  
+  
+  
+  <meta name="description" content="本文是 BT 系列文章中的一篇，主要介绍 Peer 以及 Peer 间的通信，有需要的话可以先阅读博文 BT 增强建议之概述。 Peer 来源在讲 Peer 间的通信前，先总结一下 Peer 的来源。  Magnet：磁力连接中有 x.pe 参数可以预设一些 Peer； Tracker：Tracker 服务器的作用就是提供 Peer； Local Service Discovery（BEP14）:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BT 增强建议之 Peer">
+<meta property="og:url" content="https://velih.de/2018/08/30/bt-peer/index.html">
+<meta property="og:site_name" content="Velih&#39;s Blog">
+<meta property="og:description" content="本文是 BT 系列文章中的一篇，主要介绍 Peer 以及 Peer 间的通信，有需要的话可以先阅读博文 BT 增强建议之概述。 Peer 来源在讲 Peer 间的通信前，先总结一下 Peer 的来源。  Magnet：磁力连接中有 x.pe 参数可以预设一些 Peer； Tracker：Tracker 服务器的作用就是提供 Peer； Local Service Discovery（BEP14）:">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-08-30T11:14:00.000Z">
+<meta property="article:modified_time" content="2020-07-20T13:24:35.000Z">
+<meta property="article:author" content="Velih Dzen">
+<meta property="article:tag" content="BT">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Velih&#39;s Blog" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.png">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.png">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("/css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("/css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("/css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/bootstrap.js"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    
+<link rel="stylesheet" href="/css/dialog.css">
+
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="/custom_css_source.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.png">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-bt-peer" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      BT 增强建议之 Peer
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/08/30/bt-peer/" class="article-date">
+	  <time datetime="2018-08-30T11:14:00.000Z" itemprop="datePublished">2018-08-30</time>
+	</a>
+
+      
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		阅读量  <span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>本文是 BT 系列文章中的一篇，主要介绍 Peer 以及 Peer 间的通信，有需要的话可以先阅读博文 <a href="/2018/08/26/bt-overview/" title="BT 增强建议之概述">BT 增强建议之概述</a>。</p>
+<h2 id="Peer-来源"><a href="#Peer-来源" class="headerlink" title="Peer 来源"></a>Peer 来源</h2><p>在讲 Peer 间的通信前，先总结一下 Peer 的来源。</p>
+<ol>
+<li><strong>Magnet</strong>：磁力连接中有 <strong>x.pe</strong> 参数可以预设一些 Peer；</li>
+<li><strong>Tracker</strong>：Tracker 服务器的作用就是提供 Peer；</li>
+<li><strong>Local Service Discovery</strong>（<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0014.html">BEP14</a>）:通过对本地组播地址 <code>239.192.152.143:6771</code> 和 <code>[ff15::efc0:988f]:6771</code> 发出 info_hash 宣告来尝试获得响应，如果有响应，则添加为 Peer；</li>
+<li><strong>Peer Exchange</strong>：通过 Peer 间的 <strong>Peer Exchange</strong> 扩展消息来与其他 Peer 交换 Peer，后面会详细提到；</li>
+<li><strong>DHT</strong>：通过 DHT 网络获取；</li>
+</ol>
+<h2 id="协议概述"><a href="#协议概述" class="headerlink" title="协议概述"></a>协议概述</h2><p>Peer 间的通信属于应用层协议，它使用的应用层协议可以是 TCP 或者 µTP。</p>
+<p>Peer 间按照元数据中描述的文件片段索引（起始索引为 0）进行数据交换，当一个 peer 下载完成一个分片而且经过了通过了 hash 值的校验，它会通知它的所有 peer 自己拥有了这个片段。</p>
+<p>Peer 连接的 Peer 会有一定上限数量，所有的 Peer 按照 <a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0040.html">BEP40 - Canonical Peer Priority</a> 中定义的基于双方 IP 的 crc32-c 值的算法进行排序，选择这个值更小的若干 Peer 进行连接。</p>
+<p>每个连接会包含两个状态位，choked or not（表示是否对对方 choked），interested or not（表示是否对对方的数据感兴趣），状态在连接建立时的初始值为 choked 以及 not interested。因为交互是双方的，一方不仅要存储自己给对方设定的状态，也要存储对方给自己设定的状态，因此实际上会有四个状态位（BEP 中表示只有两个状态位，但是由于主动与被动语态的复杂性以及考虑到实际源码的实现，这里引入成四个状态位，增加了一定的冗余，但便于写作，一定程度上也便于理解）。</p>
+<p>假设 A，B 是在下载同一个资源的对等体。用 A.B 表示 peer A 中 A 与 B 的连接。所以 A 与 B 连接建立时，在 A 的内存空间中的保存的对于 B 的连接会有如下的状态：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">choked = <span class="literal">true</span>;</span><br><span class="line">interested = <span class="literal">false</span>;</span><br><span class="line">peer_choked = <span class="literal">true</span>;</span><br><span class="line">peer_interested = <span class="literal">false</span>;</span><br></pre></td></tr></table></figure>
+<p>同样道理，B 中也会有类似的这样四个状态。且初始状态相同。只有当 A 的 <code>interested == true</code> 而且 <code>peer_choked == false</code> 时，A 才能向 B 索要数据。</p>
+<p>对于 A 而言，有下面四个时机更新这一组状态：</p>
+<ul>
+<li>在收到 B 发来的 <strong>choke</strong>&#x2F;<strong>unchoke</strong> 消息时，会更新 <code>peer_choked</code> 状态置为 true&#x2F;false；</li>
+<li>在收到 B 发来的 <strong>interested</strong>，<strong>not interested</strong> 消息时，会更新 <code>peer_interested</code> 状态置为 true&#x2F;false；</li>
+<li>不断根据自己所拥有的分片与 B 拥有分片的状态（B 通过 <strong>bitfield</strong> 消息告知 A）更新 <code>interested</code> 状态，并通过发送 <strong>interested</strong>&#x2F;<strong>not interested</strong> 消息给 B；</li>
+</ul>
+<h2 id="消息类型"><a href="#消息类型" class="headerlink" title="消息类型"></a>消息类型</h2><p><strong>handshake</strong> 是连接 peer 间连接建立后发送的第一个消息，主要用于通告 info_hash 与 peer_id：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| 19 (1) | &quot;BitTorrent protocol&quot; (19) | reserved_byte (8) | info_hash (20) | peer_id (20) |</span><br></pre></td></tr></table></figure>
+<p><strong>keepalive</strong>，第一个字段为消息体长度，keepalive 消息长度体为 0：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| len (4) |</span><br></pre></td></tr></table></figure>
+
+<p>除基础消息外的其他消息均有固定的格式如下：消息体长度 + 类型 + 负载。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| len (4) | type (1) | payload |</span><br></pre></td></tr></table></figure>
+<p>可能的类型值有：</p>
+<ul>
+<li>0 - choke</li>
+<li>1 - unchoke</li>
+<li>2 - interested</li>
+<li>3 - not interested</li>
+<li>4 - have</li>
+<li>5 - bitfield</li>
+<li>6 - request</li>
+<li>7 - piece</li>
+<li>8 - cancel</li>
+<li>20 - extend message</li>
+</ul>
+<p>其中 <strong>choke</strong>，<strong>unchoke</strong>，<strong>interested</strong>，<strong>not interested</strong> 消息没有负载。</p>
+<p><strong>bitfield</strong> 消息仅在 handshake 后双方各发送一次，每个比特表示对应的分片是否完整。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| len (4) | 5 (1) | bitfield |</span><br></pre></td></tr></table></figure>
+
+<p><strong>have</strong> 消息的负载是一个整型数字，peer 在一个分片下载完成并校验通过后发送该附带刚下载完成分片的索引的消息给其他 peer。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| len (4) | 4 (1) | index (4) |</span><br></pre></td></tr></table></figure>
+
+<p><strong>request</strong> 消息结构如下，用于请求指定分片（index）的范围为 <code>[ offset, offset + length )</code> 的字节，length 一般为 2^14 (16 kiB)，超过则会关闭连接。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| len (4) | 6 (1) | index (4) | offset (4) | length (4) |</span><br></pre></td></tr></table></figure>
+
+<p><strong>piece</strong> 消息用于回复 request 消息，即返回自身分片（index）的范围为 <code>[ offset, offset + length )</code> 的字节</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| len (4) | 7 (1) | index (4) | offset (4) | block (length) |</span><br></pre></td></tr></table></figure>
+
+<p><strong>cancel</strong> 消息除了类型和 request 消息不同外，其他均与 request 一致，用于向 peer 取消之前发出的 request 请求。这是由于为了加快最后若干分片的下载速度，客户端会启用 <strong>Endgame</strong> 模式，这个模式下，peer 会向所有的 peer 请求相同的分片片段，当 peer 从某个 peer 获得所需的分片片段后，需要向剩余的 peer 发送 cancel 消息以减少不必要的传输。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| len (4) | 8 (1) | index (4) | offset (4) | length (4) |</span><br></pre></td></tr></table></figure>
+
+<p>类型为 20 的是扩展消息。</p>
+<h2 id="扩展消息"><a href="#扩展消息" class="headerlink" title="扩展消息"></a>扩展消息</h2><p><a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0010.html">BEP10 - Extension Protocol</a> 中定义了扩展消息。peer 通过将 handshake 消息的保留字节的右数第 20 个比特置为 1 来通告其他 peer 自身支持扩展消息。即可以通过判断表达式 <code>reserved_byte[5] &amp; 0x10</code> 来判断 peer 是否支持扩展消息。</p>
+<p>扩展消息的基础结构如下，实际上相当于是类型为 20 的普通消息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| len (4) | 20 (1) | extended_messag_id (1) | payload |</span><br></pre></td></tr></table></figure>
+
+<p>extended_messag_id 为 0 的消息是 <strong>Extend Handshake</strong> 消息。</p>
+<h3 id="Extend-Handshake"><a href="#Extend-Handshake" class="headerlink" title="Extend Handshake"></a>Extend Handshake</h3><p>Extend Handshake 消息的有效载荷是一个 bencode 字典。字典中的所有键都是可选的，peer 需要忽略所有自己不支持的键。可选的键（还可以有更多）如下:</p>
+<ul>
+<li><strong>m</strong>：字典，表示支持的扩展消息，键是扩展消息名称，值是扩展消息的 id（与 extended_messag_id 对应）。peer 通过这个键通告其他 peer 自己支持的消息类型，且该 peer 之后发送其他的扩展消息就会使用在这里对应的 extended_messag_id。扩展消息名称的格式一般为 <code>客户端缩写_消息名称</code>，这样可以实现全网全局消息类型唯一（侧重实现）；而 extended_messag_id 则是自己客户端自己定义，在 m 字典中不重复即可（侧重索引），这样便可以做到单向通信唯一。</li>
+<li><strong>p</strong>：整型，表示本地监听端口。帮助另一方了解自己的端口信息。连接的接收方是不需要发送这个扩展消息的，因为接收方的端口是已知的。（实际上 peer 间通信无论是基于 TCP 还是 µTP（UDP），接收方理论上都可以从传输层获得端口数据）。</li>
+<li><strong>v</strong>：字符串，表示客户端的名称与版本，这个比 peer id 更可靠一些。</li>
+<li><strong>yourip</strong>：字符串，表示在 peer 视角中对方 peer 的 IP，一般客户端通过此获取自己的公网 IP。</li>
+<li><strong>ipv6</strong>：字符串，表示自身压缩格式的 IPv6 地址。可能对方 peer 更喜欢使用 IPv6 地址。 </li>
+<li><strong>ipv4</strong>：字符串，表示自身压缩格式的 IPv4 地址。可能对方 peer 更喜欢使用 IPv4 地址。</li>
+<li><strong>reqq</strong>：整型，表示自身的在不丢弃消息情况下可以保留的未处理的消息数量。在 libtorrent 中这个值是 250。</li>
+</ul>
+<p>这个消息需要在普通 handshake 成功后立即发送，在连接的生命周期内这个 Extend Handshake 多次发送都是有效的，但实际实现中有可能被忽略。如果后续的 Extend Handshake 消息指定 m 字典中某些扩展的扩展 id 为 0，则表示禁用这些扩展。</p>
+<h3 id="Metadata-Request-ut-metadata"><a href="#Metadata-Request-ut-metadata" class="headerlink" title="Metadata Request(ut_metadata)"></a>Metadata Request(ut_metadata)</h3><p><a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0009.html">BEP9 - Extension for Peers to Send Metadata Files</a> 中定义了磁力链接，同时也定义了用于从 Peer 获取元数据的扩展消息 <strong>UT Metadata</strong>。</p>
+<p>如果一个 peer 的客户端支持 <strong>UT Metadata</strong> 消息，那么在该 peer 向其他 peer 发送 Extend Handshake 消息时，需要在字典 m 中加入 <strong>ut_metadata</strong> 这个键，同时保持其对应的消息 id 在 m 字典中唯一。特殊的是对于这个消息的支持还需要在 Extend Handshake 消息负载字典中加入一个键 <strong>metadata_size</strong>，表示元数据的字节数。</p>
+<p><strong>UT Metadata</strong> 消息的负载也是一个 bencode 字典，有如下的键：</p>
+<ul>
+<li><strong>msg_type</strong>：整型，代表消息类型，可能的类型有：<ul>
+<li><strong>request</strong>：0。请求类型，即请求序号为 <strong>piece</strong> 的 metadata 片段。请求类型的返回类型为 <strong>data</strong> 或者 <strong>reject</strong>；</li>
+<li><strong>data</strong>：1。正常返回序号为 <strong>piece</strong> 的 metadata 片段。元数据会按照 16 kiB 大小切分，除了最后一片段，其余的都应该为 16 kiB 大小，序号也由此分割大小得来。元数据片段作为负载的一部分跟在整个字典后面，其并不使用 bencode 编码，但是长度需要计算在 <strong>len</strong> 中。</li>
+<li><strong>reject</strong>：2。表示被请求的 peer 没有序号为 <strong>piece</strong> 的 metadata 片段。也有可能是一定时间内请求超过数量限制，为了防止洪泛攻击，直接表示拒绝。</li>
+</ul>
+</li>
+<li><strong>piece</strong>：指定元数据的分片序号。</li>
+<li><strong>total_size</strong>：仅在 <strong>data</strong> 类型消息中出现，和握手消息中的 <strong>metadata_size</strong> 语义一致。</li>
+</ul>
+<h3 id="Partial-Seeds"><a href="#Partial-Seeds" class="headerlink" title="Partial Seeds"></a>Partial Seeds</h3><p>这个扩展是为了让 BT 支持对 Partial Seeds（部分种子，<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0021.html">BEP21 - Extension for partial seeds</a>）的识别与进一步优化。部分种子就是资源不完整但是也不再进行下载的 peer。这种情况发生在多文件种子中，用户只设定下载一部分文件。</p>
+<p>这个扩展不定义额外的扩展消息，但是在扩展握手消息的字典中加入一个键 <strong>upload_only</strong>，值为整型，如果 peer 对下载不感兴趣则需要讲此值置为 1。</p>
+<p>在 Tracker 的 Scrape 请求回复中，定义了 <strong>complete</strong>, <strong>incomplete</strong> 以及 <strong>downloaded</strong> 三种状态的 peer。为了让其他 peer 可以通过 Tracker 知晓 Partial Seeds 的情况，扩展定义了在 Scrape 回复中加入类型 <strong>downloaders</strong>，表示处于活跃状态，未完成下载且仍然需要继续下载的 peer 数量，Partial Seed 的数量可以通过 <code>incomplete - downloaders</code> 得到。同时让 Tracker 知晓 peer 自身处于 Partial Seed 状态，则需要通过 <code>event=paused</code> 事件进行告知，且每次通告时都要发送该事件。</p>
+<h3 id="Peer-Exchange-ut-pex"><a href="#Peer-Exchange-ut-pex" class="headerlink" title="Peer Exchange(ut_pex)"></a>Peer Exchange(ut_pex)</h3><p>Peer Exchange(PEX) 用于在 peer 间交换 peer 列表。通过在 Extend Handshake 消息的 字典 m 中加入 <strong>ut_pex</strong> 这个消息名称来表明支持，同样道理，消息 id 在 m 字典中保持唯一即可。</p>
+<p>PEX 消息的负载也是一个 bencode 字典，有如下的键：</p>
+<ul>
+<li><strong>added</strong>：当前连接的 IPv4 peer 压缩格式列表，告知对方进行添加</li>
+<li><strong>added.f</strong>：当前连接的 IPv4 peer 标志位，每个 peer 一个字节</li>
+<li><strong>added6</strong>：当前连接的 IPv6 peer 压缩格式列表，告知对方进行添加</li>
+<li><strong>added6.f</strong>：当前连接的 IPv6 peer 压缩格式列表标志位</li>
+<li><strong>dropped</strong>：过去断开连接的 IPv4 peer 压缩格式列表，告知对方进行删除</li>
+<li><strong>dropped6</strong>：过去断开连接的 IPv6 peer 压缩格式列表，告知对方进行删除</li>
+</ul>
+<p>标志位定义如下：</p>
+<ul>
+<li>0x02：属于 seed 或者 partial seed</li>
+<li>0x04：支持 uTP</li>
+<li>0x01：prefers encryption, as indicated by e field in extension handshake</li>
+<li>0x08：peer indicated ut_holepunch support in extension handshake</li>
+<li>0x10：outgoing connection, peer is reachable</li>
+</ul>
+<h4 id="发送规则"><a href="#发送规则" class="headerlink" title="发送规则"></a>发送规则</h4><ul>
+<li>如果 peer 与某些 peer 断开连接，则需要需要在适当时候发送 PEX 消息，将断开连接的 peer 放在 dropped 中；</li>
+<li>每分钟发送的 PEX 消息不能超过一条；</li>
+<li>不需要在握手后立即发送 PEX 消息，在收集满一定的 peer 之后再发送效果更好；</li>
+<li>添加或删除的 peer 列表中不能包括重复项，也不能在同一个 PEX 消息中删除添加的 peer；</li>
+<li>除了最初的 PEX 消息之外，每条消息中添加的 peer 数量或者 删除的 peer 数量均不能超过 50 条；</li>
+<li>added, added6, dropped, dropped6 四个键中至少需要有一个；</li>
+<li>peer 可能会与严重违反这些规则的 peer 断开连接；</li>
+</ul>
+<h4 id="扩充-seed"><a href="#扩充-seed" class="headerlink" title="扩充 seed"></a>扩充 seed</h4><p>每个 peer 会执行如下的执行一些规则来断开与部分 peer 的连接。比如</p>
+<ol>
+<li>在作种的时候会断开与 seed 和 partial seed 的连接；</li>
+<li>根据 peer id 断开 IPv4 以及 IPv6 地址实际上属于同一个 peer 的一个连接，保留自己偏爱的地址家族连接；</li>
+</ol>
+<p>这样的策略下，在 seed 占主导地位的 swarm 中通过 PEX 传播的活跃 peer 会不足。类似地，在 IPv4 占主导的 swarm 中，只支持 IPv6 的 peer 将很难获得 IPv6 的 peer。这很大程度降低了 PEX 消息的有效性。</p>
+<p>为了解决这些问题，如果一个 peer 连接到一个特定地址家族的 peer 少于25个，活跃度的要求就会放宽。因为一下原因导致连接断开的 peer 也会被保存下来，并有资格被发在 PEX 消息的 added 中：</p>
+<ol>
+<li>因为 peer id 相同而被断开的另一个地址家族的连接；</li>
+<li>因缺乏兴趣而断开连接的 peer，比如对方是 seed&#x2F;partial seed 或者对方拥有的分片不满足自己的需求；</li>
+<li>因为超过本地资源限制而断开的连接，比如全局的连接上限；</li>
+</ol>
+<p>为了保证 peer 的有效性，因为这些原因添加到 added 中的 peer 只能通过 PEX 消息发送一次，发送完后必须从等待发送列表中删除。</p>
+<h4 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h4><p>通过 PEX 获得的 peer 应该视为不可信的。攻击者可能通多伪造 PEX 消息来攻击这个 swarm。攻击者也可能通过 PEX 消息诱导 BT 客户端对特定 IP 进行尝试连接而引发 DDoS 攻击。</p>
+<p>为了缓解这些问题，peer 应该避免从单个 PEX 源获取其所有连接作为候选连接。应忽略具有不同的端口的重复 IP，还可以根据 peer 的优先级来进行（协议概述中提到）排序。</p>
+<h2 id="快速扩展（Fast-Extension）"><a href="#快速扩展（Fast-Extension）" class="headerlink" title="快速扩展（Fast Extension）"></a>快速扩展（Fast Extension）</h2><p>另外还有类似扩展消息的快速扩展消息，通过将握手消息的 <code>reserved_byte[7] |= 0x04</code> 来通告支持快速扩展，这里只列出快速扩展消息的种类，具体协议格式可参见 <a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0006.html">BEP06 - Fast Extension</a>。</p>
+<ul>
+<li><strong>Have All&#x2F;Have None</strong>：来表示拥有所有分片或者未拥有任何分片，是 <strong>bitfield</strong> 消息的快速版本；</li>
+<li><strong>Suggest Piece</strong>：建议其他 peer 下载某分片；</li>
+<li><strong>Reject Request</strong>：拒绝 peer 对某个片段的请求；</li>
+<li><strong>Allowed Fast</strong>：表示如果 peer 请求这个分片，即使它处于 choked 状态也会给它；</li>
+<li><strong>lt Dont Have</strong>：在某些情况下（比如资源短缺，LRU Cache 过期）会导致 peer 不再拥有某个片段，则可以通过此消息告知其他 peer，该扩展定义在 <a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0054.html">BEP54 - The lt_donthave extension</a> 中；</li>
+</ul>
+<h2 id="分片选择策略"><a href="#分片选择策略" class="headerlink" title="分片选择策略"></a>分片选择策略</h2><p>选择一个好的分片下载顺序与否对下载性能有这很大影响。如果选择了一个差的分片下载选择算法，则某一时刻可能所有分片你都可以下载，但是之后就没有你想下载的分片了。BT 中执行一下策略：</p>
+<h3 id="Strict-Priority（严格模式）"><a href="#Strict-Priority（严格模式）" class="headerlink" title="Strict Priority（严格模式）"></a>Strict Priority（严格模式）</h3><p>一旦请求了某个分片的子片段，那么就会在请求其他子片段之前请求该特定分片的剩余子片段，以尽量优先获得这个完整的分片。</p>
+<h3 id="Rarest-First（稀有优先）"><a href="#Rarest-First（稀有优先）" class="headerlink" title="Rarest First（稀有优先）"></a>Rarest First（稀有优先）</h3><p>在选择接下来下载哪个分片时，peer 会选择最稀有的分片（自己没有这个分片，同时其他 peer 有，但是有这个分片的 peer 数量相对其他分片最少）进行下载。这个算法保证了不稀有的分片在之后仍然能被下载到，同时稀有的分片在逐渐变多。通过尽快复制最稀有的分片，减小了稀有分片在当前连接的 peer 中完全消失的可能性。</p>
+<h3 id="Random-First-Piece（随机首分片）"><a href="#Random-First-Piece（随机首分片）" class="headerlink" title="Random First Piece（随机首分片）"></a>Random First Piece（随机首分片）</h3><p>当下载开始时，不会使用稀有优先算法。开始时 peer 没有分片可以用于上传，所以最重要的是尽快得到一个完整的分片。稀有的分片往往只被某一个 peer 拥有，从这个 peer 处下载这个分片（分成多个子片段）将会慢于从多个 peer 处下载相同分片的不同子片段。出于这个原因，刚开始下载时，会随机选择一个分片进行下载，随后策略转为稀有优先。</p>
+<h3 id="Endgame-Mode"><a href="#Endgame-Mode" class="headerlink" title="Endgame Mode"></a>Endgame Mode</h3><p>有时从一个 peer 请求某个分片会很慢，这在下载整个资源你的中途不会是一个问题（因为中途同时发生不少请求），但是这种情况可能会影响最终的即将下载完成阶段。当所有剩余的子片段都已经在向其他 peer 请求时，它会同时向所有的 peer 请求这些子片段。当某一个 peer 返回了一个子片段，就向剩余的 peer 发送 cancel 消息以节约带宽。在实践过程中，Endgame 模式持续时间非常短，所以浪费的带宽不多，而且使得资源的最后一部分下载非常快。</p>
+<h2 id="Choking-算法"><a href="#Choking-算法" class="headerlink" title="Choking 算法"></a>Choking 算法</h2><p>BT 没有中心化的资源分配，每个 peer 有责任去最大化自己的下载速率。Peer 执行一种变种 tit-fot-tat 策略，从与自己相连的 peer 处下载分片，并选择合适的 peer 进行上传，对其他 peer 进行 choke。choke 表现为拒绝上传，但下载仍可继续，同时连接被保持不销毁，在 choke 结束后连接不需要重建。Choking 算法对于 BT 来说不是必须的，但是如果需要有一个好的下载性能是非常重要的。一个好的 choking 算法需要利用好所有的资源，提供好的上传给其他 peer，同时惩罚那些只下载不上传的 peer。</p>
+<p>BT 中使用的变种 tit-fot-tat 策略是囚徒困境的应用，博主 youxu 的文章 <a target="_blank" rel="noopener" href="https://blog.youxu.info/2008/12/31/tit-for-tac-and-p2p-software/">P2P客户端的策略和奇妙的对策论</a> 对这此有着很通俗易懂的解释。</p>
+<p>对于某个 peer 的 Choking 算法 可以描述如下： </p>
+<ol>
+<li><strong>Choking Algorithm</strong>：每 T 时间选择合适的 k 个 peer 进行 unchoke，选择的标准为过去 S 时间 peer 的下载速率；</li>
+<li><strong>Optimistic Unchoking</strong>：每 nT 时间，随机选择一个 peer 进行 unchoke，以尝试发现更优质的 peer；</li>
+<li><strong>Anti-snubbing</strong>：如果 mT 时间内没有从某个 peer 处获取到一个分片，则认为被 <strong>snubbed</strong> 了，对其进行 choke；</li>
+<li><strong>Upload Only</strong>：当一个 peer 下载完成了，即成为了一个 seed，则只进行上传，不再下载。peer 会选择那些该 peer 对其有较高上传速率的 peer 进行上传。</li>
+</ol>
+<p>实际实现中 T &#x3D; 10s, k &#x3D; 7, S &#x3D; 20s, n &#x3D; 3, m &#x3D; 6。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://forum.utorrent.com/topic/90069-question-about-canonical-peer-priority/">Question About Canonical Peer Priority</a></li>
+<li><a target="_blank" rel="noopener" href="https://superuser.com/a/562970">What do Flags and Reqs mean in uTorrent? - Super User</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = '0ranga-com';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+      
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BT/" rel="tag">BT</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/22/ipfs-blog/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          在 IPFS 上部署静态博客
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/27/bt-tracker/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">BT 增强建议之 Tracker</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Peer-%E6%9D%A5%E6%BA%90"><span class="nav-number">1.</span> <span class="nav-text">Peer 来源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE%E6%A6%82%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">协议概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">消息类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E6%B6%88%E6%81%AF"><span class="nav-number">4.</span> <span class="nav-text">扩展消息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Extend-Handshake"><span class="nav-number">4.1.</span> <span class="nav-text">Extend Handshake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Metadata-Request-ut-metadata"><span class="nav-number">4.2.</span> <span class="nav-text">Metadata Request(ut_metadata)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Partial-Seeds"><span class="nav-number">4.3.</span> <span class="nav-text">Partial Seeds</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Peer-Exchange-ut-pex"><span class="nav-number">4.4.</span> <span class="nav-text">Peer Exchange(ut_pex)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E8%A7%84%E5%88%99"><span class="nav-number">4.4.1.</span> <span class="nav-text">发送规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A9%E5%85%85-seed"><span class="nav-number">4.4.2.</span> <span class="nav-text">扩充 seed</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-number">4.4.3.</span> <span class="nav-text">安全性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%89%A9%E5%B1%95%EF%BC%88Fast-Extension%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">快速扩展（Fast Extension）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%89%87%E9%80%89%E6%8B%A9%E7%AD%96%E7%95%A5"><span class="nav-number">6.</span> <span class="nav-text">分片选择策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Strict-Priority%EF%BC%88%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%EF%BC%89"><span class="nav-number">6.1.</span> <span class="nav-text">Strict Priority（严格模式）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rarest-First%EF%BC%88%E7%A8%80%E6%9C%89%E4%BC%98%E5%85%88%EF%BC%89"><span class="nav-number">6.2.</span> <span class="nav-text">Rarest First（稀有优先）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Random-First-Piece%EF%BC%88%E9%9A%8F%E6%9C%BA%E9%A6%96%E5%88%86%E7%89%87%EF%BC%89"><span class="nav-number">6.3.</span> <span class="nav-text">Random First Piece（随机首分片）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Endgame-Mode"><span class="nav-number">6.4.</span> <span class="nav-text">Endgame Mode</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Choking-%E7%AE%97%E6%B3%95"><span class="nav-number">7.</span> <span class="nav-text">Choking 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2018 - 2023 Velih&#39;s Blog All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				访客数  : <span id="busuanzi_value_site_uv"></span> |  
+				访问量  : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+  
+<script src="/js/home.js"></script>
+
+
+
+
+  
+<script src="/js/dialog.js"></script>
+
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123136650-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Velih&#39;s Blog
+          </div>
+          <div class="panel-body">
+            Copyright © 2023 Velih Dzen All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <!-- <a id="rocket" href="#top" class=""></a> -->
+  <!-- <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script> -->
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>IPFS Gateway 部署指南 | Velih&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="IPFS" />
+  
+  
+  
+  
+  <meta name="description" content="IPFS 官方还没有很完整的 Gateway 部署指南，而且 Gateway 也缺少 Authorization 支持，本文就是简单记录下 Gateway 的部署过程，分别使用 Nginx 与 Caddy 作为服务器软件，最终将会得到：  基于 Docker 部署的 IPFS 实例； 支持 HTTPS 的 Gateway； 支持 HTTP Basic Authentication 的 API Se">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IPFS Gateway 部署指南">
+<meta property="og:url" content="https://velih.de/2023/02/02/ipfs-gateway/index.html">
+<meta property="og:site_name" content="Velih&#39;s Blog">
+<meta property="og:description" content="IPFS 官方还没有很完整的 Gateway 部署指南，而且 Gateway 也缺少 Authorization 支持，本文就是简单记录下 Gateway 的部署过程，分别使用 Nginx 与 Caddy 作为服务器软件，最终将会得到：  基于 Docker 部署的 IPFS 实例； 支持 HTTPS 的 Gateway； 支持 HTTP Basic Authentication 的 API Se">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-02T10:27:03.000Z">
+<meta property="article:modified_time" content="2023-02-02T11:34:15.073Z">
+<meta property="article:author" content="Velih Dzen">
+<meta property="article:tag" content="IPFS">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Velih&#39;s Blog" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.png">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.png">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("/css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("/css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("/css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/bootstrap.js"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    
+<link rel="stylesheet" href="/css/dialog.css">
+
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="/custom_css_source.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.png">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ipfs-gateway" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      IPFS Gateway 部署指南
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2023/02/02/ipfs-gateway/" class="article-date">
+	  <time datetime="2023-02-02T10:27:03.000Z" itemprop="datePublished">2023-02-02</time>
+	</a>
+
+      
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		阅读量  <span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>IPFS 官方还没有很完整的 Gateway 部署指南，而且 Gateway 也缺少 Authorization 支持，本文就是简单记录下 Gateway 的部署过程，分别使用 Nginx 与 Caddy 作为服务器软件，最终将会得到：</p>
+<ul>
+<li>基于 Docker 部署的 IPFS 实例；</li>
+<li>支持 HTTPS 的 Gateway；</li>
+<li>支持 HTTP Basic Authentication 的 API Server；</li>
+</ul>
+<p>在开始前，你需要提前准备以下几项内容：</p>
+<ol>
+<li>知道一些基本操作，或者会找相关的资料学习解决。比如如何安装 Docker Compose 等，我在此不会涉及太多这些内容。</li>
+<li>一台云服务器主机。例如我在 Vultr 临时创建了一个系统为 Ubuntu 22.04 的实例用作演示，价格为 $6&#x2F;月。</li>
+<li>一个域名。例如我用来演示的域名托管在 Cloudflare 上。下文统一使用 your.domain 指代这个域名。小技巧：可以使用 Chrome 扩展 <a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/findr/bidnaaogcagbdidehabnjfedabckhdgc/">FindR</a> 来替换 your.domain 成你自己的域名使得阅读与复制更加方便。</li>
+</ol>
+<h2 id="1-Docker-部署-IPFS"><a href="#1-Docker-部署-IPFS" class="headerlink" title="1. Docker 部署 IPFS"></a>1. Docker 部署 IPFS</h2><p>首先在云服务器 Ubuntu 上安装好 docker 与 docker-compose，然后执行以下操作。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 创建并切换到工作目录</span></span><br><span class="line"><span class="built_in">mkdir</span> ipfs &amp;&amp; <span class="built_in">cd</span> ipfs</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 创建 docker-compose.yml</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;</span></span><br><span class="line"><span class="string">version: &#x27;3&#x27;</span></span><br><span class="line"><span class="string">services:</span></span><br><span class="line"><span class="string">  ipfs:</span></span><br><span class="line"><span class="string">    container_name: kubo</span></span><br><span class="line"><span class="string">    image: ipfs/kubo:latest</span></span><br><span class="line"><span class="string">    restart: unless-stopped</span></span><br><span class="line"><span class="string">    volumes:</span></span><br><span class="line"><span class="string">      - ./ipfs:/data/ipfs</span></span><br><span class="line"><span class="string">      - ./ipfs_fuse:/ipfs</span></span><br><span class="line"><span class="string">      - ./ipns_fuse:/ipns</span></span><br><span class="line"><span class="string">    environment:</span></span><br><span class="line"><span class="string">      - IPFS_PATH=/data/ipfs</span></span><br><span class="line"><span class="string">    ports:</span></span><br><span class="line"><span class="string">      - 4001:4001/tcp</span></span><br><span class="line"><span class="string">      - 4001:4001/udp</span></span><br><span class="line"><span class="string">      - 127.0.0.1:5001:5001</span></span><br><span class="line"><span class="string">      - 127.0.0.1:8080:8080</span></span><br><span class="line"><span class="string">&quot;</span> &gt; docker-compose.yml</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 运行 docker-compose 版本的 IPFS 实例</span></span><br><span class="line">docker-compose up -d</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 检查是否成功</span></span><br><span class="line">curl localhost:8080/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme</span><br></pre></td></tr></table></figure>
+
+<p>现在 IPFS 实例已经部署完成了，现在我们修改一些 IPFS 的配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 进入 IPFS 实例的 shell</span></span><br><span class="line">docker <span class="built_in">exec</span> -it kubo /bin/sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 如果 IPFS 在日志中抱怨 system: cannot reserve inbound connection: resource limit exceeded 那可以尝试增加 ConnsInbound</span></span><br><span class="line">ipfs config --json Swarm.ResourceMgr.Limits.System.ConnsInbound 2048</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 配置 PublicGateway 域名，注意将 gateway.your.domain 替换成你自己的域名</span></span><br><span class="line">ipfs config --json Gateway.PublicGateways <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">    &quot;gateway.your.domain&quot;: &#123;</span></span><br><span class="line"><span class="string">      &quot;UseSubdomains&quot;: true,</span></span><br><span class="line"><span class="string">	  &quot;InlineDNSLink&quot;: true,</span></span><br><span class="line"><span class="string">      &quot;Paths&quot;: [&quot;/ipfs&quot;, &quot;/ipns&quot;]</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">  &#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 退出 shell，完成 IPFS 配置</span></span><br><span class="line"><span class="built_in">exit</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 重启 IPFS 实例，应用配置</span></span><br><span class="line">docker-compose restart</span><br></pre></td></tr></table></figure>
+
+<p>然后，进行防火墙配置，我这里执行 <code>ufw disable</code> 关闭 UFW，改成使用云服务器提供的防火墙服务，你也可以直接使用系统内的防火墙。主要就是同时开启 IPv4 与 IPv6 的 TCP 22&#x2F;80&#x2F;443&#x2F;4001 端口与 UDP 4001 端口，如下：</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Protocol</th>
+<th>Port</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>accept</td>
+<td>SSH</td>
+<td>22</td>
+<td>0.0.0.0&#x2F;0,::&#x2F;0</td>
+</tr>
+<tr>
+<td>accept</td>
+<td>TCP (HTTP)</td>
+<td>80</td>
+<td>0.0.0.0&#x2F;0,::&#x2F;0</td>
+</tr>
+<tr>
+<td>accept</td>
+<td>TCP (HTTPS)</td>
+<td>443</td>
+<td>0.0.0.0&#x2F;0,::&#x2F;0</td>
+</tr>
+<tr>
+<td>accept</td>
+<td>TCP</td>
+<td>4001</td>
+<td>0.0.0.0&#x2F;0,::&#x2F;0</td>
+</tr>
+<tr>
+<td>accept</td>
+<td>UDP</td>
+<td>4001</td>
+<td>0.0.0.0&#x2F;0,::&#x2F;0</td>
+</tr>
+<tr>
+<td>drop</td>
+<td>any</td>
+<td>0 - 65535</td>
+<td>0.0.0.0&#x2F;0,::&#x2F;0</td>
+</tr>
+</tbody></table>
+<h2 id="2-DNS-配置"><a href="#2-DNS-配置" class="headerlink" title="2. DNS 配置"></a>2. DNS 配置</h2><p>找到 Vultr 实例的 IP，比如我的分别为 IPv4: 149.28.140.214，IPv6: 2401:c080:1400:6016:5400:04ff:fe45:2010。那就在 your.domain 的 DNS 管理中添加以下几个记录，如果你是在 Cloudflare 中，暂时不要开启 Proxy：</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Name</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>gateway</td>
+<td>149.28.140.214</td>
+</tr>
+<tr>
+<td>A</td>
+<td>*.ipfs.gateway</td>
+<td>149.28.140.214</td>
+</tr>
+<tr>
+<td>A</td>
+<td>*.ipns.gateway</td>
+<td>149.28.140.214</td>
+</tr>
+<tr>
+<td>AAAA</td>
+<td>gateway</td>
+<td>2401:c080:1400:6016:5400:04ff:fe45:2010</td>
+</tr>
+<tr>
+<td>AAAA</td>
+<td>*.ipfs.gateway</td>
+<td>2401:c080:1400:6016:5400:04ff:fe45:2010</td>
+</tr>
+<tr>
+<td>AAAA</td>
+<td>*.ipns.gateway</td>
+<td>2401:c080:1400:6016:5400:04ff:fe45:2010</td>
+</tr>
+</tbody></table>
+<h2 id="3-Nginx-作为服务器"><a href="#3-Nginx-作为服务器" class="headerlink" title="3. Nginx 作为服务器"></a>3. Nginx 作为服务器</h2><p>Nginx 是常用的服务器工具，下面介绍 Nginx 作为 IPFS 的服务器的配置。</p>
+<h3 id="3-1-Nginx-配置"><a href="#3-1-Nginx-配置" class="headerlink" title="3.1 Nginx 配置"></a>3.1 Nginx 配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 安装 Nginx，在 Ubuntu 上可以使用</span></span><br><span class="line">apt install nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 添加 gateway 的 Nginx conf 配置</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;</span></span><br><span class="line"><span class="string">server &#123;</span></span><br><span class="line"><span class="string">	listen 80;</span></span><br><span class="line"><span class="string">	listen [::]:80;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	server_name gateway.your.domain;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	location /ipfs &#123;</span></span><br><span class="line"><span class="string">		proxy_pass http://127.0.0.1:8080;</span></span><br><span class="line"><span class="string">		proxy_set_header Host gateway.your.domain;</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	location /ipns &#123;</span></span><br><span class="line"><span class="string">		proxy_pass http://127.0.0.1:8080;</span></span><br><span class="line"><span class="string">		proxy_set_header Host gateway.your.domain;</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	location /api &#123;</span></span><br><span class="line"><span class="string">		proxy_pass http://127.0.0.1:5001;</span></span><br><span class="line"><span class="string">		proxy_set_header Host gateway.your.domain;</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">&#x27;</span> &gt; /etc/nginx/conf.d/ipfsgateway.conf</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;</span></span><br><span class="line"><span class="string">server &#123;</span></span><br><span class="line"><span class="string">	listen 80;</span></span><br><span class="line"><span class="string">	listen [::]:80;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	server_name *.ipfs.gateway.your.domain;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	location / &#123;</span></span><br><span class="line"><span class="string">		proxy_pass http://127.0.0.1:8080;</span></span><br><span class="line"><span class="string">		proxy_set_header Host $host;</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">&#x27;</span> &gt; /etc/nginx/conf.d/ipfsgateway_ipfs.conf</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;</span></span><br><span class="line"><span class="string">server &#123;</span></span><br><span class="line"><span class="string">	listen 80;</span></span><br><span class="line"><span class="string">	listen [::]:80;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	server_name *.ipns.gateway.your.domain;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	location / &#123;</span></span><br><span class="line"><span class="string">		proxy_pass http://127.0.0.1:8080;</span></span><br><span class="line"><span class="string">		proxy_set_header Host $host;</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">&#x27;</span> &gt; /etc/nginx/conf.d/ipfsgateway_ipns.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 检查并应用 Nginx 配置</span></span><br><span class="line">nginx -t &amp;&amp; nginx -s reload</span><br></pre></td></tr></table></figure>
+<p>访问 <a target="_blank" rel="noopener" href="http://gateway.your.domain/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme">http://gateway.your.domain/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme</a> 查看 Nginx 是否配置成功。</p>
+<h3 id="3-2-HTTPS-证书生成"><a href="#3-2-HTTPS-证书生成" class="headerlink" title="3.2 HTTPS 证书生成"></a>3.2 HTTPS 证书生成</h3><p>我们借助 Certbot 帮忙生成 HTTPS 证书，因为我们使用通配符子域名，自动配置时需要完成 DNS 挑战。首先在 Cloudflare <a target="_blank" rel="noopener" href="https://dash.cloudflare.com/profile/api-tokens">用户界面</a> 创建一个权限为 <strong>Zone:DNS:Edit</strong> 的 API Token，”Zone Resources” 选择现在所用的域名，将生成的 Token 按照格式 <code>dns_cloudflare_api_token = YOUR_API_TOKEN</code> 写入文件 <code>~/.secrets/certbot/cloudflare.ini</code>。 然后如下操作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 调整权限</span></span><br><span class="line"><span class="built_in">chmod</span> 600 ~/.secrets/certbot/cloudflare.ini</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 安装 certbot</span></span><br><span class="line">snap install certbot --classic</span><br><span class="line">snap <span class="built_in">set</span> certbot trust-plugin-with-root=ok</span><br><span class="line">snap install certbot-dns-cloudflare</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 完成 DNS 挑战与 HTTPS 配置</span></span><br><span class="line">certbot --dns-cloudflare --dns-cloudflare-credentials ~/.secrets/certbot/cloudflare.ini --dns-cloudflare-propagation-seconds 20 \</span><br><span class="line"> --installer nginx \</span><br><span class="line"> -d gateway.your.domain \</span><br><span class="line"> -d *.ipfs.gateway.your.domain -d *.ipns.gateway.your.domain</span><br></pre></td></tr></table></figure>
+
+<p>最后，修改 ipfsgateway.conf，为 &#x2F;ipns, &#x2F;ipfs 两个 location 添加 <code>proxy_set_header X-Forwarded-Proto &quot;https&quot;;</code>，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">location /ipfs &#123;</span><br><span class="line">	proxy_pass http://127.0.0.1:8080;</span><br><span class="line">	proxy_set_header Host gateway.your.domain;</span><br><span class="line">	proxy_set_header X-Forwarded-Proto &quot;https&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location /ipns &#123;</span><br><span class="line">	proxy_pass http://127.0.0.1:8080;</span><br><span class="line">	proxy_set_header Host gateway.your.domain;</span><br><span class="line">	proxy_set_header X-Forwarded-Proto &quot;https&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后执行 <code>nginx -t &amp;&amp; nginx -s reload</code> 以生效，这样 Gateway 在需要重定向时会自动重定向为 HTTPS。现在测试下下面的链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://gateway.your.domain/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme">https://gateway.your.domain/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme</a></li>
+<li><a target="_blank" rel="noopener" href="https://gateway.your.domain/ipns/vitalik.eth">https://gateway.your.domain/ipns/vitalik.eth</a></li>
+</ul>
+<h3 id="3-3-IPFS-API-Server-添加认证"><a href="#3-3-IPFS-API-Server-添加认证" class="headerlink" title="3.3 IPFS API Server 添加认证"></a>3.3 IPFS API Server 添加认证</h3><p>默认的 IPFS API Server，不做认证，如果暴露在公网，则谁都可以访问，而且 IPFS 并没有提供相关的认证功能。所以我们在 Nginx 里为 API Server 添加 Basic Auth：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 安装相关工具</span></span><br><span class="line">apt install apache2-utils</span><br><span class="line"><span class="comment"># 2. 生成默认密码文件，your_username 换成你的用户名</span></span><br><span class="line">htpasswd -c /etc/nginx/.htpasswd your_username</span><br></pre></td></tr></table></figure>
+<p>然后修改 Nginx 配置，为 &#x2F;api 添加 auth_basic 配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location /api &#123;</span><br><span class="line">    auth_basic &quot;Auth Required Area&quot;;</span><br><span class="line">    auth_basic_user_file /etc/nginx/.htpasswd;</span><br><span class="line">    proxy_pass http://127.0.0.1:5001;</span><br><span class="line">    proxy_set_header Host gateway.your.domain;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后执行 <code>nginx -t &amp;&amp; nginx -s reload</code> 以生效。然后可以测试如下命令，注意将 your_username 与 your_password 替换：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">&quot;https://gateway.your.domain/api/v0/cat?arg=/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme&quot;</span> \</span><br><span class="line">-H <span class="string">&quot;Authorization: Basic <span class="subst">$(echo -n &#x27;your_username:your_password&#x27; | base64)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-Caddy-作为服务器"><a href="#4-Caddy-作为服务器" class="headerlink" title="4. Caddy 作为服务器"></a>4. Caddy 作为服务器</h2><p>Caddy 能够自动生成 HTTPS 证书，且也可以实现 Basic Auth，所以这里整理下 Caddy 作为服务器的配置。</p>
+<h3 id="4-1-构建带有额外组件的-Caddy-Docker-镜像"><a href="#4-1-构建带有额外组件的-Caddy-Docker-镜像" class="headerlink" title="4.1 构建带有额外组件的 Caddy Docker 镜像"></a>4.1 构建带有额外组件的 Caddy Docker 镜像</h3><p>和 Nginx 中使用 Certbot 生成证书类似，由于我们需要使用通配子域名，也要安装额外的组件，Caddy 原始镜像不提供这个功能，需要自行构建，新建 Dockerfile 以及 docker-compose.yml 如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 切换目录</span></span><br><span class="line"><span class="built_in">mkdir</span> caddy &amp;&amp; <span class="built_in">cd</span> caddy</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加了 cloudflare dns 组件的 caddy Dockerfile</span></span><br><span class="line"><span class="built_in">echo</span> `</span><br><span class="line">FROM caddy:2.6.2-builder AS builder</span><br><span class="line"></span><br><span class="line">RUN xcaddy build \</span><br><span class="line">    --with github.com/caddy-dns/cloudflare</span><br><span class="line"></span><br><span class="line">FROM caddy:2.6.2</span><br><span class="line"></span><br><span class="line">COPY --from=builder /usr/bin/caddy /usr/bin/caddy</span><br><span class="line">` &gt; Dockerfile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意：这里指定并会创建 caddy_network，用于之后共享给 IPFS 服务</span></span><br><span class="line"><span class="built_in">echo</span> `</span><br><span class="line">version: <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  caddy:</span><br><span class="line">    build: .</span><br><span class="line">    container_name: caddy</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">&quot;80:80&quot;</span></span><br><span class="line">      - <span class="string">&quot;80:80/udp&quot;</span></span><br><span class="line">      - <span class="string">&quot;443:443&quot;</span></span><br><span class="line">      - <span class="string">&quot;443:443/udp&quot;</span></span><br><span class="line">    volumes:</span><br><span class="line">      - ./Caddyfile:/etc/caddy/Caddyfile</span><br><span class="line">      - ./data/:/data/caddy/</span><br><span class="line">      - ./config/:/config/caddy</span><br><span class="line">    networks:</span><br><span class="line">      - caddynet</span><br><span class="line">      </span><br><span class="line">networks:</span><br><span class="line">  caddynet:</span><br><span class="line">    name: caddy_network</span><br><span class="line">` &gt; docker-compose.yml</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建镜像</span></span><br><span class="line">docker-compose build</span><br></pre></td></tr></table></figure>
+
+<p>然后在相同目录下创建 Caddyfile，注意替换其中的以下内容</p>
+<ul>
+<li>邮箱地址：用于证书生成</li>
+<li>Cloudflare API Token：获取方法与 Nginx 配置中一致</li>
+<li>Basic Auth 用户名和密码：用户名使用明文，密码可以在 caddy 服务启动后使用命令 <code>docker exec -it caddy caddy hash-password</code> 生成，见 <a target="_blank" rel="noopener" href="https://caddyserver.com/docs/caddyfile/directives/basicauth">basicauth - Caddy Documentation</a></li>
+<li>域名</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	auto_https ignore_loaded_certs</span><br><span class="line">	email your@email.address</span><br><span class="line">	acme_dns cloudflare your_dns_cloudflare_api_token</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">gateway.your.domain &#123;</span><br><span class="line">	handle /ipfs/* &#123;</span><br><span class="line">		reverse_proxy kubo:8080 &#123;</span><br><span class="line">			header_up HOST gateway.your.domain</span><br><span class="line">			header_up X-Forwarded-Proto &quot;https&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	handle /ipns/* &#123;</span><br><span class="line">		reverse_proxy kubo:8080 &#123;</span><br><span class="line">			header_up HOST gateway.your.domain</span><br><span class="line">			header_up X-Forwarded-Proto &quot;https&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	handle /api/* &#123;</span><br><span class="line">		reverse_proxy kubo:5001 &#123;</span><br><span class="line">			header_up HOST gateway.your.domain</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	basicauth /api/* &#123;</span><br><span class="line">		your_username your_password</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">*.ipfs.gateway.your.domain &#123;</span><br><span class="line">	handle * &#123;</span><br><span class="line">		reverse_proxy kubo:8080 &#123;</span><br><span class="line">			header_up HOST &#123;host&#125;</span><br><span class="line">			header_up X-Forwarded-Proto &quot;https&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">*.ipns.gateway.your.domain &#123;</span><br><span class="line">	handle * &#123;</span><br><span class="line">		reverse_proxy kubo:8080 &#123;</span><br><span class="line">			header_up HOST &#123;host&#125;</span><br><span class="line">			header_up X-Forwarded-Proto &quot;https&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在可以使用 <code>docker-compose up -d</code> 启动 caddy 服务。</p>
+<h3 id="4-2-Caddy-访问-Kubo-服务"><a href="#4-2-Caddy-访问-Kubo-服务" class="headerlink" title="4.2 Caddy 访问 Kubo 服务"></a>4.2 Caddy 访问 Kubo 服务</h3><p>要使 Caddy 在 Docker 实例中能够访问 Kubo 服务，需要让 Kubo 加入 Caddy 的网络，只需要在 Kubo 的 docker-compose.yml 中添加 Caddy 的网络如下：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">ipfs:</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">kubo</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ipfs/kubo:latest</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./ipfs:/data/ipfs</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./ipfs_fuse:/ipfs</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./ipns_fuse:/ipns</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">IPFS_PATH=/data/ipfs</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">4001</span><span class="string">:4001/tcp</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">4001</span><span class="string">:4001/udp</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:5001:5001</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8080:8080</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ipfsnet</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">ipfsnet:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">caddy_network</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>然后使用 <code>docker-compose up -d --force-recreate</code> 重新创建 Kubo 服务即可。</p>
+<h2 id="开启-Cloudflare-Proxy-的问题"><a href="#开启-Cloudflare-Proxy-的问题" class="headerlink" title="开启 Cloudflare Proxy 的问题"></a>开启 Cloudflare Proxy 的问题</h2><p>为了保护和加速网站的访问，首先你可以在 Cloudflare 为 gateway.your.domain 开启 Proxy。如果访问 Gateway 发生 <em>ERR_TOO_MANY_REDIRECTS(xxx redirected you too many times)</em> 错误，需要把域名的  SSL&#x2F;TLS Encryption mode 配置从 <strong>Flexible</strong> 调整为 <strong>Full</strong>。</p>
+<p>Cloudflare 免费支持通配符，且免费为 *.your.domain 这样的通配二级域名子域名提供 HTTPS 证书，但是本文 Gateway 场景中需要为 *.ipfs.gateway.your.domain 通配四级域名子域名提供 HTTPS 证书，在 Cloudflare 中需要订阅 Advanced Certificate Manager 或者 Business Plan 才能实现自动生成或者自主上传涵盖这种子域名的高级证书。</p>
+<p>此时如果强制为 *.ipfs.gateway 或者 *.ipns.gateway 开启 Proxy，会提示 <em>This hostname is not covered by a certificate</em>，访问时也会出现 <em>ERR_SSL_VERSION_OR_CIPHER_MISMATCH(This site can’t provide a secure xxx uses an unsupported protocol.)</em> 错误。</p>
+<p>这类功能确实属于高级功能，作为普通用户如果不愿意付费也没有关系，选择不开启 Proxy 至此也能完全正常使用了。也可以在 IPFS PublicGateways 配置时将 UseSubdomains 改为 <strong>false</strong>，这样可以禁用不受保护的 ipfs 与 ipns 子域名，且不再重定向，代价就是这样的 URL 路径违反了同源策略（Same-origin policy）会造成一些兼容性问题。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://gist.github.com/NatoBoram/09d244ab02af16fecb62b917f7bee3c0">Hosting a public IPFS gateway</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.ipfs.tech/concepts/ipfs-gateway/">IPFS Gateway | IPFS Docs</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ipfs/kubo/blob/master/docs/config.md#gateway">Kubo Config - Gateway</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-http-basic-authentication/">Restricting Access with HTTP Basic Authentication | NGINX Plus</a></li>
+<li><a target="_blank" rel="noopener" href="https://certbot-dns-cloudflare.readthedocs.io/en/stable/">certbot-dns-cloudflare’s Documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://developers.cloudflare.com/ssl/troubleshooting/too-many-redirects/">ERR_TOO_MANY_REDIRECTS · Cloudflare SSL&#x2F;TLS docs</a></li>
+<li><a target="_blank" rel="noopener" href="https://developers.cloudflare.com/ssl/troubleshooting/version-cipher-mismatch/#multi-level-subdomains">ERR_SSL_VERSION_OR_CIPHER_MISMATCH · Cloudflare SSL&#x2F;TLS docs</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = '0ranga-com';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+      
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IPFS/" rel="tag">IPFS</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/02/02/ipfs-static-site/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          IPFS 静态网站部署指南
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/06/30/haichaicape/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">深圳大鹏半岛海柴角地名小考</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Docker-%E9%83%A8%E7%BD%B2-IPFS"><span class="nav-text">1. Docker 部署 IPFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-DNS-%E9%85%8D%E7%BD%AE"><span class="nav-text">2. DNS 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Nginx-%E4%BD%9C%E4%B8%BA%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-text">3. Nginx 作为服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Nginx-%E9%85%8D%E7%BD%AE"><span class="nav-text">3.1 Nginx 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-HTTPS-%E8%AF%81%E4%B9%A6%E7%94%9F%E6%88%90"><span class="nav-text">3.2 HTTPS 证书生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-IPFS-API-Server-%E6%B7%BB%E5%8A%A0%E8%AE%A4%E8%AF%81"><span class="nav-text">3.3 IPFS API Server 添加认证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Caddy-%E4%BD%9C%E4%B8%BA%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-text">4. Caddy 作为服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%9E%84%E5%BB%BA%E5%B8%A6%E6%9C%89%E9%A2%9D%E5%A4%96%E7%BB%84%E4%BB%B6%E7%9A%84-Caddy-Docker-%E9%95%9C%E5%83%8F"><span class="nav-text">4.1 构建带有额外组件的 Caddy Docker 镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Caddy-%E8%AE%BF%E9%97%AE-Kubo-%E6%9C%8D%E5%8A%A1"><span class="nav-text">4.2 Caddy 访问 Kubo 服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%90%AF-Cloudflare-Proxy-%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">开启 Cloudflare Proxy 的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2018 - 2023 Velih&#39;s Blog All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				访客数  : <span id="busuanzi_value_site_uv"></span> |  
+				访问量  : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+  
+<script src="/js/home.js"></script>
+
+
+
+
+  
+<script src="/js/dialog.js"></script>
+
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123136650-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            Velih&#39;s Blog
+          </div>
+          <div class="panel-body">
+            Copyright © 2023 Velih Dzen All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <!-- <a id="rocket" href="#top" class=""></a> -->
+  <!-- <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script> -->
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>
