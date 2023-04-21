@@ -11,15 +11,15 @@
   
   
   
-  <meta name="description" content="本文是 BT 系列文章中的一篇，主要介绍 Tracker 服务器的工作原理，有需要的话可以先阅读博文BT 增强建议之概述。 在磁力链接出现前，BT 下载的第一步就是获取 Torrent（种子）文件。种子文件中包含了资源的最关键信息 —— Metadata（元数据）。Magnet（磁力链接）的引入则省去了获取种子文件这一步，但是仍然需要元数据，只是改为从 peer 处获取。有了元数据后，才能知道整个">
+  <meta name="description" content="本文是 BT 系列文章中的一篇，主要介绍种子文件结构与磁力链接的原理，有需要的话可以先阅读博文BT 增强建议之概述。 在磁力链接出现前，BT 下载的第一步就是获取 Torrent（种子）文件。种子文件中包含了资源的最关键信息 —— Metadata（元数据）。Magnet（磁力链接）的引入则省去了获取种子文件这一步，但是仍然需要元数据，只是改为从 peer 处获取。有了元数据后，才能知道整个资源的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BT 增强建议之 Metadata：Torrent 与 Magnet">
 <meta property="og:url" content="https://velih.de/2018/08/26/bt-metadata/index.html">
 <meta property="og:site_name" content="Velih&#39;s Blog">
-<meta property="og:description" content="本文是 BT 系列文章中的一篇，主要介绍 Tracker 服务器的工作原理，有需要的话可以先阅读博文BT 增强建议之概述。 在磁力链接出现前，BT 下载的第一步就是获取 Torrent（种子）文件。种子文件中包含了资源的最关键信息 —— Metadata（元数据）。Magnet（磁力链接）的引入则省去了获取种子文件这一步，但是仍然需要元数据，只是改为从 peer 处获取。有了元数据后，才能知道整个">
+<meta property="og:description" content="本文是 BT 系列文章中的一篇，主要介绍种子文件结构与磁力链接的原理，有需要的话可以先阅读博文BT 增强建议之概述。 在磁力链接出现前，BT 下载的第一步就是获取 Torrent（种子）文件。种子文件中包含了资源的最关键信息 —— Metadata（元数据）。Magnet（磁力链接）的引入则省去了获取种子文件这一步，但是仍然需要元数据，只是改为从 peer 处获取。有了元数据后，才能知道整个资源的">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-08-26T14:00:00.000Z">
-<meta property="article:modified_time" content="2020-07-18T07:11:02.000Z">
+<meta property="article:modified_time" content="2023-03-03T07:09:44.643Z">
 <meta property="article:author" content="Velih Dzen">
 <meta property="article:tag" content="BT">
 <meta name="twitter:card" content="summary">
@@ -197,11 +197,11 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>本文是 BT 系列文章中的一篇，主要介绍 Tracker 服务器的工作原理，有需要的话可以先阅读博文<a href="/2018/08/26/bt-overview/" title="BT 增强建议之概述">BT 增强建议之概述</a>。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>本文是 BT 系列文章中的一篇，主要介绍种子文件结构与磁力链接的原理，有需要的话可以先阅读博文<a href="/2018/08/26/bt-overview/" title="BT 增强建议之概述">BT 增强建议之概述</a>。</p>
 <p>在磁力链接出现前，BT 下载的第一步就是获取 Torrent（种子）文件。种子文件中包含了资源的最关键信息 —— Metadata（元数据）。Magnet（磁力链接）的引入则省去了获取种子文件这一步，但是仍然需要元数据，只是改为从 peer 处获取。有了元数据后，才能知道整个资源的概况，继而进行下载。</p>
 <h2 id="Torrent"><a href="#Torrent" class="headerlink" title="Torrent"></a>Torrent</h2><h3 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h3><p>种子文件使用 bencode 进行编码，整个文件是一个字典。有下列主要的 key（value 中，整型值的单位均为字节，字符串默认使用 UTF-8 编码）：</p>
 <ul>
-<li><strong>announce</strong>：字符串。tracker 的 URL 地址，仅能定义一个 Tracker。</li>
+<li><strong>announce</strong>：字符串。tracker 的 URL 地址，仅能定义一个 tracker。</li>
 <li><strong>info</strong>：字典。也就是资源的元数据：<ul>
 <li><strong>length</strong>：整型。如果有该字段，则代表种子为单文件种子，代表该文件的大小。</li>
 <li><strong>files</strong>：列表，子项类型为字典。如果有该字段，则代表种子为多文件种子。一个种子只能为单文件种子或者多文件种子，因此 <strong>files 字段和上述 length 字段只能选其中之一</strong>。files 字典的字段包括：<ul>

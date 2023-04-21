@@ -11,15 +11,15 @@
   
   
   
-  <meta name="description" content="本文是 BT 系列文章中的一篇，主要介绍种子文件结构与磁力链接的原理，有需要的话可以先阅读博文BT 增强建议之概述。 p2p 是 peer-to-peer 的缩写，为了让网络中的一个 peer 如何才能找到另外志同道合的 peer，Tracker 扮演着至关重要的月老作用。Tracker 是一个 HTTP 或者 UDP 服务器，作用是帮助 peer 找到其他拥有相同资源的 peer。 后来有了 D">
+  <meta name="description" content="本文是 BT 系列文章中的一篇，主要介绍 Tracker 服务器的工作原理，有需要的话可以先阅读博文BT 增强建议之概述。 P2P 是 peer-to-peer 的缩写，为了让网络中的一个 Peer 如何才能找到另外志同道合的 Peer，Tracker 扮演着至关重要的月老作用。Tracker 是一个 HTTP 或者 UDP 服务器，作用是帮助 peer 找到其他拥有相同资源的 peer。 后来有">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BT 增强建议之 Tracker">
 <meta property="og:url" content="https://velih.de/2018/08/27/bt-tracker/index.html">
 <meta property="og:site_name" content="Velih&#39;s Blog">
-<meta property="og:description" content="本文是 BT 系列文章中的一篇，主要介绍种子文件结构与磁力链接的原理，有需要的话可以先阅读博文BT 增强建议之概述。 p2p 是 peer-to-peer 的缩写，为了让网络中的一个 peer 如何才能找到另外志同道合的 peer，Tracker 扮演着至关重要的月老作用。Tracker 是一个 HTTP 或者 UDP 服务器，作用是帮助 peer 找到其他拥有相同资源的 peer。 后来有了 D">
+<meta property="og:description" content="本文是 BT 系列文章中的一篇，主要介绍 Tracker 服务器的工作原理，有需要的话可以先阅读博文BT 增强建议之概述。 P2P 是 peer-to-peer 的缩写，为了让网络中的一个 Peer 如何才能找到另外志同道合的 Peer，Tracker 扮演着至关重要的月老作用。Tracker 是一个 HTTP 或者 UDP 服务器，作用是帮助 peer 找到其他拥有相同资源的 peer。 后来有">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-08-26T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-07-18T07:11:02.000Z">
+<meta property="article:modified_time" content="2023-03-03T07:10:03.499Z">
 <meta property="article:author" content="Velih Dzen">
 <meta property="article:tag" content="BT">
 <meta name="twitter:card" content="summary">
@@ -197,8 +197,8 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>本文是 BT 系列文章中的一篇，主要介绍种子文件结构与磁力链接的原理，有需要的话可以先阅读博文<a href="/2018/08/26/bt-overview/" title="BT 增强建议之概述">BT 增强建议之概述</a>。</p>
-<p>p2p 是 peer-to-peer 的缩写，为了让网络中的一个 peer 如何才能找到另外志同道合的 peer，Tracker 扮演着至关重要的月老作用。Tracker 是一个 HTTP 或者 UDP 服务器，作用是帮助 peer 找到其他拥有相同资源的 peer。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>本文是 BT 系列文章中的一篇，主要介绍 Tracker 服务器的工作原理，有需要的话可以先阅读博文<a href="/2018/08/26/bt-overview/" title="BT 增强建议之概述">BT 增强建议之概述</a>。</p>
+<p>P2P 是 peer-to-peer 的缩写，为了让网络中的一个 Peer 如何才能找到另外志同道合的 Peer，Tracker 扮演着至关重要的月老作用。Tracker 是一个 HTTP 或者 UDP 服务器，作用是帮助 peer 找到其他拥有相同资源的 peer。</p>
 <p>后来有了 DHT 网络之后，Tracker 的作用逐渐弱化，但是 Tracker 代表的这种中心化一定程度上相对 DHT 代表的去中心化效率还是比较高的。如同在概述前言中所说的一样，”过时“的技术某些情况下是会“复活”的，所以了解一下 Tracker 的工作原理并不是坏事。</p>
 <h2 id="HTTP-Tracker"><a href="#HTTP-Tracker" class="headerlink" title="HTTP Tracker"></a>HTTP Tracker</h2><p>HTTP Tracker 处理的来自 peer 的 GET 请求包括以下参数：</p>
 <ul>

@@ -619,9 +619,9 @@ Local Service Discovery（BEP14）:通过对本地组播地址 239.192.152.143:6
     <div class="article-entry" itemprop="articleBody">
       
         <p class="article-excerpt-content">
-          本文是 BT 系列文章中的一篇，主要介绍种子文件结构与磁力链接的原理，有需要的话可以先阅读博文BT 增强建议之概述。
-p2p 是 peer-to-peer 的缩写，为了让网络中的一个 peer 如何才能找到另外志同道合的 peer，Tracker 扮演着至关重要的月老作用。Tracker 是一个 HTTP 或者 UDP 服务器，作用是帮助 peer 找到其他拥有相同资源的 peer。
-后来有了 DHT 网络之后，Tracker 的作用逐渐弱化，但是 Tracker 代表的这种中心化一定程度...
+          本文是 BT 系列文章中的一篇，主要介绍 Tracker 服务器的工作原理，有需要的话可以先阅读博文BT 增强建议之概述。
+P2P 是 peer-to-peer 的缩写，为了让网络中的一个 Peer 如何才能找到另外志同道合的 Peer，Tracker 扮演着至关重要的月老作用。Tracker 是一个 HTTP 或者 UDP 服务器，作用是帮助 peer 找到其他拥有相同资源的 peer。
+后来有了 DHT 网络之后，Tracker 的作用逐渐弱化，但是 Tracker 代表的这种中心化一...
         </p>
         <p class="article-more-link">
           <a href="/2018/08/27/bt-tracker/#more">阅读全文</a>
@@ -671,9 +671,9 @@ p2p 是 peer-to-peer 的缩写，为了让网络中的一个 peer 如何才能�
     <div class="article-entry" itemprop="articleBody">
       
         <p class="article-excerpt-content">
-          本文是 BT 系列文章中的一篇，主要介绍 Tracker 服务器的工作原理，有需要的话可以先阅读博文BT 增强建议之概述。
+          本文是 BT 系列文章中的一篇，主要介绍种子文件结构与磁力链接的原理，有需要的话可以先阅读博文BT 增强建议之概述。
 在磁力链接出现前，BT 下载的第一步就是获取 Torrent（种子）文件。种子文件中包含了资源的最关键信息 —— Metadata（元数据）。Magnet（磁力链接）的引入则省去了获取种子文件这一步，但是仍然需要元数据，只是改为从 peer 处获取。有了元数据后，才能知道整个资源的概况，继而进行下载。
-Torrent文件结构种子文件使用 bencode 进行编码，整个...
+Torrent文件结构种子文件使用 bencode 进行编码，整个文件是...
         </p>
         <p class="article-more-link">
           <a href="/2018/08/26/bt-metadata/#more">阅读全文</a>
