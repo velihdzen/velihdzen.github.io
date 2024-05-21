@@ -11,15 +11,15 @@
   
   
   
-  <meta name="description" content="本文是 BT 系列文章中的一篇，主要介绍 Peer 以及 Peer 间的通信，有需要的话可以先阅读博文 BT 增强建议之概述。 Peer 来源在讲 Peer 间的通信前，先总结一下 Peer 的来源。  Magnet：磁力连接中有 x.pe 参数可以预设一些 Peer； Tracker：Tracker 服务器的作用就是提供 Peer； Local Service Discovery（BEP14）:">
+  <meta name="description" content="本文是 BT 系列文章中的一篇，主要介绍 Peer 以及 Peer 间的通信，有需要的话可以先阅读博文 BT 增强建议之概述。 Peer 来源在讲 Peer 间的通信前，先总结一下 Peer 的来源：  Magnet：磁力连接中有 x.pe 参数可以预设一些 Peer； Tracker：Tracker 服务器的作用就是提供 Peer； Local Service Discovery(BEP14)：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BT 增强建议之 Peer">
 <meta property="og:url" content="https://velih.de/2018/08/30/bt-peer/index.html">
 <meta property="og:site_name" content="Velih&#39;s Blog">
-<meta property="og:description" content="本文是 BT 系列文章中的一篇，主要介绍 Peer 以及 Peer 间的通信，有需要的话可以先阅读博文 BT 增强建议之概述。 Peer 来源在讲 Peer 间的通信前，先总结一下 Peer 的来源。  Magnet：磁力连接中有 x.pe 参数可以预设一些 Peer； Tracker：Tracker 服务器的作用就是提供 Peer； Local Service Discovery（BEP14）:">
+<meta property="og:description" content="本文是 BT 系列文章中的一篇，主要介绍 Peer 以及 Peer 间的通信，有需要的话可以先阅读博文 BT 增强建议之概述。 Peer 来源在讲 Peer 间的通信前，先总结一下 Peer 的来源：  Magnet：磁力连接中有 x.pe 参数可以预设一些 Peer； Tracker：Tracker 服务器的作用就是提供 Peer； Local Service Discovery(BEP14)：">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-08-30T11:14:00.000Z">
-<meta property="article:modified_time" content="2020-07-20T13:24:35.000Z">
+<meta property="article:modified_time" content="2023-03-03T16:01:26.613Z">
 <meta property="article:author" content="Velih Dzen">
 <meta property="article:tag" content="BT">
 <meta name="twitter:card" content="summary">
@@ -188,6 +188,8 @@
       
 	<a href="/2018/08/30/bt-peer/" class="article-date">
 	  <time datetime="2018-08-30T11:14:00.000Z" itemprop="datePublished">2018-08-30</time>
+		<time datetime="2023-03-03T16:01:26.613Z" itemprop="dateModified"> 发布 | 2023-03-04 更新</time>
+	  
 	</a>
 
       
@@ -198,11 +200,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>本文是 BT 系列文章中的一篇，主要介绍 Peer 以及 Peer 间的通信，有需要的话可以先阅读博文 <a href="/2018/08/26/bt-overview/" title="BT 增强建议之概述">BT 增强建议之概述</a>。</p>
-<h2 id="Peer-来源"><a href="#Peer-来源" class="headerlink" title="Peer 来源"></a>Peer 来源</h2><p>在讲 Peer 间的通信前，先总结一下 Peer 的来源。</p>
+<h2 id="Peer-来源"><a href="#Peer-来源" class="headerlink" title="Peer 来源"></a>Peer 来源</h2><p>在讲 Peer 间的通信前，先总结一下 Peer 的来源：</p>
 <ol>
 <li><strong>Magnet</strong>：磁力连接中有 <strong>x.pe</strong> 参数可以预设一些 Peer；</li>
 <li><strong>Tracker</strong>：Tracker 服务器的作用就是提供 Peer；</li>
-<li><strong>Local Service Discovery</strong>（<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0014.html">BEP14</a>）:通过对本地组播地址 <code>239.192.152.143:6771</code> 和 <code>[ff15::efc0:988f]:6771</code> 发出 info_hash 宣告来尝试获得响应，如果有响应，则添加为 Peer；</li>
+<li><strong>Local Service Discovery</strong>(<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0014.html">BEP14</a>)：通过对本地组播地址 <code>239.192.152.143:6771</code> 和 <code>[ff15::efc0:988f]:6771</code> 发出 info_hash 宣告来尝试获得响应，如果有响应，则添加为 Peer；</li>
 <li><strong>Peer Exchange</strong>：通过 Peer 间的 <strong>Peer Exchange</strong> 扩展消息来与其他 Peer 交换 Peer，后面会详细提到；</li>
 <li><strong>DHT</strong>：通过 DHT 网络获取；</li>
 </ol>
@@ -213,11 +215,12 @@
 <p>假设 A，B 是在下载同一个资源的对等体。用 A.B 表示 peer A 中 A 与 B 的连接。所以 A 与 B 连接建立时，在 A 的内存空间中的保存的对于 B 的连接会有如下的状态：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">choked = <span class="literal">true</span>;</span><br><span class="line">interested = <span class="literal">false</span>;</span><br><span class="line">peer_choked = <span class="literal">true</span>;</span><br><span class="line">peer_interested = <span class="literal">false</span>;</span><br></pre></td></tr></table></figure>
 <p>同样道理，B 中也会有类似的这样四个状态。且初始状态相同。只有当 A 的 <code>interested == true</code> 而且 <code>peer_choked == false</code> 时，A 才能向 B 索要数据。</p>
-<p>对于 A 而言，有下面四个时机更新这一组状态：</p>
+<p>对于 A 而言，有下面几种情况需要更新这一组状态：</p>
 <ul>
 <li>在收到 B 发来的 <strong>choke</strong>&#x2F;<strong>unchoke</strong> 消息时，会更新 <code>peer_choked</code> 状态置为 true&#x2F;false；</li>
-<li>在收到 B 发来的 <strong>interested</strong>，<strong>not interested</strong> 消息时，会更新 <code>peer_interested</code> 状态置为 true&#x2F;false；</li>
-<li>不断根据自己所拥有的分片与 B 拥有分片的状态（B 通过 <strong>bitfield</strong> 消息告知 A）更新 <code>interested</code> 状态，并通过发送 <strong>interested</strong>&#x2F;<strong>not interested</strong> 消息给 B；</li>
+<li>在收到 B 发来的 <strong>interested</strong>&#x2F;<strong>notinterested</strong> 消息时，会更新 <code>peer_interested</code> 状态置为 true&#x2F;false；</li>
+<li>不断根据自己所拥有的分片与 B 拥有分片的状态（B 通过 <strong>bitfield</strong> 消息告知 A）更新 <code>interested</code> 状态，并发送 <strong>interested</strong>&#x2F;<strong>notinterested</strong> 消息给 B；</li>
+<li>不断根据 B 的传输表现（Choking 算法）来更新 <code>peer_choked</code> 状态，并发送 <strong>choke</strong>&#x2F;<strong>unchoke</strong> 消息给 B；</li>
 </ul>
 <h2 id="消息类型"><a href="#消息类型" class="headerlink" title="消息类型"></a>消息类型</h2><p><strong>handshake</strong> 是连接 peer 间连接建立后发送的第一个消息，主要用于通告 info_hash 与 peer_id：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| 19 (1) | &quot;BitTorrent protocol&quot; (19) | reserved_byte (8) | info_hash (20) | peer_id (20) |</span><br></pre></td></tr></table></figure>
@@ -273,11 +276,11 @@
 </ul>
 <p>这个消息需要在普通 handshake 成功后立即发送，在连接的生命周期内这个 Extend Handshake 多次发送都是有效的，但实际实现中有可能被忽略。如果后续的 Extend Handshake 消息指定 m 字典中某些扩展的扩展 id 为 0，则表示禁用这些扩展。</p>
 <h3 id="Metadata-Request-ut-metadata"><a href="#Metadata-Request-ut-metadata" class="headerlink" title="Metadata Request(ut_metadata)"></a>Metadata Request(ut_metadata)</h3><p><a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0009.html">BEP9 - Extension for Peers to Send Metadata Files</a> 中定义了磁力链接，同时也定义了用于从 Peer 获取元数据的扩展消息 <strong>UT Metadata</strong>。</p>
-<p>如果一个 peer 的客户端支持 <strong>UT Metadata</strong> 消息，那么在该 peer 向其他 peer 发送 Extend Handshake 消息时，需要在字典 m 中加入 <strong>ut_metadata</strong> 这个键，同时保持其对应的消息 id 在 m 字典中唯一。特殊的是对于这个消息的支持还需要在 Extend Handshake 消息负载字典中加入一个键 <strong>metadata_size</strong>，表示元数据的字节数。</p>
+<p>如果一个 peer 的客户端支持 <strong>UT Metadata</strong> 消息，那么当该 peer 向其他 peer 发送 Extend Handshake 消息时，需要在字典 m 中加入 <strong>ut_metadata</strong> 这个键，同时保持其对应的消息 id 在 m 字典中唯一。特殊的是对于这个消息的支持还需要在 Extend Handshake 消息负载字典中加入一个键 <strong>metadata_size</strong>，表示元数据的字节数。</p>
 <p><strong>UT Metadata</strong> 消息的负载也是一个 bencode 字典，有如下的键：</p>
 <ul>
 <li><strong>msg_type</strong>：整型，代表消息类型，可能的类型有：<ul>
-<li><strong>request</strong>：0。请求类型，即请求序号为 <strong>piece</strong> 的 metadata 片段。请求类型的返回类型为 <strong>data</strong> 或者 <strong>reject</strong>；</li>
+<li><strong>request</strong>：0。请求类型，即请求序号为 <strong>piece</strong> 的 metadata 片段。请求类型的返回类型为 <strong>data</strong> 或者 <strong>reject</strong>。</li>
 <li><strong>data</strong>：1。正常返回序号为 <strong>piece</strong> 的 metadata 片段。元数据会按照 16 kiB 大小切分，除了最后一片段，其余的都应该为 16 kiB 大小，序号也由此分割大小得来。元数据片段作为负载的一部分跟在整个字典后面，其并不使用 bencode 编码，但是长度需要计算在 <strong>len</strong> 中。</li>
 <li><strong>reject</strong>：2。表示被请求的 peer 没有序号为 <strong>piece</strong> 的 metadata 片段。也有可能是一定时间内请求超过数量限制，为了防止洪泛攻击，直接表示拒绝。</li>
 </ul>
@@ -287,7 +290,7 @@
 </ul>
 <h3 id="Partial-Seeds"><a href="#Partial-Seeds" class="headerlink" title="Partial Seeds"></a>Partial Seeds</h3><p>这个扩展是为了让 BT 支持对 Partial Seeds（部分种子，<a target="_blank" rel="noopener" href="http://bittorrent.org/beps/bep_0021.html">BEP21 - Extension for partial seeds</a>）的识别与进一步优化。部分种子就是资源不完整但是也不再进行下载的 peer。这种情况发生在多文件种子中，用户只设定下载一部分文件。</p>
 <p>这个扩展不定义额外的扩展消息，但是在扩展握手消息的字典中加入一个键 <strong>upload_only</strong>，值为整型，如果 peer 对下载不感兴趣则需要讲此值置为 1。</p>
-<p>在 Tracker 的 Scrape 请求回复中，定义了 <strong>complete</strong>, <strong>incomplete</strong> 以及 <strong>downloaded</strong> 三种状态的 peer。为了让其他 peer 可以通过 Tracker 知晓 Partial Seeds 的情况，扩展定义了在 Scrape 回复中加入类型 <strong>downloaders</strong>，表示处于活跃状态，未完成下载且仍然需要继续下载的 peer 数量，Partial Seed 的数量可以通过 <code>incomplete - downloaders</code> 得到。同时让 Tracker 知晓 peer 自身处于 Partial Seed 状态，则需要通过 <code>event=paused</code> 事件进行告知，且每次通告时都要发送该事件。</p>
+<p>在 Tracker 的 Scrape 请求回复中，定义了 <strong>complete</strong>, <strong>incomplete</strong> 以及 <strong>downloaded</strong> 三种状态的 peer。为了让其他 peer 可以通过 Tracker 知晓 Partial Seeds 的情况，扩展定义了在 Scrape 回复中加入类型 <strong>downloaders</strong>，表示处于活跃状态，未完成下载且仍然需要继续下载的 peer 数量，Partial Seed 的数量可以通过 <code>incomplete - downloaders</code> 得到。同时让要让 Tracker 知晓 peer 自身处于 Partial Seed 状态，则需要通过 <code>event=paused</code> 事件进行告知，且每次通告时都要发送该事件。</p>
 <h3 id="Peer-Exchange-ut-pex"><a href="#Peer-Exchange-ut-pex" class="headerlink" title="Peer Exchange(ut_pex)"></a>Peer Exchange(ut_pex)</h3><p>Peer Exchange(PEX) 用于在 peer 间交换 peer 列表。通过在 Extend Handshake 消息的 字典 m 中加入 <strong>ut_pex</strong> 这个消息名称来表明支持，同样道理，消息 id 在 m 字典中保持唯一即可。</p>
 <p>PEX 消息的负载也是一个 bencode 字典，有如下的键：</p>
 <ul>
@@ -445,7 +448,7 @@
   <div class="container">
       	<div class="row">
 	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hiker</a> </p>
-	      <p id="copyRightEn">Copyright &copy; 2018 - 2023 Velih&#39;s Blog All Rights Reserved.</p>
+	      <p id="copyRightEn">Copyright &copy; 2018 - 2024 Velih&#39;s Blog All Rights Reserved.</p>
 	      
 	      
   		   	<p id="copyRightCn">Velih Dzen 保留所有权利</p>
@@ -609,7 +612,7 @@ ga('send', 'pageview');
             Velih&#39;s Blog
           </div>
           <div class="panel-body">
-            Copyright © 2023 Velih Dzen All Rights Reserved.
+            Copyright © 2024 Velih Dzen All Rights Reserved.
           </div>
         </div>
       </div>
