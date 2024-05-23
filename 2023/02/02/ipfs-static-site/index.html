@@ -11,12 +11,12 @@
   
   
   
-  <meta name="description" content="与四年前写博客 在 IPFS 上部署静态博客 时相比，现在 IPFS 更加成熟了，也多了很多相关的服务，也考虑到原来的博文现在看来有点繁琐且过时，所以这次进行了重构并添加了周边服务的介绍。 1. 安装 IPFS123456# 安装 IPFS，此处使用 brew 为例brew install ipfs# 初始化，生成本地公私钥，默认配置等ipfs init# 保持 IPFS 运行ipfs daemo">
+  <meta name="description" content="与四年前写博客 在 IPFS 上部署静态博客 时相比，现在 IPFS 更加成熟了，也多了很多相关的服务，也考虑到原来的博文现在看来有点繁琐且过时，所以这次进行了重构并添加了周边服务的介绍。 1. 安装 IPFS 123456# 安装 IPFS，此处使用 brew 为例brew install ipfs# 初始化，生成本地公私钥，默认配置等ipfs init# 保持 IPFS 运行ipfs daem">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IPFS 静态网站部署指南">
 <meta property="og:url" content="https://velih.de/2023/02/02/ipfs-static-site/index.html">
 <meta property="og:site_name" content="Velih&#39;s Blog">
-<meta property="og:description" content="与四年前写博客 在 IPFS 上部署静态博客 时相比，现在 IPFS 更加成熟了，也多了很多相关的服务，也考虑到原来的博文现在看来有点繁琐且过时，所以这次进行了重构并添加了周边服务的介绍。 1. 安装 IPFS123456# 安装 IPFS，此处使用 brew 为例brew install ipfs# 初始化，生成本地公私钥，默认配置等ipfs init# 保持 IPFS 运行ipfs daemo">
+<meta property="og:description" content="与四年前写博客 在 IPFS 上部署静态博客 时相比，现在 IPFS 更加成熟了，也多了很多相关的服务，也考虑到原来的博文现在看来有点繁琐且过时，所以这次进行了重构并添加了周边服务的介绍。 1. 安装 IPFS 123456# 安装 IPFS，此处使用 brew 为例brew install ipfs# 初始化，生成本地公私钥，默认配置等ipfs init# 保持 IPFS 运行ipfs daem">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-02-02T12:05:43.000Z">
 <meta property="article:modified_time" content="2023-02-02T15:37:44.875Z">
@@ -188,6 +188,7 @@
       
 	<a href="/2023/02/02/ipfs-static-site/" class="article-date">
 	  <time datetime="2023-02-02T12:05:43.000Z" itemprop="datePublished">2023-02-02</time>
+	  
 	</a>
 
       
@@ -197,51 +198,59 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>与四年前写博客 在 IPFS 上部署静态博客 时相比，现在 IPFS 更加成熟了，也多了很多相关的服务，也考虑到原来的博文现在看来有点繁琐且过时，所以这次进行了重构并添加了周边服务的介绍。</p>
-<h2 id="1-安装-IPFS"><a href="#1-安装-IPFS" class="headerlink" title="1. 安装 IPFS"></a>1. 安装 IPFS</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 IPFS，此处使用 brew 为例</span></span><br><span class="line">brew install ipfs</span><br><span class="line"><span class="comment"># 初始化，生成本地公私钥，默认配置等</span></span><br><span class="line">ipfs init</span><br><span class="line"><span class="comment"># 保持 IPFS 运行</span></span><br><span class="line">ipfs daemon</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-IPFS-本地访问静态页面"><a href="#2-IPFS-本地访问静态页面" class="headerlink" title="2. IPFS 本地访问静态页面"></a>2. IPFS 本地访问静态页面</h2><p>一般我们的静态页面都包含一个 index.html，放在 public 文件夹中，现在将 public 文件夹添加到 IPFS 中</p>
+        <p>与四年前写博客 在 IPFS 上部署静态博客 时相比，现在 IPFS 更加成熟了，也多了很多相关的服务，也考虑到原来的博文现在看来有点繁琐且过时，所以这次进行了重构并添加了周边服务的介绍。</p>
+<h2 id="1-安装-IPFS">1. 安装 IPFS</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 IPFS，此处使用 brew 为例</span></span><br><span class="line">brew install ipfs</span><br><span class="line"><span class="comment"># 初始化，生成本地公私钥，默认配置等</span></span><br><span class="line">ipfs init</span><br><span class="line"><span class="comment"># 保持 IPFS 运行</span></span><br><span class="line">ipfs daemon</span><br></pre></td></tr></table></figure>
+<h2 id="2-IPFS-本地访问静态页面">2. IPFS 本地访问静态页面</h2>
+<p>一般我们的静态页面都包含一个 index.html，放在 public 文件夹中，现在将 public 文件夹添加到 IPFS 中</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipfs add -r public</span><br></pre></td></tr></table></figure>
 <p>产生如下输入，表明添加成功</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">added QmT47uvcmBktejvAmKgEUwZjCUZQpvmdd2ZxgT5LsfmjFJ public/content-hash.js</span><br><span class="line">added QmXeszC4BUxYc9kX2RA3hTLXUJYhh6qSGvs7qcHJq9XmkE public/index.html</span><br><span class="line">added QmW3bcW7H3j1jxutqrLWZ959wF5Qj3iD1VgnK3Vm46cbH2 public/my-decoder.js</span><br><span class="line">added QmdkSpWEaZFM6iPGbtDqkd6bukw7BijNkxaG5a7L5vYoRL public</span><br><span class="line">  187.86 KiB / 187.86 KiB [=======================================================] 100.00%</span><br></pre></td></tr></table></figure>
 <p>使用 public 目录的 CID 通过本地 IPFS Gateway 便可访问这个简单的网页 <a target="_blank" rel="noopener" href="http://localhost:8080/ipfs/QmdkSpWEaZFM6iPGbtDqkd6bukw7BijNkxaG5a7L5vYoRL">http://localhost:8080/ipfs/QmdkSpWEaZFM6iPGbtDqkd6bukw7BijNkxaG5a7L5vYoRL</a></p>
-<h2 id="3-借助-IPNS-保持链接不变"><a href="#3-借助-IPNS-保持链接不变" class="headerlink" title="3. 借助 IPNS 保持链接不变"></a>3. 借助 IPNS 保持链接不变</h2><p>如果现在我们的网页发生一些变更，则变更后的 public 目录 CID 会发生变化，导致网页访问地址发生变化，否则就只能访问旧版本的网页，IPNS 就用于解决这个问题。</p>
+<h2 id="3-借助-IPNS-保持链接不变">3. 借助 IPNS 保持链接不变</h2>
+<p>如果现在我们的网页发生一些变更，则变更后的 public 目录 CID 会发生变化，导致网页访问地址发生变化，否则就只能访问旧版本的网页，IPNS 就用于解决这个问题。</p>
 <p>通过以下命令将 public 目录的 CID 发布(绑定)到当前节点的 PeerID（节点公钥的哈希）。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipfs name publish QmdkSpWEaZFM6iPGbtDqkd6bukw7BijNkxaG5a7L5vYoRL</span><br></pre></td></tr></table></figure>
 <p>输出如下，k51q…jzot 便是 PeerID。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Published to k51qzi5uqu5dgcop6koxxjmjg6ul5u14g5up8xsyxdarr21r6s1565qie6jzot: /ipfs/QmdkSpWEaZFM6iPGbtDqkd6bukw7BijNkxaG5a7L5vYoRL</span><br></pre></td></tr></table></figure>
 <p>现在我们可以通过 <a target="_blank" rel="noopener" href="http://localhost:8080/ipns/k51qzi5uqu5dgcop6koxxjmjg6ul5u14g5up8xsyxdarr21r6s1565qie6jzot">http://localhost:8080/ipns/k51qzi5uqu5dgcop6koxxjmjg6ul5u14g5up8xsyxdarr21r6s1565qie6jzot</a> 访问简单网页（每个节点因为私钥不同，所以 PeerID 也不同，你需要改变链接中的 PeerID 部分再尝试访问），之后如果网页有所变更，只要再次 name publish 操作便仍然可以使用此链接访问变更后的网页。</p>
-<h2 id="4-绑定域名缩短访问链接"><a href="#4-绑定域名缩短访问链接" class="headerlink" title="4. 绑定域名缩短访问链接"></a>4. 绑定域名缩短访问链接</h2><p>目前的访问链接很长，我们可以把 ipns 绑定到自己拥有的域名来缩短访问链接，以托管在 cloudflare 的本站域名 velih.de 为例，在 DNS 管理中添加一条 TXT 记录，Name 配置为 <code>_dnslink.你的子域名名称</code>，直接使用一级域名则配置为 <code>_dnslink</code>，Content 配置为 <code>dnslink=/ipns/你的IPNS</code>：</p>
+<h2 id="4-绑定域名缩短访问链接">4. 绑定域名缩短访问链接</h2>
+<p>目前的访问链接很长，我们可以把 ipns 绑定到自己拥有的域名来缩短访问链接，以托管在 cloudflare 的本站域名 <a href="http://velih.de">velih.de</a> 为例，在 DNS 管理中添加一条 TXT 记录，Name 配置为 <code>_dnslink.你的子域名名称</code>，直接使用一级域名则配置为 <code>_dnslink</code>，Content 配置为 <code>dnslink=/ipns/你的IPNS</code>：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TXT _dnslink.enstool.velih.de dnslink=/ipns/k51qzi5uqu5dgcop6koxxjmjg6ul5u14g5up8xsyxdarr21r6s1565qie6jzot</span><br></pre></td></tr></table></figure>
 <p>现在我们可以直接通过 <a target="_blank" rel="noopener" href="http://localhost:8080/ipns/enstool.velih.de">http://localhost:8080/ipns/enstool.velih.de</a> 来访问简单网页了。然后我们将本地 Gateway 地址替换为<a target="_blank" rel="noopener" href="https://ipfs.github.io/public-gateway-checker/">公共 Gateway 列表</a>中的域名实现公网访问了，比如：</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://cf-ipfs.com/ipns/enstool.velih.de">https://cf-ipfs.com/ipns/enstool.velih.de</a></li>
 <li><a target="_blank" rel="noopener" href="https://4everland.io/ipns/enstool.velih.de">https://4everland.io/ipns/enstool.velih.de</a></li>
 </ul>
-<h2 id="5-域名直接访问"><a href="#5-域名直接访问" class="headerlink" title="5. 域名直接访问"></a>5. 域名直接访问</h2><p>再进一步，继续为域名添加一条 CNAME 记录，Name 配置为你的子域名名称，一级域名则设置为 <code>@</code>，Content 配置为一个公共的或者自建的 Gateway，我这里将 <code>enstool</code> 这个子域名绑定到了 Cloudflare 提供的公共 Gateway <code>cf-ipfs.com</code>：</p>
+<h2 id="5-域名直接访问">5. 域名直接访问</h2>
+<p>再进一步，继续为域名添加一条 CNAME 记录，Name 配置为你的子域名名称，一级域名则设置为 <code>@</code>，Content 配置为一个公共的或者自建的 Gateway，我这里将 <code>enstool</code> 这个子域名绑定到了 Cloudflare 提供的公共 Gateway <code>cf-ipfs.com</code>：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CNAME enstool.velih.de cf-ipfs.com</span><br></pre></td></tr></table></figure>
-<p>此时，可以直接通过 <a target="_blank" rel="noopener" href="https://enstool.velih.de/">https://enstool.velih.de</a> 进行访问了。</p>
-<h2 id="6-去中心化域名访问：以-ENS-为例"><a href="#6-去中心化域名访问：以-ENS-为例" class="headerlink" title="6. 去中心化域名访问：以 ENS 为例"></a>6. 去中心化域名访问：以 ENS 为例</h2><p>域名存在一些中心化的问题，比如注册机构是中心化的，DNS 的解析是中心化的，去中心化域名提供了另一种选择。</p>
+<p>此时，可以直接通过 <a target="_blank" rel="noopener" href="https://enstool.velih.de">https://enstool.velih.de</a> 进行访问了。</p>
+<h2 id="6-去中心化域名访问：以-ENS-为例">6. 去中心化域名访问：以 ENS 为例</h2>
+<p>域名存在一些中心化的问题，比如注册机构是中心化的，DNS 的解析是中心化的，去中心化域名提供了另一种选择。</p>
 <p>在 <a target="_blank" rel="noopener" href="https://eips.ethereum.org/EIPS/eip-1577">EIP-1557</a> 中 ENS 开始支持 ContentHash，IPNS 就是可以配置的 ContentHash 的一种。只要为 ENS 配置上 IPNS 便可以连接 ENS 与存在 IPFS 中的内容了。</p>
-<p>以 <code>velih.eth</code> 为例，在该 ENS 的<a target="_blank" rel="noopener" href="https://app.ens.domains/name/velih.eth">管理界面</a>，点击 <em><strong>ADD&#x2F;EDIT RECORD</strong></em>，选择添加 <em><strong>Content</strong></em>，值设置为 <code>/ipns/你的IPNS</code>，注意这一步会产生一笔交易，一定要确定填写的内容的正确性，<em><strong>Save</strong></em> 保存后再点击下方 <em><strong>Confirm</strong></em> 确认，与钱包交互签名交易，交易确认后便可以通过以下方式使用 ENS 访问网站了：</p>
+<p>以 <code>velih.eth</code> 为例，在该 ENS 的<a target="_blank" rel="noopener" href="https://app.ens.domains/name/velih.eth">管理界面</a>，点击 <em><strong>ADD/EDIT RECORD</strong></em>，选择添加 <em><strong>Content</strong></em>，值设置为 <code>/ipns/你的IPNS</code>，注意这一步会产生一笔交易，一定要确定填写的内容的正确性，<em><strong>Save</strong></em> 保存后再点击下方 <em><strong>Confirm</strong></em> 确认，与钱包交互签名交易，交易确认后便可以通过以下方式使用 ENS 访问网站了：</p>
 <ul>
-<li>使用 ENS 解析网关<ul>
-<li>eth.limo：访问 <a target="_blank" rel="noopener" href="https://velih.eth.limo/">https://velih.eth.limo</a></li>
-<li>eth.link：访问 <a target="_blank" rel="noopener" href="https://velih.eth.link/">https://velih.eth.link</a></li>
+<li>使用 ENS 解析网关
+<ul>
+<li>eth.limo：访问 <a target="_blank" rel="noopener" href="https://velih.eth.limo">https://velih.eth.limo</a></li>
+<li>eth.link：访问 <a target="_blank" rel="noopener" href="https://velih.eth.link">https://velih.eth.link</a></li>
 </ul>
 </li>
-<li>浏览器插件<ul>
-<li>MetaMask：访问 <a target="_blank" rel="noopener" href="https://velih.eth/">https://velih.eth</a></li>
-<li>IPFS Companion：运行本地 IPFS 实例后，访问 <a target="_blank" rel="noopener" href="https://velih.eth/">https://velih.eth</a></li>
+<li>浏览器插件
+<ul>
+<li>MetaMask：访问 <a target="_blank" rel="noopener" href="https://velih.eth">https://velih.eth</a></li>
+<li>IPFS Companion：运行本地 IPFS 实例后，访问 <a target="_blank" rel="noopener" href="https://velih.eth">https://velih.eth</a></li>
 </ul>
 </li>
-<li>在支持 ENS 的浏览器中直接访问<ul>
+<li>在支持 ENS 的浏览器中直接访问
+<ul>
 <li>Brave：访问 <a href="velih.eth">velih.eth</a></li>
-<li>Opera：访问 <a href="ipns://velih.eth">ipns:&#x2F;&#x2F;velih.eth</a></li>
+<li>Opera：访问 <a href="ipns://velih.eth">ipns://velih.eth</a></li>
 </ul>
 </li>
 </ul>
-<p>另一种常用的 ContentHash 是 IPFS 的 CID，格式为 <code>/ipfs/cid</code> 或者 <code>ipfs://cid</code>。这种方式问题在于之前提到的，每次网页变更都需要重新配置一次，也就是需要产生一笔花费手续费的交易，因此适合不怎么变更的内容。不过 Ethereum 创始人 Vitalik 的博客 ENS vitalik.eth 就使用的这种形式。每次 Vitalik 发布新的文章后都会通过交易变更 IPFS CID，比如 Vitalik 发布 2022 年最后一篇文章后便执行<a target="_blank" rel="noopener" href="https://etherscan.io/tx/0x93d97a0d291843f5cd726c03be855297e1ad45d5a7182da02a9c7c162c9e8167">交易</a>，以变更 vitalik.eth 的 ContentHash 为 0xe301017012208007f6b5b03e0aa1d1829c568ce4f52e177058448b73ad8d831228931925900f，通过 Content Hash Decoder 工具可以转换得到实际内容为 &#x2F;ipfs&#x2F;QmWxRwMg3bHyJxfAuPnUky2yNgNt51qmZqC99Ffenjxa94，便是此时博客根目录的 IPFS CID。</p>
+<p>另一种常用的 ContentHash 是 IPFS 的 CID，格式为 <code>/ipfs/cid</code> 或者 <code>ipfs://cid</code>。这种方式问题在于之前提到的，每次网页变更都需要重新配置一次，也就是需要产生一笔花费手续费的交易，因此适合不怎么变更的内容。不过 Ethereum 创始人 Vitalik 的博客 ENS vitalik.eth 就使用的这种形式。每次 Vitalik 发布新的文章后都会通过交易变更 IPFS CID，比如 Vitalik 发布 2022 年最后一篇文章后便执行<a target="_blank" rel="noopener" href="https://etherscan.io/tx/0x93d97a0d291843f5cd726c03be855297e1ad45d5a7182da02a9c7c162c9e8167">交易</a>，以变更 vitalik.eth 的 ContentHash 为 0xe301017012208007f6b5b03e0aa1d1829c568ce4f52e177058448b73ad8d831228931925900f，通过 Content Hash Decoder 工具可以转换得到实际内容为 /ipfs/QmWxRwMg3bHyJxfAuPnUky2yNgNt51qmZqC99Ffenjxa94，便是此时博客根目录的 IPFS CID。</p>
 <div style="width: 100%;" >
     <script type="text/javascript" src="/js/ipfs/content-hash.js"></script>
     <label>Content Hash Decoder</label><br>
@@ -265,20 +274,24 @@
         });
     </script>
 </div>
-
 <p>CID 作为 ContentHash 的方式对大部分人来说有些“昂贵”，特别是 Ethereum GasPrice 比较高的时候，但是对于 Vitalik 来说可能没有那么贵，而且可以省去运行 IPFS 节点维护 IPNS（见 可用性优化）私钥的麻烦，而且有大量的第三方主动帮忙 Pin Vitalik 的博客。所以对他来说是更优的选择。</p>
 <p>另外 .bit、HNS 这些去中心化域名也支持类似的方式进行配置访问。</p>
-<h2 id="7-可用性优化"><a href="#7-可用性优化" class="headerlink" title="7. 可用性优化"></a>7. 可用性优化</h2><p>我们引入了 IPNS 来优化访问链接，但是 IPNS 的默认传输广播机制是通过 DHT 进行的，对等节点会在 24 小时后遗忘 IPNS 记录。因此自己的 IPFS 节点会默认每 4 小时周期性地重新发布 IPNS 以防对等节点遗忘。所以一旦我们本地运行的 IPFS 实例关机超过 24 小时，那上面通过 IPNS 的几种访问方式便会失效。而且对等节点，比如上面公共 Gateway 的节点，在我们访问简单网页后，可能会缓存简单网页一段时间，但是 IPFS 的垃圾回收机制过不了多久就会删除一段时间内没被访问的对象。所以当我们的 IPFS 实例停机更长时间而且我们放在 IPFS 的文件没有很大热度，这些文件就会被网络遗忘，最初通过 CID 直接访问的方式也就失效了。以下几个方式可以优化可用性：</p>
-<h3 id="7-1-云服务器运行-IPFS-实例"><a href="#7-1-云服务器运行-IPFS-实例" class="headerlink" title="7.1. 云服务器运行 IPFS 实例"></a>7.1. 云服务器运行 IPFS 实例</h3><p>部署在本地计算机的节点难免会关机，将节点部署到云服务器会比本地计算机运行得更稳定。具体步骤可以参考我的另一篇博客 <a href="/2023/02/02/ipfs-gateway/" title="IPFS Gateway 部署指南">IPFS Gateway 部署指南</a>。部署完成后你还需要将自己的文件上传到 Gateway，可以手动操作、自己构建简单的脚本通过 Gateway API 上传，如果相关文件托管在 Github，那也可以借助 <a target="_blank" rel="noopener" href="https://github.com/marketplace/actions/upload-to-ipfs">Upload to IPFS</a> 这个 Github Action 实现自动化上传。当然别忘了在域名中配置 IPNS。</p>
+<h2 id="7-可用性优化">7. 可用性优化</h2>
+<p>我们引入了 IPNS 来优化访问链接，但是 IPNS 的默认传输广播机制是通过 DHT 进行的，对等节点会在 24 小时后遗忘 IPNS 记录。因此自己的 IPFS 节点会默认每 4 小时周期性地重新发布 IPNS 以防对等节点遗忘。所以一旦我们本地运行的 IPFS 实例关机超过 24 小时，那上面通过 IPNS 的几种访问方式便会失效。而且对等节点，比如上面公共 Gateway 的节点，在我们访问简单网页后，可能会缓存简单网页一段时间，但是 IPFS 的垃圾回收机制过不了多久就会删除一段时间内没被访问的对象。所以当我们的 IPFS 实例停机更长时间而且我们放在 IPFS 的文件没有很大热度，这些文件就会被网络遗忘，最初通过 CID 直接访问的方式也就失效了。以下几个方式可以优化可用性：</p>
+<h3 id="7-1-云服务器运行-IPFS-实例">7.1. 云服务器运行 IPFS 实例</h3>
+<p>部署在本地计算机的节点难免会关机，将节点部署到云服务器会比本地计算机运行得更稳定。具体步骤可以参考我的另一篇博客 <a href="/2023/02/02/ipfs-gateway/" title="IPFS Gateway 部署指南">IPFS Gateway 部署指南</a>。部署完成后你还需要将自己的文件上传到 Gateway，可以手动操作、自己构建简单的脚本通过 Gateway API 上传，如果相关文件托管在 Github，那也可以借助 <a target="_blank" rel="noopener" href="https://github.com/marketplace/actions/upload-to-ipfs">Upload to IPFS</a> 这个 Github Action 实现自动化上传。当然别忘了在域名中配置 IPNS。</p>
 <p>如果你有更高可用性要求，可以尝试 <a target="_blank" rel="noopener" href="https://ipfscluster.io/">IPFS Cluster</a> 部署 IPFS 节点集群。</p>
-<h3 id="7-2-4everland、Fleek-amp-Pinner"><a href="#7-2-4everland、Fleek-amp-Pinner" class="headerlink" title="7.2. 4everland、Fleek &amp; Pinner"></a>7.2. 4everland、Fleek &amp; Pinner</h3><p><a target="_blank" rel="noopener" href="https://4everland.io/">4everland</a> 提供了比较完善且方便的部署体验，支持从 IPFS CID 或者 Github 直接导入原始文件，分配 IPNS 并自动发布，也支持绑定 ENS。<a target="_blank" rel="noopener" href="https://fleek.co/">Fleek</a> 功能类似。但是这些平台都一定程度上以牺牲去中心化为代价，比如 IPNS 对应的私钥便由平台创建，存在安全风险。与自己部署相比，有些类似将资产托管在交易所与自己创建钱包管理资产的区别。</p>
-<p>相较上面两个提供完善的部署服务，还有一些只是提供文件托管服务，称为 Pinner，比如 <a target="_blank" rel="noopener" href="https://www.infura.io/">Infura</a>、<a target="_blank" rel="noopener" href="https://www.pinata.cloud/">Pinata</a>、<a target="_blank" rel="noopener" href="https://web3.storage/">Web3 Storage</a> 等。借助 <a target="_blank" rel="noopener" href="https://github.com/ipfs-shipyard/ipfs-deploy">ipfs-deploy</a> 工具可以方便地将静态页面托管到这些服务，部署到 IPFS，ipfs-deploy 也可以辅助完成传统域名的 DNSLink IPFS CID 配置，但不支持 IPNS 和 ENS。</p>
-<h3 id="7-3-Planet"><a href="#7-3-Planet" class="headerlink" title="7.3. Planet"></a>7.3. Planet</h3><p><a target="_blank" rel="noopener" href="https://www.planetable.xyz/">Planet</a> 是一个基于 IPFS 和 ENS 的免费且开源的工具用于创建，托管和关注去中心化 Web 内容。借助 Planet 客户端可以完成上文大部分工作。每一个关注你 Planet 的用户都会帮忙 Pin 一份你的内容，这样你的内容可用性就会变高。当然如果你初来乍到或者久久没有得到多人的关注，那想要自己的 Planet 能持久被访问，要不就一直保持 Planet 客户端运行，要不还是得借助自部署的 IPFS 节点或者 Pinner 以保持可用性。对于一个不喜欢上文中这么多复杂操作的普通用户而言，Planet 肯定是最优的选择。</p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<h3 id="7-2-4everland、Fleek-Pinner">7.2. 4everland、Fleek &amp; Pinner</h3>
+<p><a target="_blank" rel="noopener" href="https://4everland.io/">4everland</a> 提供了比较完善且方便的部署体验，支持从 IPFS CID 或者 Github 直接导入原始文件，分配 IPNS 并自动发布，也支持绑定 ENS。<a target="_blank" rel="noopener" href="https://fleek.co/">Fleek</a> 功能类似。但是这些平台都一定程度上以牺牲去中心化为代价，比如 IPNS 对应的私钥便由平台创建，存在安全风险。与自己部署相比，有些类似将资产托管在交易所与自己创建钱包管理资产的区别。</p>
+<p>相较上面两个提供完善的部署服务，还有一些只是提供文件托管服务，称为 Pinner，比如 <a target="_blank" rel="noopener" href="https://www.infura.io">Infura</a>、<a target="_blank" rel="noopener" href="https://www.pinata.cloud">Pinata</a>、<a target="_blank" rel="noopener" href="https://web3.storage">Web3 Storage</a> 等。借助 <a target="_blank" rel="noopener" href="https://github.com/ipfs-shipyard/ipfs-deploy">ipfs-deploy</a> 工具可以方便地将静态页面托管到这些服务，部署到 IPFS，ipfs-deploy 也可以辅助完成传统域名的 DNSLink IPFS CID 配置，但不支持 IPNS 和 ENS。</p>
+<h3 id="7-3-Planet">7.3. Planet</h3>
+<p><a target="_blank" rel="noopener" href="https://www.planetable.xyz/">Planet</a> 是一个基于 IPFS 和 ENS 的免费且开源的工具用于创建，托管和关注去中心化 Web 内容。借助 Planet 客户端可以完成上文大部分工作。每一个关注你 Planet 的用户都会帮忙 Pin 一份你的内容，这样你的内容可用性就会变高。当然如果你初来乍到或者久久没有得到多人的关注，那想要自己的 Planet 能持久被访问，要不就一直保持 Planet 客户端运行，要不还是得借助自部署的 IPFS 节点或者 Pinner 以保持可用性。对于一个不喜欢上文中这么多复杂操作的普通用户而言，Planet 肯定是最优的选择。</p>
+<h2 id="Reference">Reference</h2>
+<ol>
 <li><a target="_blank" rel="noopener" href="https://eips.ethereum.org/EIPS/eip-1577">EIP-1577: contenthash field for ENS</a></li>
 <li><a target="_blank" rel="noopener" href="https://docs.ipfs.tech/concepts/ipns/">IPNS (InterPlanetary Name System) and Mutability | IPFS Docs</a></li>
 <li><a target="_blank" rel="noopener" href="https://dnslink.dev/">DNSLink Standard</a></li>
-<li><a target="_blank" rel="noopener" href="https://cid.ipfs.tech/">CID Inspector | IPFS</a></li>
+<li><a target="_blank" rel="noopener" href="https://cid.ipfs.tech">CID Inspector | IPFS</a></li>
 </ol>
 
       
@@ -353,7 +366,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
     
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85-IPFS"><span class="nav-text">1. 安装 IPFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-IPFS-%E6%9C%AC%E5%9C%B0%E8%AE%BF%E9%97%AE%E9%9D%99%E6%80%81%E9%A1%B5%E9%9D%A2"><span class="nav-text">2. IPFS 本地访问静态页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%80%9F%E5%8A%A9-IPNS-%E4%BF%9D%E6%8C%81%E9%93%BE%E6%8E%A5%E4%B8%8D%E5%8F%98"><span class="nav-text">3. 借助 IPNS 保持链接不变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D%E7%BC%A9%E7%9F%AD%E8%AE%BF%E9%97%AE%E9%93%BE%E6%8E%A5"><span class="nav-text">4. 绑定域名缩短访问链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%9F%9F%E5%90%8D%E7%9B%B4%E6%8E%A5%E8%AE%BF%E9%97%AE"><span class="nav-text">5. 域名直接访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E5%9F%9F%E5%90%8D%E8%AE%BF%E9%97%AE%EF%BC%9A%E4%BB%A5-ENS-%E4%B8%BA%E4%BE%8B"><span class="nav-text">6. 去中心化域名访问：以 ENS 为例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E5%8F%AF%E7%94%A8%E6%80%A7%E4%BC%98%E5%8C%96"><span class="nav-text">7. 可用性优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%90%E8%A1%8C-IPFS-%E5%AE%9E%E4%BE%8B"><span class="nav-text">7.1. 云服务器运行 IPFS 实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-4everland%E3%80%81Fleek-amp-Pinner"><span class="nav-text">7.2. 4everland、Fleek &amp; Pinner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-Planet"><span class="nav-text">7.3. Planet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85-IPFS"><span class="nav-text">1. 安装 IPFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-IPFS-%E6%9C%AC%E5%9C%B0%E8%AE%BF%E9%97%AE%E9%9D%99%E6%80%81%E9%A1%B5%E9%9D%A2"><span class="nav-text">2. IPFS 本地访问静态页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%80%9F%E5%8A%A9-IPNS-%E4%BF%9D%E6%8C%81%E9%93%BE%E6%8E%A5%E4%B8%8D%E5%8F%98"><span class="nav-text">3. 借助 IPNS 保持链接不变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D%E7%BC%A9%E7%9F%AD%E8%AE%BF%E9%97%AE%E9%93%BE%E6%8E%A5"><span class="nav-text">4. 绑定域名缩短访问链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%9F%9F%E5%90%8D%E7%9B%B4%E6%8E%A5%E8%AE%BF%E9%97%AE"><span class="nav-text">5. 域名直接访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E5%9F%9F%E5%90%8D%E8%AE%BF%E9%97%AE%EF%BC%9A%E4%BB%A5-ENS-%E4%B8%BA%E4%BE%8B"><span class="nav-text">6. 去中心化域名访问：以 ENS 为例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E5%8F%AF%E7%94%A8%E6%80%A7%E4%BC%98%E5%8C%96"><span class="nav-text">7. 可用性优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%90%E8%A1%8C-IPFS-%E5%AE%9E%E4%BE%8B"><span class="nav-text">7.1. 云服务器运行 IPFS 实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-4everland%E3%80%81Fleek-Pinner"><span class="nav-text">7.2. 4everland、Fleek &amp; Pinner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-Planet"><span class="nav-text">7.3. Planet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol>
     
     </div>
   </aside>
@@ -436,13 +449,6 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 

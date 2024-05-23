@@ -181,6 +181,7 @@
       
 	<a href="/2023/02/22/7PJPGJ5G+VW/" class="article-date">
 	  <time datetime="2023-02-22T11:24:01.000Z" itemprop="datePublished">2023-02-22</time>
+	  
 	</a>
 
       
@@ -194,9 +195,10 @@
           海柴角位于大鹏半岛，这里目前还没有被开发，因为礁石林立，风急浪高，船只靠岸也很困难，徒步几乎是达到的唯一选择。
 海柴角地名是深圳特区成立后才有，在此之前海柴角有不少曾用名。就像是甲岸村之于隔岸村，羊台山之于阳台山、羊蹄山，海柴角似乎是另一个“地名规范”的受害者，只是相比前两者，海柴角人迹罕至，更鲜有人为之发声。
 本文尽可能收集了有关海柴角的历史文献资料，由于不具备历史地理学、语言学等相关专业的研究知识，所以暂只限于收集。
-海柴角1987年《深圳市地名志》中如下描述海柴角：
+海柴角
+1987年《深圳市地名志》中如下描述海柴角：
 
-在大鹏区三门岛...
+在大鹏区三门...
         </p>
         <p class="article-more-link">
           <a href="/2023/02/22/7PJPGJ5G+VW/#more">阅读全文</a>
@@ -236,6 +238,7 @@
       
 	<a href="/2023/02/02/ipfs-static-site/" class="article-date">
 	  <time datetime="2023-02-02T12:05:43.000Z" itemprop="datePublished">2023-02-02</time>
+	  
 	</a>
 
       
@@ -247,9 +250,10 @@
       
         <p class="article-excerpt-content">
           与四年前写博客 在 IPFS 上部署静态博客 时相比，现在 IPFS 更加成熟了，也多了很多相关的服务，也考虑到原来的博文现在看来有点繁琐且过时，所以这次进行了重构并添加了周边服务的介绍。
-1. 安装 IPFS123456# 安装 IPFS，此处使用 brew 为例brew install ipfs# 初始化，生成本地公私钥，默认配置等ipfs init# 保持 IPFS 运行ipfs daemon
-
-2. IPFS 本地访问静态页面一般我们的静态页面都包含一个 index.html，放在...
+1. 安装 IPFS
+123456# 安装 IPFS，此处使用 brew 为例brew install ipfs# 初始化，生成本地公私钥，默认配置等ipfs init# 保持 IPFS 运行ipfs daemon
+2. IPFS 本地访问静态页面
+一般我们的静态页面都包含一个 index.html，放...
         </p>
         <p class="article-more-link">
           <a href="/2023/02/02/ipfs-static-site/#more">阅读全文</a>
@@ -289,6 +293,7 @@
       
 	<a href="/2023/02/02/ipfs-gateway/" class="article-date">
 	  <time datetime="2023-02-02T10:27:03.000Z" itemprop="datePublished">2023-02-02</time>
+	  
 	</a>
 
       
@@ -347,6 +352,7 @@
       
 	<a href="/2018/11/15/bt-advanced/" class="article-date">
 	  <time datetime="2018-11-15T11:45:00.000Z" itemprop="datePublished">2018-11-15</time>
+	  
 	</a>
 
       
@@ -358,8 +364,10 @@
       
         <p class="article-excerpt-content">
           本文是 BT 系列文章中的一篇，主要介绍 BEP 中剩下的改进方案，有需要的话可以先阅读博文 BT 增强建议之概述。
-进阶改进方案本节点详细介绍几个比较重要的进阶改进方案。剩余的只作简单归纳。
-超级做种模式提高做种效率BEP16 - Superseeding 中起草的超级做种功能是一个来帮助初始做种者使用较少的流量来完成做种的算法。当一个做种客户端进入超级做种模式后，它将不会表现为一个标准的做种者，而是伪装成一个没有数据的正常 peer。当有其他 peer 连接时，它仅将一个从未发送过的片...
+进阶改进方案
+本节点详细介绍几个比较重要的进阶改进方案。剩余的只作简单归纳。
+超级做种模式提高做种效率
+BEP16 - Superseeding 中起草的超级做种功能是一个来帮助初始做种者使用较少的流量来完成做种的算法。当一个做种客户端进入超级做种模式后，它将不会表现为一个标准的做种者，而是伪装成一个没有数据的正常 peer。当有其他 peer 连接时，它仅将一个从未发送过...
         </p>
         <p class="article-more-link">
           <a href="/2018/11/15/bt-advanced/#more">阅读全文</a>
@@ -399,6 +407,7 @@
       
 	<a href="/2018/11/12/bt-dht/" class="article-date">
 	  <time datetime="2018-11-12T13:11:00.000Z" itemprop="datePublished">2018-11-12</time>
+	  
 	</a>
 
       
@@ -411,7 +420,9 @@
         <p class="article-excerpt-content">
           BitTorrent 使用 DHT 网路来存储 peer 信息，以实现去 Tracker 化的种子。此时，每个 peer 都成了一个 Tracker。网络基于 Kademlia 算法实现，使用 UDP 进行传输。
 本文主要对 BT 中的 DHT 网络实现与在博文 DHT 网络之 Kademlia 算法 中描述的 Kademlia 算法的区别进行总结。准确的说不能说是区别，而应该定义成实现细节，毕竟理论算法应用到实际时总需要因地制宜。
-实现细节点key-value 对存储的内容BT 使用 D...
+实现细节点
+key-value 对存储的内容
+BT 使用...
         </p>
         <p class="article-more-link">
           <a href="/2018/11/12/bt-dht/#more">阅读全文</a>
@@ -451,6 +462,7 @@
       
 	<a href="/2018/11/08/dht-kademlia/" class="article-date">
 	  <time datetime="2018-11-08T03:29:00.000Z" itemprop="datePublished">2018-11-08</time>
+	  
 	</a>
 
       
@@ -463,9 +475,10 @@
         <p class="article-excerpt-content">
           本文是论文 Kademlia: A Peer-to-Peer Information System Based on the XOR Metric 的翻译。
 
-
-Kademlia：一种基于 XOR 距离的 P2P 信息系统作者：Petar Maymounkov 以及 David Mazières
-Abstract（摘要）我们描述了一种在容易出错的环境下仍具有可证明的容错性和性能的 P2P 分布式散列表。我们的系统使用了一种基于 XOR 距离的新型拓扑来路由查询与定位节点的需求，该拓扑简化...
+Kademlia：一种基于 XOR 距离的 P2P 信息系统
+作者：Petar Maymounkov 以及 David Mazières
+Abstract（摘要）
+我们描述了一种在容易出错的环境下仍具有可证明的容错性和性能的 P2P 分布式散列表。我们的系统使用了一种基于 XOR 距离的新型拓扑来路由查询与定位节点的需求，该拓扑简...
         </p>
         <p class="article-more-link">
           <a href="/2018/11/08/dht-kademlia/#more">阅读全文</a>
@@ -505,6 +518,7 @@ Abstract（摘要）我们描述了一种在容易出错的环境下仍具有可
       
 	<a href="/2018/09/22/ipfs-blog/" class="article-date">
 	  <time datetime="2018-09-22T13:12:00.000Z" itemprop="datePublished">2018-09-22</time>
+	  
 	</a>
 
       
@@ -556,6 +570,7 @@ Abstract（摘要）我们描述了一种在容易出错的环境下仍具有可
       
 	<a href="/2018/08/30/bt-peer/" class="article-date">
 	  <time datetime="2018-08-30T11:14:00.000Z" itemprop="datePublished">2018-08-30</time>
+	  
 	</a>
 
       
@@ -567,11 +582,12 @@ Abstract（摘要）我们描述了一种在容易出错的环境下仍具有可
       
         <p class="article-excerpt-content">
           本文是 BT 系列文章中的一篇，主要介绍 Peer 以及 Peer 间的通信，有需要的话可以先阅读博文 BT 增强建议之概述。
-Peer 来源在讲 Peer 间的通信前，先总结一下 Peer 的来源：
+Peer 来源
+在讲 Peer 间的通信前，先总结一下 Peer 的来源：
 
 Magnet：磁力连接中有 x.pe 参数可以预设一些 Peer；
 Tracker：Tracker 服务器的作用就是提供 Peer；
-Local Service Discovery(BEP14)：通过对本地组播地址 239.192.152.143:6771 和 [ff15::efc0:98...
+Local Service Discovery(BEP14)：通过对本地组播地址 239.192.152.143:6771 和 [ff15::efc0:9...
         </p>
         <p class="article-more-link">
           <a href="/2018/08/30/bt-peer/#more">阅读全文</a>
@@ -611,6 +627,7 @@ Local Service Discovery(BEP14)：通过对本地组播地址 239.192.152.143:677
       
 	<a href="/2018/08/27/bt-tracker/" class="article-date">
 	  <time datetime="2018-08-26T16:00:00.000Z" itemprop="datePublished">2018-08-27</time>
+	  
 	</a>
 
       
@@ -663,6 +680,7 @@ P2P 是 peer-to-peer 的缩写，为了让网络中的一个 Peer 如何才能�
       
 	<a href="/2018/08/26/bt-metadata/" class="article-date">
 	  <time datetime="2018-08-26T14:00:00.000Z" itemprop="datePublished">2018-08-26</time>
+	  
 	</a>
 
       
@@ -675,7 +693,9 @@ P2P 是 peer-to-peer 的缩写，为了让网络中的一个 Peer 如何才能�
         <p class="article-excerpt-content">
           本文是 BT 系列文章中的一篇，主要介绍种子文件结构与磁力链接的原理，有需要的话可以先阅读博文 BT 增强建议之概述。
 在磁力链接出现前，BT 下载的第一步就是获取 Torrent（种子）文件。种子文件中包含了资源的最关键信息 —— Metadata（元数据）。Magnet（磁力链接）的引入则省去了获取种子文件这一步，但是仍然需要元数据，只是改为从 Peer 处获取。有了元数据后，才能知道整个资源的概况，继而进行下载。
-Torrent文件结构种子文件使用 bencode 进行编码，整个文件...
+Torrent
+文件结构
+种子文件使用 bencode 进行编码，整个...
         </p>
         <p class="article-more-link">
           <a href="/2018/08/26/bt-metadata/#more">阅读全文</a>
@@ -784,13 +804,6 @@ Torrent文件结构种子文件使用 bencode 进行编码，整个文件...
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
